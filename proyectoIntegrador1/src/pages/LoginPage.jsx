@@ -1,5 +1,5 @@
 // Import libraries
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Swal from "sweetalert2";
 
 // Firebase setup
@@ -12,6 +12,10 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+//3D
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -20,7 +24,7 @@ export default function LoginPage() {
   // Toast notification configuration using SweetAlert2
   const Toast = Swal.mixin({
     toast: true,
-    position: "top-end",
+    position: "bottom-right",
     showConfirmButton: false,
     timer: 2000,
     timerProgressBar: true,
@@ -30,17 +34,53 @@ export default function LoginPage() {
     },
   });
 
+  //function to animate loading object
+  function LoadingRing() {
+    const ringRef = useRef();
+    const segmentRef = useRef();
+
+    useFrame(({ clock }) => {
+      const elapsedTime = clock.getElapsedTime();
+
+      // Rotar el anillo completo
+      ringRef.current.rotation.z += 0.01;
+
+      // Mover el segmento iluminado alrededor del anillo
+      segmentRef.current.position.x = Math.cos(elapsedTime * 2) * 1.2;
+      segmentRef.current.position.y = Math.sin(elapsedTime * 2) * 1.2;
+    });
+
+    return (
+      <group ref={ringRef}>
+        {/* Anillo principal */}
+        <mesh>
+          <torusGeometry args={[1, 0.2, 16, 100]} />
+          <meshStandardMaterial color="lightblue" />
+        </mesh>
+
+        {/* Segmento iluminado que se mueve */}
+        <mesh ref={segmentRef} scale={[0.4, 0.4, 0.4]}>
+          <sphereGeometry args={[1.5, 16, 16]} />
+          <meshStandardMaterial
+            color="white"
+            emissive="yellow"
+            emissiveIntensity={1}
+          />
+        </mesh>
+      </group>
+    );
+  }
+
   // Function to handle successful login
   async function successLogin(loggedInUser) {
     setUser(loggedInUser);
 
     const userRef = doc(getFirestore(), "users", loggedInUser.uid);
-
     const docSnapshot = await getDoc(userRef);
+
     if (docSnapshot.exists()) {
       setUserDocData({ id: userRef.id, ...docSnapshot.data() });
     }
-
     navigate("/home");
   }
 
@@ -95,15 +135,21 @@ export default function LoginPage() {
   // Render loading state if still checking authentication
   if (loading)
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-900">
-        <div className="w-full max-w-md rounded-xl border border-cyan-500 bg-gray-800 p-8 shadow-lg">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-slate-900 to-slate-700 text-white">
+        <div className="w-full max-w-sm rounded-lg bg-slate-600 bg-opacity-75 p-8 text-center shadow-lg">
           <header className="mb-6 text-center">
-            <h2 className="text-3xl font-extrabold text-cyan-400">
-              Logging In
-            </h2>
+            <h1 className="mb-8 text-3xl font-bold">Log In</h1>
           </header>
-
-          <p className="text-center text-cyan-300">LOADING....</p>
+          <div className="flex items-center justify-center">
+            {/* Canvas para el anillo 3D */}
+            <Canvas style={{ height: 150, width: 150 }}>
+              <ambientLight intensity={0.5} />
+              <spotLight position={[10, 10, 10]} angle={0.15} />
+              <LoadingRing />
+              <OrbitControls enableZoom={false} enablePan={false} />
+            </Canvas>
+          </div>
+          <p className="mt-8 text-3xl font-bold">LOADING....</p>
         </div>
       </div>
     );
@@ -111,7 +157,7 @@ export default function LoginPage() {
   // Render the login page
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-slate-900 to-slate-700 text-white">
-      <div className="w-full max-w-sm rounded-lg bg-slate-800 bg-opacity-75 p-8 text-center shadow-lg">
+      <div className="w-full max-w-sm rounded-lg bg-slate-600 bg-opacity-75 p-8 text-center shadow-lg">
         <h1 className="mb-8 text-3xl font-bold">Log In</h1>
         <button
           onClick={handleGoogleSignIn}

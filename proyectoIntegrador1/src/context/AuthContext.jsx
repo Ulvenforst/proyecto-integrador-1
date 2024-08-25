@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
     return savedUserDocData ? JSON.parse(savedUserDocData) : null;
   });
 
-  // Guardar `user` en `sessionStorage` cuando cambia
   useEffect(() => {
     if (user) {
       sessionStorage.setItem("user", JSON.stringify(user));
@@ -22,7 +21,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
-  // Guardar `userDocData` en `sessionStorage` cuando cambia
   useEffect(() => {
     if (userDocData) {
       sessionStorage.setItem("userDocData", JSON.stringify(userDocData));
