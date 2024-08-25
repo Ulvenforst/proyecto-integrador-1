@@ -59,7 +59,7 @@ export default function LoginPage() {
         </mesh>
 
         {/* Segmento iluminado que se mueve */}
-        <mesh ref={segmentRef} scale={[0.4, 0.4, 0.4]}>
+        <mesh ref={segmentRef} scale={[0.3, 0.3, 0.18]}>
           <sphereGeometry args={[1.5, 16, 16]} />
           <meshStandardMaterial
             color="white"
@@ -149,7 +149,6 @@ export default function LoginPage() {
               <OrbitControls enableZoom={false} enablePan={false} />
             </Canvas>
           </div>
-          <p className="mt-8 text-3xl font-bold">LOADING....</p>
         </div>
       </div>
     );
@@ -161,7 +160,7 @@ export default function LoginPage() {
         <h1 className="mb-8 text-3xl font-bold">Log In</h1>
         <button
           onClick={handleGoogleSignIn}
-          className="flex w-full items-center justify-center rounded-md bg-white px-6 py-3 text-lg font-bold text-slate-900 transition-all duration-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          className="flex w-full items-center justify-center rounded-md bg-white px-6 py-3 text-lg font-bold text-slate-900 transition-all duration-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
         >
           <img
             src="https://img.icons8.com/color/48/000000/google-logo.png"
