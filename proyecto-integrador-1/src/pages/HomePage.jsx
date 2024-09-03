@@ -1,21 +1,25 @@
 import NavBar from "../components/NavBar";
 import React, { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-
+import { TrackballControls } from "@react-three/drei";
 export default function HomePage() {
   function RotatingCube() {
-    const cubeRef = useRef();
+    const cubeRef = useRef(null);
+    useFrame(({ clock }) => {
+      const t = clock.getElapsedTime();
+      const x = Math.sin(t) * 4;
+      const y = Math.cos(x);
 
-    useFrame(() => {
-      // Rota el cubo en los ejes X y Y
-      cubeRef.current.rotation.x += 0.01;
-      cubeRef.current.rotation.y += 0.01;
+      if (cubeRef.current) {
+        cubeRef.current.position.x = x;
+        cubeRef.current.position.y = y;
+      }
     });
 
     return (
       <mesh ref={cubeRef}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="blue" />
+        <boxGeometry args={[2, 2, 2]} />
+        <meshPhysicalMaterial color="blue" roughness={0.5} metalness={0.9} />
       </mesh>
     );
   }
@@ -26,9 +30,10 @@ export default function HomePage() {
       <main className="container mx-auto p-4 text-center">
         <div className="rounded-lg bg-slate-800 bg-opacity-75 p-8 shadow-lg">
           <h1 className="text-4xl font-bold">
-            <Canvas>
-              <ambientLight intensity={0.9} />
-              <spotLight position={[20, 20, 20]} angle={0.15} />
+            <Canvas camera={{ position: [2, 0, 5] }}>
+              <TrackballControls />
+              <ambientLight intensity={1.5} />
+              <directionalLight position={[0, 10, 10]} />
               <RotatingCube />
             </Canvas>
             Bienvenido a HomePage
