@@ -36,16 +36,16 @@ export default function HomePage() {
               <directionalLight position={[0, 10, 10]} />
               <RotatingCube />
             </Canvas>
-            Bienvenido a HomePage
+            Bienvenido a TerraWatch
           </h1>
           <p className="mt-4 text-lg">
-            Aquí podrás encontrar información sobre diversos problemas
-            acuáticos.
+            Aquí podrás encontrar información sobre diversos problemas en la
+            tierra.
           </p>
           <div className="mt-8">
             <h2 className="text-2xl font-semibold">Secciones:</h2>
             <ul className="mt-4 space-y-2">
-              <li>- Tipos de problemas acuáticos</li>
+              <li>- Tipos de problemas en la tierra</li>
               <li>- Soluciones posibles</li>
               <li>- Recursos adicionales</li>
             </ul>
