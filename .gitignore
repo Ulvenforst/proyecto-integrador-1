@@ -1,0 +1,36 @@
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node modules and build output
+node_modules/
+dist/
+dist-ssr/
+
+# Local environment and config files
+*.local
+.env
+
+# Editor directories and files
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Proyecto-1 specific paths (adjusted from relative paths)
+proyecto-integrador-1/logs/
+proyecto-integrador-1/node_modules/
+proyecto-integrador-1/dist/
+proyecto-integrador-1/dist-ssr/
+proyecto-integrador-1/*.local
+proyecto-integrador-1/.env
