@@ -1,13 +1,11 @@
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
-import React from "react";
-
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { useHelper } from "@react-three/drei";
 import { PointLightHelper } from "three";
-import { Center, Html, Text, Text3D } from "@react-three/drei";
+import { Center, Text3D } from "@react-three/drei";
 
-const Forest = (props) => {
+const Forest = ({ fun, ...props }) => {
   const { nodes, materials } = useGLTF("/models/forest_scene_op.glb");
 
   const spotLightRef = useRef();
@@ -50,17 +48,26 @@ const Forest = (props) => {
       </RigidBody>
 
       <pointLight
-        FF0D00
         ref={spotLightRef}
         color={0xff0d00}
-        position={[81, 23, -35]} // Posición de la luz en la escena
-        intensity={5_000} // Intensidad de la luz
-        distance={860} // Distancia máxima a la que llega la luz
-        decay={2} // Decaimiento de la intensidad (cuánto disminuye la luz con la distancia)
-        shadow-mapSize-width={3} // Tamaño del mapa de sombras (resolución)
-        shadow-mapSize-height={3} // Tamaño del mapa de sombras (resolución)
+        position={[81, 23, -35]}
+        intensity={5_000}
+        distance={860}
+        decay={2}
+        shadow-mapSize-width={3}
+        shadow-mapSize-height={3}
       />
-      <Center top left position={[80, 26, -40]} rotation={[0, Math.PI / 1.5, 0]}>
+
+      <Center
+        top
+        left
+        position={[80, 26, -40]}
+        rotation={[0, Math.PI / 1.5, 0]}
+      >
+        <mesh onClick={fun}>
+          <boxGeometry args={[42, 8, 0.1]} /> <meshStandardMaterial />
+        </mesh>
+
         <Text3D
           font="/fonts/blue-ocean.json"
           bevelEnabled
@@ -70,8 +77,10 @@ const Forest = (props) => {
           lineHeight={0.75}
           letterSpacing={0.05}
           size={3}
+          position={[0, 0, 0.1]}
+          onClick={fun}
         >
-          {`Bienvenido a este \n      espacio y`}
+          {`Inicia Sesion con Google`}
           <meshNormalMaterial />
         </Text3D>
       </Center>
