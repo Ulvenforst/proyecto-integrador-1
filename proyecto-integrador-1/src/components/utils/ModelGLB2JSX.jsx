@@ -1,5 +1,6 @@
 import { useGLTF, useTexture } from "@react-three/drei";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
+import * as THREE from 'three';
 
 const ModelGLB2JSX = ({ 
   modelName, 
@@ -8,22 +9,38 @@ const ModelGLB2JSX = ({
   texturePath = "textures/forest/texture_gradient.png", 
   scale = 0.5, 
   rotation = [Math.PI / 2, 0, 0], 
+  textureOffsetX = 0,
+  textureOffsetY = 0.5,
   ...props 
 }) => {
   const fullPath = `${modelPath}/${modelName}`;
   const { nodes, materials } = useGLTF(fullPath);
+  const texture = useTexture(texturePath);
+  const [materialMap] = useState(() => {
+    const map = texture.clone();
+    map.needsUpdate = true;
+    return map;
+  });
 
-  const modelTexture = useTexture(texturePath);
-  modelTexture.offset.set(0, 0.5); 
+  useLayoutEffect(() => {
+    materialMap.offset = new THREE.Vector2(textureOffsetX, textureOffsetY);
+    materialMap.needsUpdate = true;
+  }, [materialMap, textureOffsetX, textureOffsetY]);
+
+  useEffect(() => {
+    return () => {
+      materialMap.dispose();
+    };
+  }, [materialMap]);
+
+  useEffect(() => {
+    useGLTF.preload(fullPath);
+  }, [fullPath]);
 
   if (!nodes[nodeName]) {
     console.error(`Node ${nodeName} not found in GLB model`);
     return null;
   }
-
-  useEffect(() => {
-    useGLTF.preload(fullPath);
-  }, [fullPath]);
 
   return (
     <group {...props} dispose={null}>
@@ -31,10 +48,9 @@ const ModelGLB2JSX = ({
         <mesh
           name={nodeName} 
           castShadow
-          // receiveShadow
           geometry={nodes[nodeName].geometry} 
           material={materials.AllColors_Material}
-          material-map={modelTexture}
+          material-map={materialMap}
           rotation={rotation}
           scale={scale}
         />

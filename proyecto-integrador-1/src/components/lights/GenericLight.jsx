@@ -21,7 +21,7 @@ const GenericLight = () => {
         shadow-camera-bottom={-30}
         shadow-bias={-0.0001}
       />
-      <ambientLight intensity={1.5} />
+    <ambientLight intensity={1.5} />
     </>
   );
 }

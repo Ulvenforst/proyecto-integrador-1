@@ -1,4 +1,4 @@
-import GenericModelBlock from "../utils/GenericModelBlock";
+import GenericModelBlock from "../../utils/GenericModelBlock";
 import { GRASS_TYPES } from "./grassTypes";
 
 const GrassBlock = (props) => (

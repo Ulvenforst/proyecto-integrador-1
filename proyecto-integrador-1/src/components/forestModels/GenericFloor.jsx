@@ -1,5 +1,5 @@
 // import { useTexture } from "@react-three/drei";
-import { useMemo } from "react";
+// import { useMemo } from "react";
 
 const GenericFloor = () => {
   // const PATH = useMemo(() => "textures/forest/floor/rocky_terrain_", []);
@@ -20,7 +20,7 @@ const GenericFloor = () => {
     >
       <planeGeometry args={[100, 100]} />
 
-      <meshStandardMaterial color="#70cf2f" />
+      <meshStandardMaterial color="#70cf2f"/>
     </mesh>
   );
 };

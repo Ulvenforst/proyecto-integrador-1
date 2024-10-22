@@ -1,4 +1,4 @@
-import GenericModelBlock from "../utils/GenericModelBlock";
+import GenericModelBlock from "../../utils/GenericModelBlock";
 import { TREE_TYPES } from "./treeTypes";
 
 const AverageTreesBlock = (props) => (
