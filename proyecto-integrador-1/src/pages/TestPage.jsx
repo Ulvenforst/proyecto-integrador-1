@@ -13,7 +13,7 @@ import Forest from "../world/Forest";
 
 export default function TestPage() {
   const cameraSettings = {
-    position: [0, 15, 15],
+    position: [150, 35, -80],
   };
 
   return (
