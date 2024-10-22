@@ -10,4 +10,3 @@ const StonesBlock = (props) => (
 );
 
 export default StonesBlock;
-

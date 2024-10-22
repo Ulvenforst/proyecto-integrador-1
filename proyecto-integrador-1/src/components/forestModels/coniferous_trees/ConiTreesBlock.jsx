@@ -10,4 +10,3 @@ const ConiTreesBlock = (props) => (
 );
 
 export default ConiTreesBlock;
-

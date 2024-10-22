@@ -10,4 +10,3 @@ const BushesBlock = (props) => (
 );
 
 export default BushesBlock;
-

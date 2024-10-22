@@ -8,4 +8,3 @@ export const BUSHES_TYPES = [
     nodeName: "Bush_group_big"
   },
 ];
-

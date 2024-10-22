@@ -8,4 +8,3 @@ export const STONE_TYPES = [
     nodeName: "Stone_group_average"
   },
 ];
-
