@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 //import of components
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
+import TestPage  from "./pages/TestPage";
+
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -14,6 +16,7 @@ function App() {
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<PrivateRoute element={HomePage} />} />
+          <Route path="/test" element={<PrivateRoute element={TestPage} />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

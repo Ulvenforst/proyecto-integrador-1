@@ -2,7 +2,13 @@ import NavBar from "../components/NavBar";
 import React, { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { TrackballControls } from "@react-three/drei";
+import { useNavigate } from "react-router-dom";
+
+
 export default function HomePage() {
+  const navigate = useNavigate();
+
+
   function RotatingCube() {
     const cubeRef = useRef(null);
     useFrame(({ clock }) => {
@@ -51,8 +57,8 @@ export default function HomePage() {
             </ul>
           </div>
           <div className="mt-12">
-            <button className="rounded-md bg-red-500 px-6 py-3 text-lg font-bold transition-all duration-300 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">
-              Explorar Más
+            <button onClick={() => navigate("/test")} className="rounded-md bg-red-500 px-6 py-3 text-lg font-bold transition-all duration-300 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">
+              Expoloar mas
             </button>
           </div>
         </div>
