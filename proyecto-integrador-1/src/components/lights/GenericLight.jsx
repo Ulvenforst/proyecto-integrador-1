@@ -28,7 +28,7 @@ const GenericLight = ({ mapSize = 4, chunkSize = 40 }) => {
         shadow-bias={-0.001}
         shadow-normalBias={0.02}
       />
-      <ambientLight intensity={0.8} />
+      <ambientLight intensity={1.5} />
     </>
   );
 }
