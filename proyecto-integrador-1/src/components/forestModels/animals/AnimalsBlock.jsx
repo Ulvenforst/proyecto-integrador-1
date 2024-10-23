@@ -5,7 +5,7 @@ const AnimalsBlock = (props) => (
   <GenericModelBlock
     modelTypes={MUSHROOM_TYPES}
     modelPath="models/forest/animals"
-    scale={1.2}
+    scale={1.5}
     {...props}
   />
 );

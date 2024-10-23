@@ -3,7 +3,7 @@ export const MUSHROOM_TYPES = [
     modelName: "fox_final_plane.glb",
     nodeName: "fox_final_plane",
   },
-  /*{
+  {
     modelName: "cat_final_plane.glb",
     nodeName: "cat_final_plane",
   },
@@ -15,6 +15,10 @@ export const MUSHROOM_TYPES = [
     modelName: "deer_final_plane.glb",
     nodeName: "deer_final_plane",
   },
+  {
+    modelName: "cow_final_plane.glb",
+    nodeName: "cow_final_plane",
+  } /*
   {
     modelName: "duck_final_plane.glb",
     nodeName: "duck_final_plane",
@@ -47,10 +51,7 @@ export const MUSHROOM_TYPES = [
     modelName: "dog_small_final_plane.glb",
     nodeName: "dog_small_final_plane",
   },
-  {
-    modelName: "cow_final_plane.glb",
-    nodeName: "cow_final_plane",
-  },
+
   {
     modelName: "lizard_final_plane.glb",
     nodeName: "lizard_final_plane",
@@ -78,5 +79,5 @@ export const MUSHROOM_TYPES = [
   {
     modelName: "bird_final_plane.glb",
     nodeName: "bird_final_plane",
-  },*/
+  },*/,
 ];
