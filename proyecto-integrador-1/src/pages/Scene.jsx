@@ -7,7 +7,10 @@ import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
 
 const Scene = () => {
-  const terrainMap = [[1]];
+  const terrainMap = [
+    [1, 1],
+    [2, 1],
+  ];
 
   const mapWidth = terrainMap[0].length;
   const mapHeight = terrainMap.length;
