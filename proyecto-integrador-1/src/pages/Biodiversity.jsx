@@ -11,8 +11,10 @@ import Lights from "../components/lights/Lights";
 
 const Biodiversity = () => {
   const terrainMap = [
-    [2, 2],
-    [2, 0],
+    [2, 2, 2, 2],
+    [2, 2, 0, 1],
+    [2, 1, 2, 2],
+    [1, 2, 1, 2],
   ];
 
   const mapWidth = terrainMap[0].length;
@@ -48,7 +50,7 @@ const Biodiversity = () => {
             maxAzimuthAngle={Math.PI * 0.25}
             minAzimuthAngle={-Math.PI * 0.25}
             target={[centerX, 0, centerZ]}
-            enableZoom={false}
+            enableZoom={true}
             enablePan={false}
           />
           <primitive object={new AxesHelper(500)} />

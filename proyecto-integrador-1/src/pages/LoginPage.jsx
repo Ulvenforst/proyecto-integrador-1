@@ -16,15 +16,6 @@ import { useAuth } from "../context/AuthContext";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 
-import { Suspense } from "react";
-import { useGLTF } from "@react-three/drei";
-
-function Model({ name }) {
-  // Usa el hook useGLTF para cargar tu archivo .glb o .gltf
-  const { scene } = useGLTF(`models/${name}`);
-
-  return <primitive object={scene} scale={0.5} />;
-}
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -168,15 +159,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-slate-900 to-slate-700 text-white">
       <div className="w-full max-w-sm rounded-lg bg-slate-600 bg-opacity-75 p-8 text-center shadow-lg">
         <h1 className="mb-8 text-3xl font-bold">Log In</h1>
-        <Canvas style={{ height: 300, width: 300 }}>
-          <ambientLight intensity={0.5} />
-          <spotLight position={[10, 10, 10]} angle={0.15} />
-          <Suspense fallback={null}>
-            <Model name={"pokebola.glb"} />
-            <Model name={"trash-can.glb"} />
-          </Suspense>
-          <OrbitControls enableZoom={true} />
-        </Canvas>
+
         <button
           onClick={handleGoogleSignIn}
           className="flex w-full items-center justify-center rounded-md bg-white px-6 py-3 text-lg font-bold text-slate-900 transition-all duration-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
@@ -193,4 +176,3 @@ export default function LoginPage() {
   );
 }
 
-useGLTF.preload("/path/to/your/model.glb");

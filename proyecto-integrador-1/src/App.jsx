@@ -17,11 +17,11 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="/login" element={<TestPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<PrivateRoute element={HomePage} />} />
           <Route path="/test" element={<PrivateRoute element={TestPage} />} />
+          <Route path="/biodiversity" element={<PrivateRoute element={Biodiversity} />} />
           <Route path="/scene" element={<Scene/>} />
-          <Route path="/biodiversity" element={<Biodiversity/>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
