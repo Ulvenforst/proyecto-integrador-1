@@ -1,26 +1,82 @@
 export const MUSHROOM_TYPES = [
   {
-    modelName: "mushroom_big_brown.glb",
-    nodeName: "Mushroom_big_brown"
+    modelName: "fox_final_plane.glb",
+    nodeName: "fox_final_plane",
+  },
+  /*{
+    modelName: "cat_final_plane.glb",
+    nodeName: "cat_final_plane",
   },
   {
-    modelName: "mushroom_big_group_brown.glb",
-    nodeName: "Mushroom_big_group_brown"
+    modelName: "bizon_final_plane.glb",
+    nodeName: "bizon_final_plane",
   },
   {
-    modelName: "mushroom_flat_group_white.glb",
-    nodeName: "Mushroom_flat_group_white"
+    modelName: "deer_final_plane.glb",
+    nodeName: "deer_final_plane",
   },
   {
-    modelName: "mushroom_flat_white.glb",
-    nodeName: "Mushroom_flat_white"
+    modelName: "duck_final_plane.glb",
+    nodeName: "duck_final_plane",
   },
   {
-    modelName: "mushroom_high_yellow.glb",
-    nodeName: "Mushroom_high_yellow"
+    modelName: "deer_female_final_plane.glb",
+    nodeName: "deer_female_final_plane",
   },
   {
-    modelName: "mushroom_high_group_yellow.glb",
-    nodeName: "Mushroom_high_group_yellow"
-  }
+    modelName: "penguin_final_plane.glb",
+    nodeName: "penguin_final_plane",
+  },
+  {
+    modelName: "shark_final_plane.glb",
+    nodeName: "shark_final_plane",
+  },
+  {
+    modelName: "bear_final_plane.glb",
+    nodeName: "bear_final_plane",
+  },
+  {
+    modelName: "sheep_final_plane.glb",
+    nodeName: "sheep_final_plane",
+  },
+  {
+    modelName: "frog_final_plane.glb",
+    nodeName: "frog_final_plane",
+  },
+  {
+    modelName: "dog_small_final_plane.glb",
+    nodeName: "dog_small_final_plane",
+  },
+  {
+    modelName: "cow_final_plane.glb",
+    nodeName: "cow_final_plane",
+  },
+  {
+    modelName: "lizard_final_plane.glb",
+    nodeName: "lizard_final_plane",
+  },
+  {
+    modelName: "rabbit_final_plane.glb",
+    nodeName: "rabbit_final_plane",
+  },
+  {
+    modelName: "horse_final_plane.glb",
+    nodeName: "horse_final_plane",
+  },
+  {
+    modelName: "giraffe_final_plane.glb",
+    nodeName: "giraffe_final_plane",
+  },
+  {
+    modelName: "dog_medium_final_plane.glb",
+    nodeName: "dog_medium_final_plane",
+  },
+  {
+    modelName: "chicken_final_plane.glb",
+    nodeName: "chicken_final_plane",
+  },
+  {
+    modelName: "bird_final_plane.glb",
+    nodeName: "bird_final_plane",
+  },*/
 ];

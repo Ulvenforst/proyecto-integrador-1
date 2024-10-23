@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import TestPage  from "./pages/TestPage";
 
+import Biodiversity  from "./pages/Biodiversity";
+
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -19,6 +21,7 @@ function App() {
           <Route path="/home" element={<PrivateRoute element={HomePage} />} />
           <Route path="/test" element={<PrivateRoute element={TestPage} />} />
           <Route path="/scene" element={<Scene/>} />
+          <Route path="/biodiversity" element={<Biodiversity/>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -5,38 +5,12 @@ import { TrackballControls } from "@react-three/drei";
 import { useNavigate } from "react-router-dom";
 export default function HomePage() {
   const navigate = useNavigate();
-  function RotatingCube() {
-    const cubeRef = useRef(null);
-    useFrame(({ clock }) => {
-      const t = clock.getElapsedTime();
-      const x = Math.sin(t) * 4;
-      const y = Math.cos(x);
-      if (cubeRef.current) {
-        cubeRef.current.position.x = x;
-        cubeRef.current.position.y = y;
-      }
-    });
-
-    return (
-      <mesh ref={cubeRef}>
-        <boxGeometry args={[2, 2, 2]} />
-        <meshPhysicalMaterial color="blue" roughness={0.5} metalness={0.9} />
-      </mesh>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-r from-slate-900 to-slate-700 text-white">
       <NavBar />
       <main className="container mx-auto p-4 text-center">
         <div className="rounded-lg bg-slate-800 bg-opacity-75 p-8 shadow-lg">
           <h1 className="text-4xl font-bold">
-            <Canvas camera={{ position: [2, 0, 5] }}>
-              <TrackballControls />
-              <ambientLight intensity={1.5} />
-              <directionalLight position={[0, 10, 10]} />
-              <RotatingCube />
-            </Canvas>
             Bienvenido a TerraWatch
           </h1>
           <p className="mt-4 text-lg">
@@ -53,7 +27,7 @@ export default function HomePage() {
           </div>
           <div className="mt-12">
             <button
-              onClick={() => navigate("/test")}
+              onClick={() => navigate("/biodiversity")}
               className="rounded-md bg-red-500 px-6 py-3 text-lg font-bold transition-all duration-300 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
             >
               Expoloar mas

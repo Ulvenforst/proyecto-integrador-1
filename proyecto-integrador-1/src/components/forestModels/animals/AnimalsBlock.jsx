@@ -1,12 +1,13 @@
 import GenericModelBlock from "../../utils/GenericModelBlock";
 import { MUSHROOM_TYPES } from "./animalsTypes";
 
-const MushroomsBlock = (props) => (
+const AnimalsBlock = (props) => (
   <GenericModelBlock
     modelTypes={MUSHROOM_TYPES}
-    modelPath="models/forest/mushrooms"
+    modelPath="models/forest/animals"
+    scale={1.2}
     {...props}
   />
 );
 
-export default MushroomsBlock;
+export default AnimalsBlock;

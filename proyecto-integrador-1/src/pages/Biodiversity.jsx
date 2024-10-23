@@ -9,10 +9,10 @@ import Terrain from "../components/terrain/Terrain";
 import ControlCamare from "../components/controls/ControlCamare";
 import Lights from "../components/lights/Lights";
 
-const Scene = () => {
+const Biodiversity = () => {
   const terrainMap = [
-    [0, 1],
-    [2, 3],
+    [2, 2],
+    [2, 0],
   ];
 
   const mapWidth = terrainMap[0].length;
@@ -56,7 +56,6 @@ const Scene = () => {
             mapSize={Math.max(mapWidth, mapHeight)}
             chunkSize={chunkSize}
           />
-        <Lights></Lights>
           <CloudsBlock
             n={30}
             factor={Math.max(totalWidth, totalHeight)}
@@ -79,4 +78,4 @@ const Scene = () => {
   );
 };
 
-export default Scene;
+export default Biodiversity;
