@@ -1,20 +1,23 @@
-import { BakeShadows, OrbitControls } from "@react-three/drei";
+import { BakeShadows} from "@react-three/drei";
 import { AxesHelper } from "three";
 import { Canvas } from "@react-three/fiber";
-// import PixelArt from "../components/postprocessing/PixelArt";
+import { Center, Text3D } from "@react-three/drei";
 import { Suspense } from "react";
+
+//componentes
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
 import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
 import ControlCamare from "../components/controls/ControlCamare";
 import Lights from "../components/lights/Lights";
+import Button3D from "../components/Button3D";
 
-const Biodiversity = () => {
+const Biodiversity = ({ function_login }) => {
   const terrainMap = [
     [2, 2, 2, 2],
-    [2, 2, 0, 1],
-    [2, 1, 2, 2],
-    [0, 1, 2, 0],
+    [2, 2, 2, 2],
+    [2, 2, 2, 2],
+    [2, 2, 2, 2],
   ];
 
   const mapWidth = terrainMap[0].length;
@@ -29,7 +32,7 @@ const Biodiversity = () => {
   const cameraDistance = Math.max(totalWidth, totalHeight);
   const cameraHeight = cameraDistance * 0.05;
 
-  const cameraPosition = [centerX, cameraHeight, cameraDistance / 2];
+  const cameraPosition = [centerX, cameraHeight, cameraDistance / 4];
 
   const terrainOffsetX = -((mapWidth - 1) * chunkSize) / 2;
   const terrainOffsetZ = -((mapHeight - 1) * chunkSize) / 2;
@@ -37,27 +40,20 @@ const Biodiversity = () => {
   return (
     <div className="container h-screen max-w-full">
       <Canvas
-        className="bg-cyan-100"
+        className="bg-cyan-200"
         shadows="soft"
         camera={{
           position: cameraPosition,
         }}
       >
         <Suspense fallback={null}>
-          <OrbitControls
-            maxPolarAngle={Math.PI * 0.48}
-            minPolarAngle={Math.PI * 0.4}
-            maxAzimuthAngle={Math.PI * 0.25}
-            minAzimuthAngle={-Math.PI * 0.25}
-            target={[centerX, 0, centerZ]}
-            enableZoom={false}
-            enablePan={false}
-          />
+          <ControlCamare></ControlCamare>
           <primitive object={new AxesHelper(500)} />
           <GenericLight
             mapSize={Math.max(mapWidth, mapHeight)}
             chunkSize={chunkSize}
           />
+          <Lights />
           <CloudsBlock
             n={30}
             factor={Math.max(totalWidth, totalHeight)}
@@ -73,6 +69,26 @@ const Biodiversity = () => {
             baseSeed={12345}
             position={[terrainOffsetX, 0, terrainOffsetZ]}
           />
+
+          <Center top left position={[0, 2.5, 26]} rotation={[0, 0, 0]}>
+            <Text3D
+              font="/fonts/blue-ocean.json"
+              bevelEnabled
+              bevelSize={0.02}
+              bevelThickness={0.01}
+              height={0.5}
+              lineHeight={0.75}
+              letterSpacing={0.05}
+              size={0.6}
+              position={[0, 0, 0.1]}
+              onClick={function_login}
+              castShadow
+              receiveShadow
+            >
+              {`ola`}
+              <meshStandardMaterial color="yellow" />
+            </Text3D>
+          </Center>
           <BakeShadows />
         </Suspense>
       </Canvas>
