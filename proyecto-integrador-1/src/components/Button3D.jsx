@@ -15,7 +15,7 @@ const Button3D = ({ function_login }) => {
       onClick={function_login} // Acción en click
       scale={hovered ? [1.2, 1.2, 1.2] : [1, 1, 1]} // Aumenta la escala en hover
     >
-      <boxGeometry args={[2, 0.5, 1]} /> {/* Tamaño del botón */}
+      <boxGeometry args={[4, 0.5, 1]} /> {/* Tamaño del botón */}
       <meshStandardMaterial color={hovered ? "#ff6347" : "#007bff"} />{" "}
       {/* Cambia el color en hover */}
       {/* Texto 3D encima del botón */}
@@ -26,7 +26,7 @@ const Button3D = ({ function_login }) => {
         anchorX="center" // Alinea el texto horizontalmente
         anchorY="middle" // Alinea el texto verticalmente
       >
-        Click Me
+        LOG IN WITH GOOGLE 
       </Text>
     </mesh>
   );

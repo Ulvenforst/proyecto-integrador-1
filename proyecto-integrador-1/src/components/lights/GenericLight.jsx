@@ -16,7 +16,7 @@ const GenericLight = ({ mapSize = 4, chunkSize = 40 }) => {
     <>
       <directionalLight
         // ref={directionalLightRef}
-        intensity={1.5}
+        intensity={0.5}
         castShadow
         position={[lightOffset, lightHeight, lightOffset]}
         shadow-mapSize={[2048, 2048]}
@@ -28,7 +28,7 @@ const GenericLight = ({ mapSize = 4, chunkSize = 40 }) => {
         shadow-bias={-0.001}
         shadow-normalBias={0.02}
       />
-      <ambientLight intensity={1.5} />
+      <ambientLight intensity={0.5} />
     </>
   );
 };

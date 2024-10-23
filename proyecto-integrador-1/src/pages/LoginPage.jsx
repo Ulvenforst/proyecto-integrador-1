@@ -19,7 +19,6 @@ import Lights from "../components/lights/Lights";
 import Button3D from "../components/Button3D";
 
 //3D
-import Biodiversity from "./Biodiversity";
 import { BakeShadows } from "@react-three/drei";
 import { AxesHelper } from "three";
 import { Canvas } from "@react-three/fiber";
@@ -140,8 +139,7 @@ export default function LoginPage() {
         }}
       >
         <Suspense fallback={null}>
-          <ControlCamare></ControlCamare>
-          <primitive object={new AxesHelper(500)} />
+          <ControlCamare />
           <GenericLight
             mapSize={Math.max(mapWidth, mapHeight)}
             chunkSize={chunkSize}
@@ -162,27 +160,8 @@ export default function LoginPage() {
             baseSeed={12345}
             position={[terrainOffsetX, 0, terrainOffsetZ]}
           />
-
-          <Center top left position={[5, 2.5, 26]} rotation={[0, 0, 0]}>
-            <Text3D
-              font="/fonts/blue-ocean.json"
-              bevelEnabled
-              bevelSize={0.02}
-              bevelThickness={0.01}
-              height={0.5}
-              lineHeight={0.75}
-              letterSpacing={0.05}
-              size={0.6}
-              position={[0, 0, 0.1]}
-              onClick={handleGoogleSignIn}
-              castShadow
-              receiveShadow
-            >
-              {`Inicia Sesion con Google`}
-              <meshStandardMaterial color="yellow" />
-            </Text3D>
-          </Center>
           <Button3D function_login={handleGoogleSignIn} />
+
           <BakeShadows />
         </Suspense>
       </Canvas>
