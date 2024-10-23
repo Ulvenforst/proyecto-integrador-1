@@ -14,7 +14,7 @@ const Biodiversity = () => {
     [2, 2, 2, 2],
     [2, 2, 0, 1],
     [2, 1, 2, 2],
-    [1, 2, 1, 2],
+    [0, 1, 2, 0],
   ];
 
   const mapWidth = terrainMap[0].length;
@@ -50,7 +50,7 @@ const Biodiversity = () => {
             maxAzimuthAngle={Math.PI * 0.25}
             minAzimuthAngle={-Math.PI * 0.25}
             target={[centerX, 0, centerZ]}
-            enableZoom={true}
+            enableZoom={false}
             enablePan={false}
           />
           <primitive object={new AxesHelper(500)} />

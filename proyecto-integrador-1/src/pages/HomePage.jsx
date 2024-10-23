@@ -10,9 +10,7 @@ export default function HomePage() {
       <NavBar />
       <main className="container mx-auto p-4 text-center">
         <div className="rounded-lg bg-slate-800 bg-opacity-75 p-8 shadow-lg">
-          <h1 className="text-4xl font-bold">
-            Bienvenido a TerraWatch
-          </h1>
+          <h1 className="text-4xl font-bold">Bienvenido a TerraWatch</h1>
           <p className="mt-4 text-lg">
             Aquí podrás encontrar información sobre diversos problemas en la
             tierra.
@@ -27,10 +25,22 @@ export default function HomePage() {
           </div>
           <div className="mt-12">
             <button
-              onClick={() => navigate("/biodiversity")}
-              className="rounded-md bg-red-500 px-6 py-3 text-lg font-bold transition-all duration-300 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+              onClick={() => navigate("/")}
+              className="mr-8 rounded-md bg-cyan-500 px-6 py-3 text-lg font-bold transition-all duration-300 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-400"
             >
-              Expoloar mas
+              Deforestacino de arboles
+            </button>
+            <button
+              onClick={() => navigate("/biodiversity")}
+              className="mr-8 rounded-md bg-cyan-500 px-6 py-3 text-lg font-bold transition-all duration-300 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+            >
+              Perdida de biodiversidad
+            </button>
+            <button
+              onClick={() => navigate("/")}
+              className="mr-8 rounded-md bg-cyan-500 px-6 py-3 text-lg font-bold transition-all duration-300 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+            >
+              Erosion en los suelos
             </button>
           </div>
         </div>
