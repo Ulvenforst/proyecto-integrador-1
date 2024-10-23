@@ -3,19 +3,14 @@ import React, { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { TrackballControls } from "@react-three/drei";
 import { useNavigate } from "react-router-dom";
-
-
 export default function HomePage() {
   const navigate = useNavigate();
-
-
   function RotatingCube() {
     const cubeRef = useRef(null);
     useFrame(({ clock }) => {
       const t = clock.getElapsedTime();
       const x = Math.sin(t) * 4;
       const y = Math.cos(x);
-
       if (cubeRef.current) {
         cubeRef.current.position.x = x;
         cubeRef.current.position.y = y;
@@ -57,7 +52,10 @@ export default function HomePage() {
             </ul>
           </div>
           <div className="mt-12">
-            <button onClick={() => navigate("/test")} className="rounded-md bg-red-500 px-6 py-3 text-lg font-bold transition-all duration-300 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">
+            <button
+              onClick={() => navigate("/test")}
+              className="rounded-md bg-red-500 px-6 py-3 text-lg font-bold transition-all duration-300 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+            >
               Expoloar mas
             </button>
           </div>

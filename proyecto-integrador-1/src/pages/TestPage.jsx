@@ -1,3 +1,4 @@
+//Tree JS
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { Loader } from "@react-three/drei";
@@ -6,10 +7,10 @@ import { Suspense } from "react";
 import { AxesHelper } from "three";
 
 //componentes
-import ControlCamare from "../controls/ControlCamare";
-import Staging from "../staging/Staging";
-import Lights from "../lights/Lights";
-import Forest from "../world/Forest";
+import ControlCamare from "../components/controls/ControlCamare";
+import Staging from "../components/staging/Staging";
+import Lights from "../components/lights/Lights";
+import Forest from "../components/world/Forest";
 
 // Import libraries
 import React, { useState, useEffect } from "react";
