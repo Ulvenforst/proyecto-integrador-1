@@ -10,11 +10,11 @@ const ForestChunkAnimals = ({ position, seed = 12345 }) => {
   return (
     <TerrainChunk position={position}>
       <ConiTreesBlock n={15} factor={35} seed={seed} minRadius={2} />
-      <StonesBlock n={10} factor={40} seed={seed} />
-      <MushroomsBlock n={10} factor={20} seed={seed + 2} minRadius={0.5} />
-      <GrassBlock n={100} factor={35} seed={seed + 1} minRadius={0.5} />
-      <BushesBlock n={4} factor={35} seed={seed + 2} minRadius={1} />{" "}
-      <AnimalsBlock n={30} factor={55} seed={seed + 2} minRadius={1} />{" "}
+      <StonesBlock n={40} factor={40} seed={seed} />
+      <MushroomsBlock n={40} factor={55} seed={seed + 2} minRadius={0.5} />
+      <GrassBlock n={100} factor={40} seed={seed + 1} minRadius={0.5} />
+      <BushesBlock n={4} factor={35} seed={seed + 2} minRadius={1} />
+      <AnimalsBlock n={28} factor={38} seed={seed + 2} minRadius={1} />
     </TerrainChunk>
   );
 };

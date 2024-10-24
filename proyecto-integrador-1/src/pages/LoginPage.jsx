@@ -105,10 +105,12 @@ export default function LoginPage() {
   }
 
   const terrainMap = [
-    [2, 2, 2, 2],
-    [2, 2, 2, 2],
-    [2, 2, 2, 2],
-    [2, 2, 2, 2],
+    [2, 2, 2, 2, 2, 2],
+    [2, 2, 2, 2, 2, 2],
+    [2, 2, 2, 2, 2, 2],
+    [2, 2, 2, 2, 2, 2],
+    [2, 2, 2, 2, 2, 2],
+    [2, 2, 2, 2, 2, 2],
   ];
 
   const mapWidth = terrainMap[0].length;
@@ -123,7 +125,7 @@ export default function LoginPage() {
   const cameraDistance = Math.max(totalWidth, totalHeight);
   const cameraHeight = cameraDistance * 0.05;
 
-  const cameraPosition = [centerX, cameraHeight, cameraDistance / 4];
+  const cameraPosition = [0, 0, 0];
 
   const terrainOffsetX = -((mapWidth - 1) * chunkSize) / 2;
   const terrainOffsetZ = -((mapHeight - 1) * chunkSize) / 2;

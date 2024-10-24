@@ -9,7 +9,7 @@ const Button3D = ({ function_login }) => {
   return (
     <mesh
       ref={buttonRef}
-      position={[0, 2.5, 26]}
+      position={[0, 2.5, 0]}
       onPointerOver={() => setHovered(true)} // Detecta hover
       onPointerOut={() => setHovered(false)} // Detecta salida del hover
       onClick={function_login} // Acción en click

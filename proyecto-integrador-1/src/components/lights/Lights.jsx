@@ -12,13 +12,13 @@ const Lights = () => {
     <>
       <group rotation={[0, 0, 0]}>
         <spotLight
-          //ref={spotLightRef}
-          color={0x1d96ea}
-          position={[0, 0, 27]}
+          ref={spotLightRef}
+          color={0xe8832f}
+          position={[0, -5, 0]}
           intensity={100}
-          distance={122}
+          distance={30}
           decay={0.3}
-          angle={1.2}
+          angle={1}
           target={targetRef.current} // Asignamos el target de la luz
           shadow-mapSize-width={3}
           shadow-mapSize-height={3}
