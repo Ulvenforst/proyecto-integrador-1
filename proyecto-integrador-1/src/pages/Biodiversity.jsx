@@ -48,12 +48,10 @@ const Biodiversity = ({ function_login }) => {
       >
         <Suspense fallback={null}>
           <ControlCamare></ControlCamare>
-          <primitive object={new AxesHelper(500)} />
           <GenericLight
             mapSize={Math.max(mapWidth, mapHeight)}
             chunkSize={chunkSize}
           />
-          <Lights />
           <CloudsBlock
             n={30}
             factor={Math.max(totalWidth, totalHeight)}
@@ -69,7 +67,6 @@ const Biodiversity = ({ function_login }) => {
             baseSeed={12345}
             position={[terrainOffsetX, 0, terrainOffsetZ]}
           />
-
           <BakeShadows />
         </Suspense>
       </Canvas>
