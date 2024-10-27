@@ -13,7 +13,7 @@ export default function ControlCamera() {
       // maxAzimuthAngle={Math.PI * 0.25}
       // minAzimuthAngle={-Math.PI * 0.25}
       target={[0, 2.5, 0]}
-      enableZoom={true}
+      enableZoom={false}
       enablePan={false}
       minDistance={3.5}  // Establece la distancia mínima
       maxDistance={15} // Establece la distancia máxima

@@ -1,6 +1,7 @@
 // Import libraries
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import { OrbitControls } from "@react-three/drei";
 
 // Firebase setup
 import { auth } from "../firebase/config";
@@ -20,10 +21,9 @@ import Button3D from "../components/Button3D";
 
 //3D
 import { BakeShadows } from "@react-three/drei";
-import { AxesHelper } from "three";
 import { Canvas } from "@react-three/fiber";
-import { Center, Text3D } from "@react-three/drei";
 import { Suspense } from "react";
+import { AxesHelper } from "three";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -141,7 +141,17 @@ export default function LoginPage() {
         }}
       >
         <Suspense fallback={null}>
-          <ControlCamare />
+          <OrbitControls
+            maxPolarAngle={Math.PI * 0.55}
+            // minPolarAngle={Math.PI * 0.1}
+            // maxAzimuthAngle={Math.PI * 0.25}
+            // minAzimuthAngle={-Math.PI * 0.25}
+            target={[0, 2.5, 0]}
+            enableZoom={true}
+            enablePan={false}
+            minDistance={3.5} // Establece la distancia mínima
+            maxDistance={15} // Establece la distancia máxima
+          />
           <GenericLight
             mapSize={Math.max(mapWidth, mapHeight)}
             chunkSize={chunkSize}

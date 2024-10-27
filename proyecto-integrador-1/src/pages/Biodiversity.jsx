@@ -1,8 +1,9 @@
 import { BakeShadows } from "@react-three/drei";
 import { AxesHelper } from "three";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { Center, Text3D } from "@react-three/drei";
-import { Suspense } from "react";
+import { Suspense, useRef, useEffect } from "react";
+import RoundedBoxWithText from "../components/RoundedBoxWithText";
 
 //componentes
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
@@ -12,13 +13,29 @@ import ControlCamare from "../components/controls/ControlCamare";
 import Lights from "../components/lights/Lights";
 import Button3D from "../components/Button3D";
 
+const CameraController = () => {
+  const { camera } = useThree();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      camera.position.z += 0.01;
+      camera.position.x += 0.2;
+      camera.position.y += 0.3;
+    };
+
+    const container = document.querySelector(".container");
+    container.addEventListener("click", handleScroll);
+
+    return () => {
+      container.removeEventListener("click", handleScroll);
+    };
+  }, [camera]);
+
+  return null; // No renderiza nada, solo controla la cámara
+};
+
 const Biodiversity = ({ function_login }) => {
-  const terrainMap = [
-    [2, 2, 2, 2],
-    [2, 2, 2, 2],
-    [2, 2, 2, 2],
-    [2, 2, 2, 2],
-  ];
+  const terrainMap = [[2]];
 
   const mapWidth = terrainMap[0].length;
   const mapHeight = terrainMap.length;
@@ -46,22 +63,14 @@ const Biodiversity = ({ function_login }) => {
           position: cameraPosition,
         }}
       >
+        <CameraController />
         <Suspense fallback={null}>
           <ControlCamare></ControlCamare>
           <GenericLight
             mapSize={Math.max(mapWidth, mapHeight)}
             chunkSize={chunkSize}
           />
-          <CloudsBlock
-            n={30}
-            factor={Math.max(totalWidth, totalHeight)}
-            seed={133456}
-            textureOffsetX={0.8}
-            textureOffsetY={1}
-            position={[centerX, 30, centerZ]}
-            scale={0.8}
-            minRadius={12}
-          />
+          <RoundedBoxWithText text={"oaaaaaaaaaa"}></RoundedBoxWithText>
           <Terrain
             map={terrainMap}
             baseSeed={12345}

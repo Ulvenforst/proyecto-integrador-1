@@ -12,7 +12,7 @@ const Lights = () => {
     <>
       <group rotation={[0, 0, 0]}>
         <spotLight
-          ref={spotLightRef}
+          //ref={spotLightRef}
           color={0xe8832f}
           position={[0, -5, 0]}
           intensity={100}

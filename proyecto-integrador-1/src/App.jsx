@@ -5,8 +5,10 @@ import Scene from "./pages/Scene";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 
-import Biodiversity  from "./pages/Biodiversity";
+//import pages
+import Biodiversity from "./pages/Biodiversity";
 
+//import utils
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -18,8 +20,11 @@ function App() {
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<PrivateRoute element={HomePage} />} />
-          <Route path="/biodiversity" element={<PrivateRoute element={Biodiversity} />} />
-          <Route path="/scene" element={<Scene/>} />
+          <Route
+            path="/biodiversity"
+            element={<PrivateRoute element={Biodiversity} />}
+          />
+          <Route path="/scene" element={<Scene />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
