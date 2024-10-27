@@ -15,6 +15,8 @@ const GenericModelBlock = ({
   textureOffsetY = 0.5,
   randomRotation = false,
   maxTiltAngle = Math.PI / 12,
+  existingPositions = [], // Posiciones ocupadas por otros elementos
+  onPosition = () => {}, // Callback para reportar nuevas posiciones
   ...props 
 }) => {
   const models = useMemo(() => {
@@ -30,35 +32,48 @@ const GenericModelBlock = ({
         factor,
         minRadius,
         50,
-        positions
+        [...existingPositions, ...positions] // Combinamos las posiciones existentes con las nuevas
       );
-
-      const zRotation = randomRotation 
-        ? SeededUtils.getSeededSideRotation(seed, index, maxTiltAngle)
-        : 0;
       
-      positions.push({
-        position,
-        radius: minRadius
-      });
+      // Solo agregamos la posición y notificamos si es válida
+      if (position) {
+        positions.push({
+          position,
+          radius: minRadius
+        });
+        onPosition(position, minRadius);
 
-      return {
-        id: index,
-        position,
-        rotation: [0, 0, zRotation],
-        modelName: modelType.modelName,
-        nodeName: modelType.nodeName,
-        textureOffsetX,
-        textureOffsetY,
-      };
-    });
-  }, [n, factor, seed, modelTypes, minRadius, textureOffsetX, textureOffsetY, randomRotation, maxTiltAngle]);
+        const zRotation = randomRotation 
+          ? SeededUtils.getSeededSideRotation(seed, index, maxTiltAngle)
+          : 0;
+
+        return {
+          id: index,
+          position,
+          rotation: [0, 0, zRotation],
+          modelName: modelType.modelName,
+          nodeName: modelType.nodeName,
+          textureOffsetX,
+          textureOffsetY,
+        };
+      }
+      return null;
+    }).filter(Boolean); // Filtramos los elementos nulos
+  }, [n, factor, seed, modelTypes, minRadius, textureOffsetX, textureOffsetY, randomRotation, maxTiltAngle, existingPositions]);
 
   const Component = GLB2JSXComponent || ModelGLB2JSX;
 
   return (
     <group {...props}>
-      {models.map(({ id, position, rotation, modelName, nodeName, textureOffsetX, textureOffsetY }) => (
+      {models.map(({ 
+        id, 
+        position, 
+        rotation, 
+        modelName, 
+        nodeName, 
+        textureOffsetX, 
+        textureOffsetY 
+      }) => (
         <Component
           key={id} 
           modelName={modelName} 

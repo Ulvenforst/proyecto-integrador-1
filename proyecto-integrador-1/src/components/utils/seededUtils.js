@@ -4,22 +4,14 @@ const seededRandom = (seed, index) => {
 };
 
 const getSeededSideRotation = (seed, index, maxTiltAngle = Math.PI / 12) => {
-  // Solo generamos rotación para el eje Z (inclinación lateral)
   return (seededRandom(seed, index * 3 + 7) * 2 - 1) * maxTiltAngle;
 };
 
-const isPositionValid = (position, occupiedPositions, minRadius) => {
-  for (const occupied of occupiedPositions) {
-    const dx = position[0] - occupied.position[0];
-    const dz = position[2] - occupied.position[2];
-    const distance = Math.sqrt(dx * dx + dz * dz);
-    const minDistance = minRadius + occupied.radius;
-    
-    if (distance < minDistance) {
-      return false;
-    }
-  }
-  return true;
+const isPositionTooClose = (pos1, pos2, minDistance) => {
+  const dx = pos1[0] - pos2[0];
+  const dz = pos1[2] - pos2[2];
+  const distance = Math.sqrt(dx * dx + dz * dz);
+  return distance < minDistance;
 };
 
 const generateRandomPosition = (seed, index, factor) => {
@@ -28,6 +20,13 @@ const generateRandomPosition = (seed, index, factor) => {
     0,
     (seededRandom(seed, index * 3 + 1) - 0.5) * factor,
   ];
+};
+
+const isPositionValid = (position, existingPositions, minRadius) => {
+  if (!existingPositions.every(pos => !isPositionTooClose(position, pos.position, minRadius))) {
+    return false;
+  }
+  return true;
 };
 
 const getSeededPosition = (seed, index, factor, minRadius = 1, maxAttempts = 50, existingPositions = []) => {
@@ -53,4 +52,10 @@ const getSeededTreeType = (seed, index, types) => {
   return types[typeIndex];
 };
 
-export { seededRandom, getSeededPosition, getSeededTreeType, getSeededSideRotation };
+export { 
+  seededRandom, 
+  getSeededPosition, 
+  getSeededTreeType, 
+  getSeededSideRotation, 
+  isPositionTooClose 
+};
