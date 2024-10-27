@@ -23,7 +23,7 @@ const Scene = () => {
   const centerX = 0;
   const centerZ = 0;
   
-  const cameraDistance = Math.max(totalWidth, totalHeight) * 1.2;
+  const cameraDistance = Math.max(totalWidth, totalHeight) * 0.7;
   const cameraHeight = cameraDistance * 0.4;
   
   const cameraPosition = [

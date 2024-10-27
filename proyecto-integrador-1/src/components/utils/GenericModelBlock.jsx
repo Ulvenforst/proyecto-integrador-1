@@ -13,6 +13,8 @@ const GenericModelBlock = ({
   minRadius = 1,
   textureOffsetX = 0,
   textureOffsetY = 0.5,
+  randomRotation = false,
+  maxTiltAngle = Math.PI / 12,
   ...props 
 }) => {
   const models = useMemo(() => {
@@ -30,6 +32,10 @@ const GenericModelBlock = ({
         50,
         positions
       );
+
+      const zRotation = randomRotation 
+        ? SeededUtils.getSeededSideRotation(seed, index, maxTiltAngle)
+        : 0;
       
       positions.push({
         position,
@@ -39,24 +45,26 @@ const GenericModelBlock = ({
       return {
         id: index,
         position,
+        rotation: [0, 0, zRotation],
         modelName: modelType.modelName,
         nodeName: modelType.nodeName,
         textureOffsetX,
         textureOffsetY,
       };
     });
-  }, [n, factor, seed, modelTypes, minRadius, textureOffsetX, textureOffsetY]);
+  }, [n, factor, seed, modelTypes, minRadius, textureOffsetX, textureOffsetY, randomRotation, maxTiltAngle]);
 
   const Component = GLB2JSXComponent || ModelGLB2JSX;
 
   return (
     <group {...props}>
-      {models.map(({ id, position, modelName, nodeName, textureOffsetX, textureOffsetY }) => (
+      {models.map(({ id, position, rotation, modelName, nodeName, textureOffsetX, textureOffsetY }) => (
         <Component
           key={id} 
           modelName={modelName} 
           nodeName={nodeName} 
           position={position} 
+          rotation={rotation}
           modelPath={modelPath}
           textureOffsetX={textureOffsetX}
           textureOffsetY={textureOffsetY}

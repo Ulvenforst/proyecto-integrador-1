@@ -8,7 +8,7 @@ const ModelGLB2JSX = ({
   nodeName, 
   texturePath = "textures/forest/texture_gradient.png", 
   scale = 0.5, 
-  rotation = [Math.PI / 2, 0, 0], 
+  rotation = [0, 0, 0],
   textureOffsetX = 0,
   textureOffsetY = 0.5,
   ...props 
@@ -51,7 +51,7 @@ const ModelGLB2JSX = ({
           geometry={nodes[nodeName].geometry} 
           material={materials.AllColors_Material}
           material-map={materialMap}
-          rotation={rotation}
+          rotation={[Math.PI / 2, 0, rotation[2]]}
           scale={scale}
         />
       </group>

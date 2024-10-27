@@ -3,6 +3,11 @@ const seededRandom = (seed, index) => {
   return x - Math.floor(x);
 };
 
+const getSeededSideRotation = (seed, index, maxTiltAngle = Math.PI / 12) => {
+  // Solo generamos rotación para el eje Z (inclinación lateral)
+  return (seededRandom(seed, index * 3 + 7) * 2 - 1) * maxTiltAngle;
+};
+
 const isPositionValid = (position, occupiedPositions, minRadius) => {
   for (const occupied of occupiedPositions) {
     const dx = position[0] - occupied.position[0];
@@ -48,4 +53,4 @@ const getSeededTreeType = (seed, index, types) => {
   return types[typeIndex];
 };
 
-export { seededRandom, getSeededPosition, getSeededTreeType };
+export { seededRandom, getSeededPosition, getSeededTreeType, getSeededSideRotation };

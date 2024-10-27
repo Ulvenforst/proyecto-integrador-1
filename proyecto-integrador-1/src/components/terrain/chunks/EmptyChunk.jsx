@@ -1,3 +1,4 @@
+import BranchesBlock from '../../forestModels/branches/BranchesBlock';
 import FlowersBlock from '../../forestModels/flowers/FlowersBlock';
 import GrassBlock from '../../forestModels/grass/GrassBlock';
 import MushroomsBlock from '../../forestModels/mushrooms/MushroomsBlock';
@@ -18,6 +19,14 @@ const EmptyChunk = ({ position, seed = 12345 }) => {
         factor={20}
         seed={seed + 2}
         minRadius={0.5}
+      />
+      <BranchesBlock
+        n={10}
+        factor={35}
+        seed={seed + 3}
+        minRadius={0.5}
+        randomRotation={true}
+        maxTiltAngle={Math.PI}
       />
       <FlowersBlock
         n={20}
