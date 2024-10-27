@@ -8,16 +8,16 @@ const GenericLight = ({ mapSize = 4, chunkSize = 40 }) => {
 
   const terrainSize = mapSize * chunkSize;
   const halfTerrainSize = terrainSize / 2;
-
+  
   const lightHeight = terrainSize * 0.75;
   const lightOffset = terrainSize * 0.5;
 
   return (
     <>
-      <directionalLight
+      <directionalLight 
         // ref={directionalLightRef}
-        intensity={0.5}
-        castShadow
+        intensity={1.5} 
+        castShadow 
         position={[lightOffset, lightHeight, lightOffset]}
         shadow-mapSize={[2048, 2048]}
         shadow-camera-far={terrainSize * 2}
@@ -28,9 +28,9 @@ const GenericLight = ({ mapSize = 4, chunkSize = 40 }) => {
         shadow-bias={-0.001}
         shadow-normalBias={0.02}
       />
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={1.5} />
     </>
   );
-};
+}
 
 export default GenericLight;
