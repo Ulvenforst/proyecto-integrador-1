@@ -34,3 +34,4 @@ const GenericLight = ({ mapSize = 4, chunkSize = 40 }) => {
 }
 
 export default GenericLight;
+

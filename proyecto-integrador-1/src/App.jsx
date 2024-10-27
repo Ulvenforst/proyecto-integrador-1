@@ -1,23 +1,31 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-// import of components
+
+//import of components
 import Scene from "./pages/Scene";
-// import HomePage from "./pages/HomePage";
-// import LoginPage from "./pages/LoginPage";
-// import { AuthProvider } from "./context/AuthContext";
-// import PrivateRoute from "./components/PrivateRoute";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
+
+//import pages
+import Biodiversity from "./pages/Biodiversity";
+
+//import utils
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
+
 
 function App() {
   return (
     //<AuthProvider>
       <BrowserRouter>
         <Routes>
-          { /*
-          <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/home" element={<PrivateRoute element={HomePage} />} />
-          */ }
-          <Route path="/" element={<Scene/>} />
+          { 
+          <Route
+            path="/biodiversity"
+            element={<PrivateRoute element={Biodiversity} />}
+          />
+          <Route path="/scene" element={<Scene />} />
+
         </Routes>
       </BrowserRouter>
     // </AuthProvider>

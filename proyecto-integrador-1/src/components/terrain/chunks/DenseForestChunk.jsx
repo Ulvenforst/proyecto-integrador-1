@@ -60,3 +60,4 @@ const DenseForestChunk = ({ position, seed = 12345 }) => {
 };
 
 export default DenseForestChunk;
+

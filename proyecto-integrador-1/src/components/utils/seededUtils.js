@@ -58,4 +58,6 @@ export {
   getSeededTreeType, 
   getSeededSideRotation, 
   isPositionTooClose 
+
 };
+
