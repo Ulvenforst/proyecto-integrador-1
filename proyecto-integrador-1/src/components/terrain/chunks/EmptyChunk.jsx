@@ -1,4 +1,4 @@
-import BranchesBlock from '../../forestModels/branches/BranchesBlock';
+// import BranchesBlock from '../../forestModels/branches/BranchesBlock';
 import FlowersBlock from '../../forestModels/flowers/FlowersBlock';
 import GrassBlock from '../../forestModels/grass/GrassBlock';
 import MushroomsBlock from '../../forestModels/mushrooms/MushroomsBlock';
@@ -16,17 +16,17 @@ const EmptyChunk = ({ position, seed = 12345 }) => {
         minRadius: 1.5
       }
     },
-    {
-      Component: BranchesBlock,
-      props: {
-        n: 10,
-        factor: 35,
-        seedOffset: 3,
-        minRadius: 1,
-        randomRotation: true,
-        maxTiltAngle: Math.PI
-      }
-    },
+    // {
+    //   Component: BranchesBlock,
+    //   props: {
+    //     n: 10,
+    //     factor: 35,
+    //     seedOffset: 3,
+    //     minRadius: 1,
+    //     randomRotation: true,
+    //     maxTiltAngle: Math.PI
+    //   }
+    // },
     {
       Component: MushroomsBlock,
       props: {
