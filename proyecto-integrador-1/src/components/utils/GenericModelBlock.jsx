@@ -90,4 +90,6 @@ const GenericModelBlock = ({
   );
 };
 
+
 export default GenericModelBlock;
+
