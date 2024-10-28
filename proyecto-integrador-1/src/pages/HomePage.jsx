@@ -20,11 +20,11 @@ function CameraAnimation({ isAnimating, setIsAnimating }) {
 
     // Primero, animamos la posición de la cámara
     gsap.to(camera.position, {
-      x: 5,
-      y: 5,
-      z: 5,
+      x: 100,
+      y: 16,
+      z: 15,
       duration: 2,
-      ease: "back.inOut",
+      ease: "power1.inOut",
       onUpdate: () => camera.updateProjectionMatrix(),
       onComplete: () => setIsAnimating(false),
     });
@@ -32,11 +32,11 @@ function CameraAnimation({ isAnimating, setIsAnimating }) {
     // Luego, animamos el target hacia el cual mira la cámara
     const target = { x: 1, y: 1, z: 1 }; // Cambia las coordenadas del target según lo que necesites
     gsap.to(target, {
-      x: 110,
-      y: 0,
-      z: 0,
+      x: 100,
+      y: 6,
+      z: 15,
       duration: 2,
-      ease: "back.inOut",
+      ease: "power1.inOut",
       onUpdate: () => camera.lookAt(target.x, target.y, target.z),
     });
   }, [isAnimating, camera, setIsAnimating]);
@@ -107,7 +107,7 @@ export default function HomePage() {
           />
           <TextGeneral3D
             text={"Deforestación de árboles"}
-            position={[-15, 5, 0]}
+            position={[-10, 5, 0]}
             onClick={animate}
           />
           <TextGeneral3D
@@ -117,7 +117,7 @@ export default function HomePage() {
           />
           <TextGeneral3D
             text={"Erosión de suelos"}
-            position={[15, 5, 0]}
+            position={[10, 5, 0]}
             onClick={() => navigate("/biodiversity")}
           />
           <Terrain

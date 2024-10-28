@@ -4,9 +4,8 @@ import { RoundedBox, Text3D } from "@react-three/drei";
 function TextGeneral3D({
   text = "",
   position = [0, -1, 0],
-  onClick = null, // Valor por defecto
+  onClick = () => console.log(click),
 }) {
-  // Dividir el texto en líneas si es necesario
   const maxLineLength = 35;
   const lines = useMemo(() => {
     const words = text.split(" ");
@@ -26,22 +25,12 @@ function TextGeneral3D({
     return result;
   }, [text]);
 
-  // Ajustar el tamaño del recuadro según el número de líneas y longitud del texto
   const boxWidth = Math.max(...lines.map((line) => line.length)) * 0.4 + 1;
   const boxHeight = lines.length * 0.8 + 0.5;
 
-  // Estados de hover y click
   const [hovered, setHovered] = useState(false);
 
-  // Manejadores de eventos de hover y click
-  const handlePointerOver = useCallback(() => {
-    if (
-      typeof onClick === "function" &&
-      onClick.toString() !== "function() { console.log('Texto clicado!'); }"
-    ) {
-      setHovered(true);
-    }
-  }, [onClick]);
+  const handlePointerOver = useCallback(() => setHovered(true), []);
 
   const handlePointerOut = useCallback(() => setHovered(false), []);
 
@@ -72,13 +61,16 @@ function TextGeneral3D({
             0.1,
           ]}
           rotation={[-(Math.PI / 6), 0, 0]}
-          scale={hovered && typeof onClick === "function" ? 1.5 : 1} // Escalar el texto en hover solo si onClick es una función
+          scale={hovered && typeof onClick === "function" ? 1.5 : 1}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
+          onClick={handleClick}
         >
           {line}
           <meshStandardMaterial
             color="#000000"
-            emissive="#ffff99" // Color de "brillo"
-            emissiveIntensity={hovered && typeof onClick === "function" ? 1 : 0} // Intensidad de brillo en hover
+            emissive="#ffff99"
+            emissiveIntensity={hovered && typeof onClick === "function" ? 1 : 0}
           />
         </Text3D>
       ))}

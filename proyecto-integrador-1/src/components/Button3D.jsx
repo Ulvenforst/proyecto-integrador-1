@@ -1,4 +1,4 @@
-import { Text } from "@react-three/drei";
+import { Text, RoundedBox } from "@react-three/drei";
 import { useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 
@@ -22,16 +22,18 @@ const Button3D = ({ function_login }) => {
   });
 
   return (
-    <mesh
+    <RoundedBox
       ref={buttonRef}
+      args={[4, 0.5, 1]}
+      radius={0.15}
+      smoothness={4}
       position={[0, 2.5, 0]}
-      onPointerOver={() => setHovered(true)} // Detecta hover
-      onPointerOut={() => setHovered(false)} // Detecta salida del hover
-      onClick={function_login} // Acción en click
-      scale={hovered ? [1.2, 1.2, 1.2] : [1, 1, 1]} // Aumenta la escala en hover
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+      onClick={function_login}
+      scale={hovered ? [1.2, 1.2, 1.2] : [1, 1, 1]}
     >
-      <boxGeometry args={[4, 0.5, 1]} />
-      <meshStandardMaterial color={hovered ? "#ff6347" : "#007bff"} />
+      <meshStandardMaterial color={hovered ? "#de6010" : "#3498d6"} />
       <Text
         position={[0, 0, 0.51]}
         fontSize={0.3}
@@ -41,7 +43,7 @@ const Button3D = ({ function_login }) => {
       >
         LOG IN WITH GOOGLE
       </Text>
-    </mesh>
+    </RoundedBox>
   );
 };
 
