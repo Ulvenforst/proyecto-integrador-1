@@ -8,12 +8,10 @@ import Terrain from "../components/terrain/Terrain";
 
 const Scene = () => {
   const terrainMap = [
-    [1, 1, 1, 2, 2, 2],
-    [1, 0, 1, 2, 2, 2],
-    [1, 1, 0, 2, 2, 2],
-    [1, 0, 0, 1, 0, 1],
-    [1, 0, 1, 0, 1, 1],
-    [1, 1, 1, 1, 1, 1]
+    [0, 1, 2, 2],
+    [1, 0, 2, 2],
+    [0, 0, 1, 0],
+    [0, 1, 0, 1],
   ];
 
   const mapWidth = terrainMap[0].length;
