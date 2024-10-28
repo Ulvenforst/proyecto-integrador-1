@@ -15,7 +15,6 @@ import { useAuth } from "../context/AuthContext";
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
 import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
-import ControlCamare from "../components/controls/ControlCamare";
 import Lights from "../components/lights/Lights";
 import Button3D from "../components/Button3D";
 
