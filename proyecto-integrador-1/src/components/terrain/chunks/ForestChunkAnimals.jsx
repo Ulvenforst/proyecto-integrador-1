@@ -25,7 +25,7 @@ const DenseForestChunk = ({ position, seed = 12345 }) => {
         factor: 35,
         minRadius: 2,
         randomRotation: true,
-        maxTiltAngle: Math.PI / 16,
+        maxTiltAngle: Math.PI / 2,
       },
     },
     {

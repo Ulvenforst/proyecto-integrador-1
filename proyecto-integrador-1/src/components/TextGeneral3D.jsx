@@ -40,15 +40,6 @@ function TextGeneral3D({
 
   return (
     <group position={position}>
-      <RoundedBox
-        args={[boxWidth, boxHeight, 0.2]}
-        onPointerOver={handlePointerOver}
-        onPointerOut={handlePointerOut}
-        onClick={handleClick}
-        rotation={[-(Math.PI / 6), 0, 0]}
-      >
-        <meshStandardMaterial color={hovered ? "#cccccc" : "#ffffff"} />
-      </RoundedBox>
       {lines.map((line, index) => (
         <Text3D
           key={index}

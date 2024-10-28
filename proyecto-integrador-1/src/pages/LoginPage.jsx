@@ -22,6 +22,7 @@ import { BakeShadows } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import { OrbitControls } from "@react-three/drei";
+import { AxesHelper } from "three";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -139,14 +140,22 @@ export default function LoginPage() {
             target={[0, 2.5, 0]}
             enableZoom={true}
             enablePan={false}
-            minDistance={3.5} 
-            maxDistance={15} 
+            minDistance={3.5}
+            maxDistance={15}
           />
           <GenericLight
             mapSize={Math.max(mapWidth, mapHeight)}
             chunkSize={chunkSize}
           />
           <Lights />
+
+          <Button3D
+            text={"login with google"}
+            position={[0, 5, 0]}
+            function_click={handleGoogleSignIn}
+          ></Button3D>
+
+          <primitive object={new AxesHelper(500)} />
           <CloudsBlock
             n={30}
             factor={Math.max(totalWidth, totalHeight)}
@@ -163,7 +172,6 @@ export default function LoginPage() {
             baseSeed={12345}
             position={[terrainOffsetX, 0, terrainOffsetZ]}
           />
-          <Button3D function_login={handleGoogleSignIn} />
           <BakeShadows />
         </Suspense>
       </Canvas>

@@ -11,18 +11,21 @@ import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
 import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
 import TextGeneral3D from "../components/TextGeneral3D";
+import Button3D from "../components/Button3D";
+import RoundedBoxWithText from "../components/RoundedBoxWithText";
 
 function CameraAnimation({ isAnimating, setIsAnimating }) {
   const { camera } = useThree();
 
   useEffect(() => {
+    console.log("aaaaaaaaaaa")
     if (!isAnimating) return;
 
     // Primero, animamos la posición de la cámara
     gsap.to(camera.position, {
       x: 100,
       y: 16,
-      z: 15,
+      z: 18,
       duration: 2,
       ease: "power1.inOut",
       onUpdate: () => camera.updateProjectionMatrix(),
@@ -33,7 +36,7 @@ function CameraAnimation({ isAnimating, setIsAnimating }) {
     const target = { x: 1, y: 1, z: 1 }; // Cambia las coordenadas del target según lo que necesites
     gsap.to(target, {
       x: 100,
-      y: 6,
+      y: 16,
       z: 15,
       duration: 2,
       ease: "power1.inOut",
@@ -66,6 +69,7 @@ export default function HomePage() {
   const [isAnimating, setIsAnimating] = useState(false);
 
   const animate = () => {
+    console.log("cambio")
     setIsAnimating(true);
   };
 
@@ -79,9 +83,11 @@ export default function HomePage() {
           position: cameraPosition,
         }}
       >
-        <CameraAnimation isAnimating={isAnimating} setIsAnimating={setIsAnimating} />
+        <CameraAnimation
+          isAnimating={isAnimating}
+          setIsAnimating={setIsAnimating}
+        />
         <Suspense fallback={null}>
-          
           <GenericLight
             mapSize={Math.max(mapWidth, mapHeight)}
             chunkSize={chunkSize}
@@ -97,28 +103,30 @@ export default function HomePage() {
             minRadius={12}
           />
           <primitive object={new AxesHelper(500)} />
-          <TextGeneral3D
+          <RoundedBoxWithText
             text={"Bienvenido a TerraWatch "}
             position={[0, 10, 0]}
           />
-          <TextGeneral3D
-            text={"Aquí podrás encontrar información sobre diversos problemas en la tierra."}
+          <RoundedBoxWithText
+            text={
+              "Aquí podrás encontrar información sobre diversos problemas en la tierra."
+            }
             position={[0, 8, 0]}
           />
-          <TextGeneral3D
+          <Button3D
             text={"Deforestación de árboles"}
             position={[-10, 5, 0]}
-            onClick={animate}
+            function_click={animate}
           />
-          <TextGeneral3D
+          <Button3D
             text={"Pérdida de Biodiversidad"}
             position={[0, 5, 0]}
-            onClick={() => navigate("/biodiversity")}
+            function_click={() => navigate("/biodiversity")}
           />
-          <TextGeneral3D
+          <Button3D
             text={"Erosión de suelos"}
             position={[10, 5, 0]}
-            onClick={() => navigate("/biodiversity")}
+            function_click={() => navigate("/biodiversity")}
           />
           <Terrain
             map={terrainMap}

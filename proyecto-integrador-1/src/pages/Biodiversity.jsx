@@ -8,7 +8,6 @@ import NavBar from "../components/NavBar";
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
 import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
-import Button3D from "../components/Button3D";
 
 const CameraController = () => {
   const { camera } = useThree();
