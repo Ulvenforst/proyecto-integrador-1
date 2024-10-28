@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
 import TerrainChunk from '../TerrainChunk';
+import { FLOOR_TYPES } from '../floors';
 
 const ChunkGenerator = ({ 
   position, 
   seed = 12345,
-  blocks = [] 
+  blocks = [],
+  floor = FLOOR_TYPES.DEFAULT
 }) => {
   const [models] = useMemo(() => {
     const positions = [];
@@ -34,7 +36,7 @@ const ChunkGenerator = ({
   }, [position, seed, blocks]);
 
   return (
-    <TerrainChunk position={position}>
+    <TerrainChunk position={position} floor={floor}>
       {models}
     </TerrainChunk>
   );

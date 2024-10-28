@@ -16,7 +16,6 @@ const Terrain = ({
             return null;
           }
 
-          // Genera una semilla única para cada chunk basada en su posición
           const chunkSeed = baseSeed + (rowIndex * 1000) + colIndex;
 
           return (

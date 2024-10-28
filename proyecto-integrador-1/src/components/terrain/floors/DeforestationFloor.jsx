@@ -1,7 +1,7 @@
 // import { useTexture } from "@react-three/drei";
 // import { useMemo } from "react";
 
-const GenericFloor = () => {
+const DeforestationFloor = () => {
   // const PATH = useMemo(() => "textures/forest/floor/rocky_terrain_", []);
 
   // I didn't like much the result of this texture, we should try another one
@@ -20,9 +20,10 @@ const GenericFloor = () => {
     >
       <planeGeometry args={[40, 40]} />
 
-      <meshStandardMaterial color="#70cf2f"/>
+      <meshStandardMaterial color="#674107"/>
     </mesh>
   );
 };
 
-export default GenericFloor;
+export default DeforestationFloor;
+

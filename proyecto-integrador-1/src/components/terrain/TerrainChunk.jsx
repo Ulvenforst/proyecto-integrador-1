@@ -1,9 +1,10 @@
-import GenericFloor from "../forestModels/GenericFloor";
 import { useCallback } from "react";
+import { FLOOR_TYPES } from "./floors";
 
 const TerrainChunk = ({ 
   position, 
   size = 40,
+  floor = FLOOR_TYPES.DEFAULT,
   children 
 }) => {
   const chunkPosition = useCallback(() => [
@@ -12,10 +13,12 @@ const TerrainChunk = ({
     position[1] * size
   ], [position, size]);
 
+  const FloorComponent = floor.Component;
+
   return (
     <group position={chunkPosition()}>
-      <GenericFloor scale={size/20}/>
       {children}
+      <FloorComponent {...floor.props}/>
     </group>
   );
 };
