@@ -7,6 +7,8 @@ import HomePage from "./pages/HomePage";
 
 //import pages
 import Biodiversity from "./pages/Biodiversity";
+import Deforestation from "./pages/Deforestation";
+import SoilErosion from "./pages/SoilErosion";
 
 //import utils
 import { AuthProvider } from "./context/AuthContext";
@@ -23,6 +25,14 @@ function App() {
           <Route
             path="/biodiversity"
             element={<PrivateRoute element={Biodiversity} />}
+          />
+          <Route
+            path="/deforestation"
+            element={<PrivateRoute element={Deforestation} />}
+          />
+          <Route
+            path="/soil-erosion"
+            element={<PrivateRoute element={SoilErosion} />}
           />
           <Route path="/scene" element={<Scene />} />
         </Routes>

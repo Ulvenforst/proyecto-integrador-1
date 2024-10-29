@@ -22,7 +22,6 @@ import { BakeShadows } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import { OrbitControls } from "@react-three/drei";
-import { AxesHelper } from "three";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -104,12 +103,12 @@ export default function LoginPage() {
   }
 
   const terrainMap = [
-    [2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2],
+    [5, 5, 5, 5, 5, 5],
+    [5, 5, 5, 5, 5, 5],
+    [5, 5, 5, 5, 5, 5],
+    [5, 5, 5, 5, 5, 5],
+    [5, 5, 5, 5, 5, 5],
+    [5, 5, 5, 5, 5, 5],
   ];
 
   const mapWidth = terrainMap[0].length;
@@ -117,9 +116,6 @@ export default function LoginPage() {
   const chunkSize = 40;
   const totalWidth = mapWidth * chunkSize;
   const totalHeight = mapHeight * chunkSize;
-
-  const centerX = 0;
-  const centerZ = 0;
 
   const terrainOffsetX = -((mapWidth - 1) * chunkSize) / 2;
   const terrainOffsetZ = -((mapHeight - 1) * chunkSize) / 2;
@@ -138,7 +134,6 @@ export default function LoginPage() {
           <OrbitControls
             maxPolarAngle={Math.PI * 0.55}
             target={[0, 2.5, 0]}
-            enableZoom={true}
             enablePan={false}
             minDistance={3.5}
             maxDistance={15}
@@ -155,14 +150,13 @@ export default function LoginPage() {
             function_click={handleGoogleSignIn}
           ></Button3D>
 
-          <primitive object={new AxesHelper(500)} />
           <CloudsBlock
             n={30}
             factor={Math.max(totalWidth, totalHeight)}
             seed={133456}
             textureOffsetX={0.8}
             textureOffsetY={1}
-            position={[centerX, 30, centerZ]}
+            position={[0, 30, 0]}
             scale={0.8}
             minRadius={12}
           />

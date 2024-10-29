@@ -6,7 +6,7 @@ import MushroomsBlock from "../../forestModels/mushrooms/MushroomsBlock";
 import AnimalsBlock from "../../forestModels/animals/AnimalsBlock";
 import ChunkGenerator from "./ChunkGenerator";
 
-const DenseForestChunk = ({ position, seed = 12345 }) => {
+const DenseForestChunkAnimals = ({ position, seed = 12345 }) => {
   const blocks = [
     {
       Component: ConiTreesBlock,
@@ -70,4 +70,4 @@ const DenseForestChunk = ({ position, seed = 12345 }) => {
   return <ChunkGenerator position={position} seed={seed} blocks={blocks} />;
 };
 
-export default DenseForestChunk;
+export default DenseForestChunkAnimals;

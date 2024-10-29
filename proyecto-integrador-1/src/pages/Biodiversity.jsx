@@ -90,7 +90,6 @@ const Biodiversity = () => {
 
   return (
     <div className="container h-screen max-w-full">
-      <NavBar />
       <Canvas
         className="bg-cyan-200"
         shadows="soft"
