@@ -1,5 +1,5 @@
 // Import libraries
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
 // Firebase setup
@@ -11,9 +11,16 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 // Contexts and hooks
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
+import GenericLight from "../components/lights/GenericLight";
+import Terrain from "../components/terrain/Terrain";
+import Lights from "../components/lights/Lights";
+import Button3D from "../components/Button3D";
 
 //3D
-import { Canvas, useFrame } from "@react-three/fiber";
+import { BakeShadows } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { Suspense } from "react";
 import { OrbitControls } from "@react-three/drei";
 
 export default function LoginPage() {
@@ -33,43 +40,6 @@ export default function LoginPage() {
       toast.onmouseleave = Swal.resumeTimer;
     },
   });
-
-  //function to animate loading object
-  function LoadingRing() {
-    const ringRef = useRef();
-    const segmentRef = useRef();
-
-    useFrame(({ clock }) => {
-      const elapsedTime = clock.getElapsedTime();
-
-      // Rotar el anillo completo
-      ringRef.current.rotation.z += 0.01;
-
-      // Mover el segmento iluminado alrededor del anillo
-      segmentRef.current.position.x = Math.cos(elapsedTime * 2) * 1.2;
-      segmentRef.current.position.y = Math.sin(elapsedTime * 2) * 1.2;
-    });
-
-    return (
-      <group ref={ringRef}>
-        {/* Anillo principal */}
-        <mesh>
-          <torusGeometry args={[1, 0.2, 16, 100]} />
-          <meshStandardMaterial color="lightblue" />
-        </mesh>
-
-        {/* Segmento iluminado que se mueve */}
-        <mesh ref={segmentRef} scale={[0.3, 0.3, 0.18]}>
-          <sphereGeometry args={[1.5, 16, 16]} />
-          <meshStandardMaterial
-            color="white"
-            emissive="yellow"
-            emissiveIntensity={1}
-          />
-        </mesh>
-      </group>
-    );
-  }
 
   // Function to handle successful login
   async function successLogin(loggedInUser) {
@@ -132,44 +102,73 @@ export default function LoginPage() {
     }
   }
 
-  // Render loading state if still checking authentication
-  if (loading)
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-slate-900 to-slate-700 text-white">
-        <div className="w-full max-w-sm rounded-lg bg-slate-600 bg-opacity-75 p-8 text-center shadow-lg">
-          <header className="mb-6 text-center">
-            <h1 className="mb-8 text-3xl font-bold">Log In</h1>
-          </header>
-          <div className="flex items-center justify-center">
-            {/* Canvas para el anillo 3D */}
-            <Canvas style={{ height: 150, width: 150 }}>
-              <ambientLight intensity={0.5} />
-              <spotLight position={[10, 10, 10]} angle={0.15} />
-              <LoadingRing />
-              <OrbitControls enableZoom={false} enablePan={false} />
-            </Canvas>
-          </div>
-        </div>
-      </div>
-    );
+  const terrainMap = [
+    [5, 5, 5, 5, 5, 5],
+    [5, 5, 5, 5, 5, 5],
+    [5, 5, 5, 5, 5, 5],
+    [5, 5, 5, 5, 5, 5],
+    [5, 5, 5, 5, 5, 5],
+    [5, 5, 5, 5, 5, 5],
+  ];
+
+  const mapWidth = terrainMap[0].length;
+  const mapHeight = terrainMap.length;
+  const chunkSize = 40;
+  const totalWidth = mapWidth * chunkSize;
+  const totalHeight = mapHeight * chunkSize;
+
+  const terrainOffsetX = -((mapWidth - 1) * chunkSize) / 2;
+  const terrainOffsetZ = -((mapHeight - 1) * chunkSize) / 2;
 
   // Render the login page
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-slate-900 to-slate-700 text-white">
-      <div className="w-full max-w-sm rounded-lg bg-slate-600 bg-opacity-75 p-8 text-center shadow-lg">
-        <h1 className="mb-8 text-3xl font-bold">Log In</h1>
-        <button
-          onClick={handleGoogleSignIn}
-          className="flex w-full items-center justify-center rounded-md bg-white px-6 py-3 text-lg font-bold text-slate-900 transition-all duration-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-        >
-          <img
-            src="https://img.icons8.com/color/48/000000/google-logo.png"
-            alt="Google logo"
-            className="mr-3 h-6 w-6"
+    <div className="container h-screen max-w-full">
+      <Canvas
+        className="bg-cyan-200"
+        shadows="soft"
+        camera={{
+          position: [0, 0, 0],
+        }}
+      >
+        <Suspense fallback={null}>
+          <OrbitControls
+            maxPolarAngle={Math.PI * 0.55}
+            target={[0, 2.5, 0]}
+            enablePan={false}
+            minDistance={3.5}
+            maxDistance={15}
           />
-          Log in with Google
-        </button>
-      </div>
+          <GenericLight
+            mapSize={Math.max(mapWidth, mapHeight)}
+            chunkSize={chunkSize}
+          />
+          <Lights />
+
+          <Button3D
+            text={"login with google"}
+            position={[0, 5, 0]}
+            function_click={handleGoogleSignIn}
+          ></Button3D>
+
+          <CloudsBlock
+            n={30}
+            factor={Math.max(totalWidth, totalHeight)}
+            seed={133456}
+            textureOffsetX={0.8}
+            textureOffsetY={1}
+            position={[0, 30, 0]}
+            scale={0.8}
+            minRadius={12}
+          />
+
+          <Terrain
+            map={terrainMap}
+            baseSeed={12345}
+            position={[terrainOffsetX, 0, terrainOffsetZ]}
+          />
+          <BakeShadows />
+        </Suspense>
+      </Canvas>
     </div>
   );
 }

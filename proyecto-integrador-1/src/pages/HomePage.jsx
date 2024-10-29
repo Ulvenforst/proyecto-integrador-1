@@ -1,62 +1,121 @@
-import NavBar from "../components/NavBar";
-import React, { useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { TrackballControls } from "@react-three/drei";
-export default function HomePage() {
-  function RotatingCube() {
-    const cubeRef = useRef(null);
-    useFrame(({ clock }) => {
-      const t = clock.getElapsedTime();
-      const x = Math.sin(t) * 4;
-      const y = Math.cos(x);
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Scene from "./Scene";
+import Navbar from "../components/NavBar";
 
-      if (cubeRef.current) {
-        cubeRef.current.position.x = x;
-        cubeRef.current.position.y = y;
+
+
+const HomePage = () => {
+  const navigate = useNavigate();
+  const [viewIndex, setViewIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+
+  const views = [
+    {
+      title: "TERRAWATCH",
+      content:
+        "Bienvenido a TERRAWATCH, tu plataforma para explorar y entender los principales problemas ambientales que afectan a nuestro planeta. Navega a través de diferentes secciones para aprender más sobre cada tema.",
+      type: "home",
+    },
+    {
+      title: "Biodiversidad",
+      content:
+        "La pérdida de biodiversidad es uno de los mayores desafíos ambientales. La extinción de especies y la destrucción de ecosistemas están ocurriendo a un ritmo sin precedentes.",
+      route: "/biodiversity",
+      type: "section",
+    },
+    {
+      title: "Deforestación",
+      content:
+        "Los bosques son fundamentales para la vida en la Tierra. Sin embargo, cada año perdemos millones de hectáreas debido a la tala indiscriminada y la expansión agrícola.",
+      route: "/deforestation",
+      type: "section",
+    },
+    {
+      title: "Erosión del Suelo",
+      content:
+        "La degradación del suelo amenaza nuestra capacidad para producir alimentos y mantener ecosistemas saludables. La erosión afecta a la agricultura y la estabilidad de los ecosistemas.",
+      route: "/soil-erosion",
+      type: "section",
+    },
+  ];
+
+  useEffect(() => {
+    const handleWheel = (event) => {
+      if (isAnimating) return;
+      setIsAnimating(true);
+
+      if (event.deltaY > 0) {
+        setViewIndex((prev) => (prev + 1) % views.length);
+      } else {
+        setViewIndex((prev) => (prev - 1 + views.length) % views.length);
       }
-    });
+
+      setTimeout(() => setIsAnimating(false), 1000);
+    };
+
+    window.addEventListener("wheel", handleWheel);
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, [isAnimating, views.length]);
+
+  const ContentBox = ({ view, index }) => {
+    if (view.type === "home") {
+      return (
+        <div className="absolute bottom-10 left-10 z-10 max-w-2xl rounded-lg bg-black/50 p-8 text-white backdrop-blur-sm">
+          <div className="mb-6 flex items-center gap-8">
+            <img
+              src="/logos/TERRAWATCH.png"
+              alt="TERRAWATCH Logo"
+              className="h-32 w-32 object-contain"
+            />
+            <h1 className="text-4xl font-bold">{view.title}</h1>
+          </div>
+          <p className="text-xl leading-relaxed">{view.content}</p>
+        </div>
+      );
+    }
 
     return (
-      <mesh ref={cubeRef}>
-        <boxGeometry args={[2, 2, 2]} />
-        <meshPhysicalMaterial color="blue" roughness={0.5} metalness={0.9} />
-      </mesh>
+      <div
+        className={`absolute z-10 transition-all duration-500 ease-in-out ${
+          index === 1
+            ? "left-10 top-24"
+            : index === 2
+              ? "right-10 top-24"
+              : "bottom-10 right-10"
+        } max-w-md rounded-lg bg-black/50 p-6 text-white backdrop-blur-sm`}
+      >
+        <h2 className="mb-4 text-2xl font-bold">{view.title}</h2>
+        <p className="mb-6 text-lg leading-relaxed">{view.content}</p>
+        <button
+          className="transform rounded-lg bg-green-500 px-6 py-2 text-white transition-transform duration-200 hover:scale-105 hover:bg-green-600"
+          onClick={() => navigate(view.route)}
+        >
+          Explorar problemática
+        </button>
+      </div>
     );
-  }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-slate-900 to-slate-700 text-white">
-      <NavBar />
-      <main className="container mx-auto p-4 text-center">
-        <div className="rounded-lg bg-slate-800 bg-opacity-75 p-8 shadow-lg">
-          <h1 className="text-4xl font-bold">
-            <Canvas camera={{ position: [2, 0, 5] }}>
-              <TrackballControls />
-              <ambientLight intensity={1.5} />
-              <directionalLight position={[0, 10, 10]} />
-              <RotatingCube />
-            </Canvas>
-            Bienvenido a TerraWatch
-          </h1>
-          <p className="mt-4 text-lg">
-            Aquí podrás encontrar información sobre diversos problemas en la
-            tierra.
-          </p>
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold">Secciones:</h2>
-            <ul className="mt-4 space-y-2">
-              <li>- Tipos de problemas en la tierra</li>
-              <li>- Soluciones posibles</li>
-              <li>- Recursos adicionales</li>
-            </ul>
-          </div>
-          <div className="mt-12">
-            <button className="rounded-md bg-red-500 px-6 py-3 text-lg font-bold transition-all duration-300 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">
-              Explorar Más
-            </button>
-          </div>
-        </div>
-      </main>
+    <div className="relative h-screen w-full">
+      {/* Navbar */}
+      <Navbar
+        views={views}
+        viewIndex={viewIndex}
+        setViewIndex={setViewIndex}
+        isAnimating={isAnimating}
+        setIsAnimating={setIsAnimating}
+      />
+
+      {/* Content Box */}
+      <ContentBox view={views[viewIndex]} index={viewIndex} />
+
+      {/* 3D Scene */}
+      <Scene viewIndex={viewIndex} />
     </div>
   );
-}
+};
+
+export default HomePage;
