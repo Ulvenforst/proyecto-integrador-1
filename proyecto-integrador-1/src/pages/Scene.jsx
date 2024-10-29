@@ -57,7 +57,7 @@ const Scene = ({ viewIndex }) => {
 
   const positions = [
     [-cameraDistance * 0.6, cameraHeight * 0.5, cameraDistance * 0.6], // Inferior izquierda
-    [-cameraDistance * 0.6, cameraHeight * 0.5, -cameraDistance * 0.6], // Superior izquierda
+    [-cameraDistance * 0.71, cameraHeight * 0.4, -cameraDistance * 0.71], // Superior izquierda
     [cameraDistance * 0.6, cameraHeight * 0.5, -cameraDistance * 0.6],  // Superior derecha
     [cameraDistance * 0.6, cameraHeight * 0.5, cameraDistance * 0.6],   // Inferior derecha
   ];

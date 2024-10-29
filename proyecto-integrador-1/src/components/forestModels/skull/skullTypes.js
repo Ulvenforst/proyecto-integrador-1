@@ -4,4 +4,3 @@ export const SKULL_TYPES = [
     nodeName: "bison_skull__0",
   },
 ];
-//geometry={nodes.bison_skull__0.geometry}

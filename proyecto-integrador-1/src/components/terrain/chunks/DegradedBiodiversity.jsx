@@ -22,8 +22,9 @@ const DegradedBiodiversity = ({ position, seed = 13345 }) => {
     {
       Component: SkullBlock,
       props: {
-        n: 15,
+        n: 25,
         factor: 35,
+        seedOffset: 2,
         minRadius: 2,
         randomRotation: true,
         maxTiltAngle: Math.PI / 2,
