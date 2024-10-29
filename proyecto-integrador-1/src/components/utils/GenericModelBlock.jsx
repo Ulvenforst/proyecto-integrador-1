@@ -32,7 +32,7 @@ const GenericModelBlock = ({
         factor,
         minRadius,
         50,
-        [...existingPositions, ...positions] // Combinamos las posiciones existentes con las nuevas
+        [...existingPositions, ...positions],
       );
       
       // Solo agregamos la posición y notificamos si es válida
@@ -90,4 +90,6 @@ const GenericModelBlock = ({
   );
 };
 
+
 export default GenericModelBlock;
+
