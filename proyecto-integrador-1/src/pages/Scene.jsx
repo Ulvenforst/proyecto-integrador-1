@@ -36,7 +36,7 @@ function CameraAnimation({ viewIndex, positions, centerX, centerZ }) {
 const Scene = ({ viewIndex }) => {
   const terrainMap = [
     [1, 1, 1, 1, 1, 1],
-    [1, 6, 5, 2, 2, 1],
+    [1, 6, 6, 2, 2, 1],
     [1, 5, 5, 2, 2, 1],
     [1, 0, 1, 7, 7, 1],
     [1, 0, 1, 7, 7, 1],

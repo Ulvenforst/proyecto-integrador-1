@@ -5,7 +5,7 @@ const SkullBlock = (props) => (
   <GenericModelBlock
     modelTypes={SKULL_TYPES}
     modelPath="models/forest/skull"
-    scale={0.005}
+    scale={0.002}
     {...props}
   />
 );
