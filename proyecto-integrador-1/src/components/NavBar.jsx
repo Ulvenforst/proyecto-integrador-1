@@ -13,7 +13,7 @@ const Navbar = ({
   setIsAnimating,
 }) => {
   const navigate = useNavigate();
-  // const { user, setUser } = useAuth();
+  const { user, setUser } = useAuth();
 
   const handleLogoClick = () => {
     if (!isAnimating) {
@@ -31,16 +31,16 @@ const Navbar = ({
     }
   };
 
-  // const handleSignOut = async () => {
-  //   try {
-  //     await signOut(auth);
-  //     setUser(null);
-  //     sessionStorage.removeItem("user");
-  //     navigate("/login");
-  //   } catch (error) {
-  //     console.error("Error signing out:", error);
-  //   }
-  // };
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      sessionStorage.removeItem("user");
+      navigate("/login");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
   return (
     <nav className="absolute left-0 right-0 top-0 z-10 bg-black/50 backdrop-blur-sm">
@@ -68,7 +68,7 @@ const Navbar = ({
 
         {/* User Info and Sign Out */}
         <div className="flex items-center space-x-4">
-          {/*user && (
+          {user && (
             <div className="flex items-center space-x-2">
               {user.photoURL && (
                 <img
@@ -81,14 +81,14 @@ const Navbar = ({
                 {user.displayName || user.email}
               </span>
             </div>
-          )*/}
-          {/*
+          )}
+          {
           <button
             onClick={handleSignOut}
             className="rounded-md bg-red-500 px-4 py-2 text-base font-bold text-white transition-all duration-300 hover:bg-red-700 hover:text-slate-300 focus:outline-none focus:ring-2 focus:ring-red-400"
           >
             Sign Out
-          </button> */}
+          </button>}
         </div>
       </div>
     </nav>
