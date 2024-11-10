@@ -26,7 +26,7 @@ import { OrbitControls } from "@react-three/drei";
 export default function LoginPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  // const { setUser, setUserDocData } = useAuth();
+  const { setUser, setUserDocData } = useAuth();
 
   // Toast notification configuration using SweetAlert2
   const Toast = Swal.mixin({

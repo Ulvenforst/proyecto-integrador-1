@@ -83,7 +83,7 @@ export default function Deforestation() {
   }, []);
 
   const returnHome = async () => {
-    navigate("/scene");
+    navigate("/home");
   };
 
   const handleChunkClick = (rowIndex, colIndex) => {
