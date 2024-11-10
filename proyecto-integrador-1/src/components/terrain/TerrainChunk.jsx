@@ -5,7 +5,8 @@ const TerrainChunk = ({
   position, 
   size = 40,
   floor = FLOOR_TYPES.DEFAULT,
-  children 
+  children,
+  onClick 
 }) => {
   const chunkPosition = useCallback(() => [
     position[0] * size,
@@ -16,9 +17,15 @@ const TerrainChunk = ({
   const FloorComponent = floor.Component;
 
   return (
-    <group position={chunkPosition()}>
+    <group 
+      position={chunkPosition()}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick?.();
+      }}
+    >
       {children}
-      <FloorComponent {...floor.props}/>
+      <FloorComponent {...floor.props} scale={size/20}/>
     </group>
   );
 };

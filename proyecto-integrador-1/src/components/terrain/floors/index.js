@@ -1,20 +1,18 @@
 import GenericFloor from "../../forestModels/GenericFloor";
 import DeforestationFloor from "./DeforestationFloor";
+import SoilErosionFloor from "./SoilErosionFloor";
 
 export const FLOOR_TYPES = {
   DEFAULT: {
     Component: GenericFloor,
-    props: {
-    }
+    props: {},
   },
   DEFORESTED: {
     Component: DeforestationFloor,
-    props: {
-    }
+    props: {},
   },
   DRY: {
-    Component: GenericFloor,
-    props: {
-    }
-  }
+    Component: SoilErosionFloor,
+    props: {},
+  },
 };
