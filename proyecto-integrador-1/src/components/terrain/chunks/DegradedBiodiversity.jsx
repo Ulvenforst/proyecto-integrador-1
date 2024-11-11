@@ -54,7 +54,7 @@ const DegradedBiodiversity = ({ position, seed = 13345 }) => {
       position={position}
       seed={seed}
       blocks={blocks}
-      floor={FLOOR_TYPES.DEFORESTED}
+      floor={FLOOR_TYPES.LOST}
     />
   );
 };
