@@ -82,12 +82,13 @@ const Navbar = ({
               </span>
             </div>
           )}
+          {
           <button
             onClick={handleSignOut}
             className="rounded-md bg-red-500 px-4 py-2 text-base font-bold text-white transition-all duration-300 hover:bg-red-700 hover:text-slate-300 focus:outline-none focus:ring-2 focus:ring-red-400"
           >
             Sign Out
-          </button>
+          </button>}
         </div>
       </div>
     </nav>
