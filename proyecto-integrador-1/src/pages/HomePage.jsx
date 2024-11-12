@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Scene from "./Scene";
 import Navbar from "../components/NavBar";
 
-
-
 const HomePage = () => {
   const navigate = useNavigate();
   const [viewIndex, setViewIndex] = useState(0);

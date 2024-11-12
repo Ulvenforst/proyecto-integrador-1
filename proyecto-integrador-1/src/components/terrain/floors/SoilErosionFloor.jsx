@@ -13,7 +13,7 @@ const SoilErosionFloor = () => {
   });
 
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} scale={1.15} receiveShadow>
       <planeGeometry args={[40, 40]} />
 
       <meshStandardMaterial {...floorTexture} />

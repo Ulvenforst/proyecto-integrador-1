@@ -15,8 +15,8 @@ const GenericModelBlock = ({
   textureOffsetY = 0.5,
   randomRotation = false,
   maxTiltAngle = Math.PI / 12,
-  existingPositions = [], // Posiciones ocupadas por otros elementos
-  onPosition = () => {}, // Callback para reportar nuevas posiciones
+  existingPositions = [],
+  onPosition = () => {},
   ...props 
 }) => {
   const models = useMemo(() => {
@@ -35,7 +35,6 @@ const GenericModelBlock = ({
         [...existingPositions, ...positions],
       );
       
-      // Solo agregamos la posición y notificamos si es válida
       if (position) {
         positions.push({
           position,
@@ -58,7 +57,7 @@ const GenericModelBlock = ({
         };
       }
       return null;
-    }).filter(Boolean); // Filtramos los elementos nulos
+    }).filter(Boolean);
   }, [n, factor, seed, modelTypes, minRadius, textureOffsetX, textureOffsetY, randomRotation, maxTiltAngle, existingPositions]);
 
   const Component = GLB2JSXComponent || ModelGLB2JSX;

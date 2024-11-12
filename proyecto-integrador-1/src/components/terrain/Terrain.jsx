@@ -3,7 +3,8 @@ import { CHUNK_TYPES } from './chunks';
 const Terrain = ({ 
   map, 
   baseSeed = 12345,
-  position = [0, 0, 0]
+  position = [0, 0, 0],
+  onChunkClick
 }) => {
   return (
     <group position={position}>
@@ -23,6 +24,7 @@ const Terrain = ({
               key={`${rowIndex}-${colIndex}`}
               position={[colIndex, rowIndex]}
               seed={chunkSeed}
+              onClick={() => onChunkClick?.(rowIndex, colIndex)}
             />
           );
         })
