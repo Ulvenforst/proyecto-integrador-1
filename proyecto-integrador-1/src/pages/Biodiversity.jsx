@@ -70,8 +70,17 @@ const Biodiversity = () => {
   const navigate = useNavigate();
   const [viewIndex, setViewIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-
   const [focusMode, setFocusMode] = useState(false);
+  const [showScrollHint, setShowScrollHint] = useState(true);
+
+  // Efecto para ocultar el texto después de 10 segundos
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowScrollHint(false);
+    }, 10000);
+
+    return () => clearTimeout(timer); // Limpieza del temporizador
+  }, []);
 
   const views = [
     {
@@ -157,6 +166,18 @@ const Biodiversity = () => {
     navigate("/home");
   };
 
+  const scrollHintStyle = {
+    position: "absolute",
+    bottom: "20px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    color: "white",
+    fontSize: "7rem",
+    animation: "blink 1s infinite", // Aplica la animación de parpadeo
+    opacity: showScrollHint ? 1 : 0, // Oculta el texto después de 10 segundos
+    transition: "opacity 0.5s ease",
+  };
+
   return (
     <div className="container h-screen max-w-full">
       <button
@@ -169,6 +190,17 @@ const Biodiversity = () => {
       {focusMode && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-black bg-opacity-80 p-8 text-2xl text-white">
           <p>{views[viewIndex].text}</p>
+        </div>
+      )}
+
+      {showScrollHint && (
+        <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 transform rounded-lg px-6 py-2 text-center text-white transition-all duration-200 hover:scale-105">
+          <p className="animate-pulse text-3xl">
+            Desplázate por el entorno con el <strong>SCROLL</strong> del mouse 🖱️
+          </p>
+          <p className="animate-pulse text-3xl">
+            presiona <strong>ENTER</strong> para ver mejor el texto ⌨️
+          </p>
         </div>
       )}
 
