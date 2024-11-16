@@ -1,18 +1,14 @@
 import { BakeShadows, OrbitControls } from "@react-three/drei";
 import { AxesHelper } from "three";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Suspense, useRef, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import RoundedBoxWithText from "../components/RoundedBoxWithText";
-import NavBar from "../components/NavBar";
 import { gsap } from "gsap";
-import { Html } from "@react-three/drei";
+
 //componentes
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
 import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
-import Wood_sing from "../components/Wood_sing";
-import { RoundedBox, Text3D } from "@react-three/drei";
-import { FirstPersonControls } from "@react-three/drei";
 import { useNavigate } from "react-router-dom";
 
 function CameraAnimation({ viewIndex, positions }) {
@@ -79,7 +75,37 @@ const Biodiversity = () => {
       setShowScrollHint(false);
     }, 10000);
 
-    return () => clearTimeout(timer); // Limpieza del temporizador
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Efecto para manejar el scroll del mouse
+  useEffect(() => {
+    const handleWheel = (event) => {
+      if (isAnimating) return;
+      setIsAnimating(true);
+
+      if (event.deltaY < 0) {
+        setViewIndex((prev) => (prev + 1) % views.length);
+      } else {
+        setViewIndex((prev) => (prev - 1 + views.length) % views.length);
+      }
+
+      setTimeout(() => setIsAnimating(false), 1000);
+    };
+
+    window.addEventListener("wheel", handleWheel);
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, [isAnimating, views.length]);
+
+  // Efecto para manejar el evento de la tecla "enter"
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Enter") {
+        setFocusMode((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   const views = [
@@ -105,33 +131,13 @@ const Biodiversity = () => {
     },
   ];
 
-  useEffect(() => {
-    const handleWheel = (event) => {
-      if (isAnimating) return;
-      setIsAnimating(true);
-
-      if (event.deltaY < 0) {
-        setViewIndex((prev) => (prev + 1) % views.length);
-      } else {
-        setViewIndex((prev) => (prev - 1 + views.length) % views.length);
-      }
-
-      setTimeout(() => setIsAnimating(false), 1000);
-    };
-
-    window.addEventListener("wheel", handleWheel);
-    return () => window.removeEventListener("wheel", handleWheel);
-  }, [isAnimating, views.length]);
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Enter") {
-        setFocusMode((prev) => !prev);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  const positions = [
+    //roja, verde, azul
+    [0, 5, 155],
+    [0, 5, 72],
+    [0, 5, -1],
+    [0, 5, -75],
+  ];
 
   const terrainMap = [
     [1, 1, 1, 5, 1, 1],
@@ -154,34 +160,10 @@ const Biodiversity = () => {
   const terrainOffsetX = -((mapWidth - 1) * chunkSize) / 2;
   const terrainOffsetZ = -((mapHeight - 1) * chunkSize) / 2;
 
-  const positions = [
-    //roja, verde, azul
-    [0, 5, 155],
-    [0, 5, 72],
-    [0, 5, -1],
-    [0, 5, -75],
-  ];
-
-  const goHome = async () => {
-    navigate("/home");
-  };
-
-  const scrollHintStyle = {
-    position: "absolute",
-    bottom: "20px",
-    left: "50%",
-    transform: "translateX(-50%)",
-    color: "white",
-    fontSize: "7rem",
-    animation: "blink 1s infinite", // Aplica la animación de parpadeo
-    opacity: showScrollHint ? 1 : 0, // Oculta el texto después de 10 segundos
-    transition: "opacity 0.5s ease",
-  };
-
   return (
     <div className="container h-screen max-w-full">
       <button
-        onClick={goHome}
+        onClick={() => navigate("/home")}
         className="absolute left-6 top-6 z-10 transform rounded-lg bg-green-500 px-6 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-green-600"
       >
         inicio
@@ -196,7 +178,8 @@ const Biodiversity = () => {
       {showScrollHint && (
         <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 transform rounded-lg px-6 py-2 text-center text-white transition-all duration-200 hover:scale-105">
           <p className="animate-pulse text-3xl">
-            Desplázate por el entorno con el <strong>SCROLL</strong> del mouse 🖱️
+            Desplázate por el entorno con el <strong>SCROLL</strong> del mouse
+            🖱️
           </p>
           <p className="animate-pulse text-3xl">
             presiona <strong>ENTER</strong> para ver mejor el texto ⌨️
@@ -214,10 +197,20 @@ const Biodiversity = () => {
         <Suspense fallback={null}>
           <CameraAnimation viewIndex={viewIndex} positions={positions} />
 
+          {views.map((box, index) => (
+            <RoundedBoxWithText
+              key={index}
+              text={box.text}
+              position={box.position}
+              rotation={box.rotation}
+            />
+          ))}
+
           <GenericLight
             mapSize={Math.max(mapWidth, mapHeight)}
             chunkSize={chunkSize}
           />
+
           <CloudsBlock
             n={300}
             factor={Math.max(totalWidth, totalHeight)}
@@ -229,31 +222,13 @@ const Biodiversity = () => {
             minRadius={12}
           />
 
-          <primitive object={new AxesHelper(500)} />
-
-          {views.map((box, index) => {
-            return (
-              <RoundedBoxWithText
-                key={index}
-                text={box.text}
-                position={box.position}
-                rotation={box.rotation}
-              />
-            );
-          })}
-
-          <RoundedBoxWithText
-            text={
-              "Contaminación: La contaminación del aire, el agua y el suelo afecta negativamente a los ecosistemas y a la vida silvestre."
-            }
-            position={[-10, 6, -90]}
-            rotation={[0, Math.PI / 6, 0]}
-          />
           <Terrain
             map={terrainMap}
             baseSeed={12345}
             position={[terrainOffsetX, 0, terrainOffsetZ]}
           />
+
+          <primitive object={new AxesHelper(500)} />
 
           <BakeShadows />
         </Suspense>
