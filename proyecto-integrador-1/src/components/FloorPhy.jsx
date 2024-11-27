@@ -42,7 +42,6 @@ export function Model(props) {
           colliders="hull"
           position={[x, yPosition, z]} // Establecer la posición generada
           mass={0.1}
-          gravityScale={0.1}
         >
           <mesh
             castShadow
@@ -82,7 +81,6 @@ export function Model(props) {
           colliders="hull"
           position={[x, yPosition, z]}
           mass={0.1}
-          gravityScale={0.1}
         >
           <mesh
             castShadow
@@ -121,7 +119,6 @@ export function Model(props) {
           colliders="hull"
           position={[x, yPosition, z]}
           mass={0.1}
-          gravityScale={0.1}
         >
           <mesh
             castShadow
