@@ -6,6 +6,9 @@ import MushroomsBlock from "../../forestModels/mushrooms/MushroomsBlock";
 import AnimalsBlock from "../../forestModels/animals/AnimalsBlock";
 import ChunkGenerator from "./ChunkGenerator";
 
+import DeadTreesBlock from "../../forestModels/dead_trees/DeadTreesBlock";
+import { FLOOR_TYPES } from "../floors";
+
 const DenseForestChunkAnimals = ({
   position,
   seed = 12345,
@@ -32,7 +35,17 @@ const DenseForestChunkAnimals = ({
         randomRotation: true,
         maxTiltAngle: Math.PI / 2,
         isAnimationDegraded: isAnimationDegraded,
-        scale: 1
+        scale: 1,
+      },
+    },
+    {
+      Component: DeadTreesBlock,
+      props: {
+        n: 10,
+        factor: 35,
+        seedOffset: 3,
+        minRadius: 1.5,
+        scale: 0.3,
       },
     },
     {
@@ -74,7 +87,14 @@ const DenseForestChunkAnimals = ({
     },
   ];
 
-  return <ChunkGenerator position={position} seed={seed} blocks={blocks} />;
+  return (
+    <ChunkGenerator
+      position={position}
+      seed={seed}
+      blocks={blocks}
+      floor={FLOOR_TYPES.DEGRADED}
+    />
+  );
 };
 
 export default DenseForestChunkAnimals;

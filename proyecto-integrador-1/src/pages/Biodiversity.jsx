@@ -69,29 +69,29 @@ const Biodiversity = () => {
   const [isDamaged, setIsDamaged] = useState(false);
 
   const terrainMap = [
-    [1, 1, 1, 5, 1, 1],
-    [1, 5, 5, 5, 1, 1],
-    [1, 5, 5, 5, 1, 1],
-    [1, 1, 5, 5, 5, 1],
-    [1, 1, 5, 5, 5, 1],
-    [1, 5, 5, 5, 1, 1],
-    [1, 5, 5, 5, 1, 1],
-    [1, 1, 5, 5, 1, 1],
-    [1, 1, 5, 5, 1, 1],
+    [1, 1, 1, 8, 1, 1],
+    [1, 8, 8, 8, 1, 1],
+    [1, 8, 8, 8, 1, 1],
+    [1, 1, 8, 8, 8, 1],
+    [1, 1, 8, 8, 8, 1],
+    [1, 8, 8, 8, 1, 1],
+    [1, 8, 8, 8, 1, 1],
+    [1, 1, 8, 8, 1, 1],
+    [1, 1, 8, 8, 1, 1],
   ];
 
   const terrainMap2 = [
     [1, 1, 1, 1, 1, 1],
-    [1, 6, 6, 6, 1, 1],
-    [1, 6, 6, 6, 1, 1],
-    [1, 1, 6, 6, 6, 1],
-    [1, 1, 6, 6, 6, 1],
-    [1, 6, 6, 6, 1, 1],
-    [1, 6, 6, 6, 1, 1],
-    [1, 1, 6, 6, 1, 1],
-    [1, 1, 6, 6, 1, 1],
+    [1, 6, 6, 5, 5, 1],
+    [1, 6, 6, 5, 5, 1],
+    [1, 5, 5, 6, 6, 1],
+    [1, 5, 5, 6, 6, 1],
+    [1, 6, 6, 5, 5, 1],
+    [1, 6, 6, 5, 5, 1],
+    [1, 1, 5, 5, 1, 1],
+    [1, 1, 5, 5, 1, 1],
   ];
-  const [mapMistico, setMapMistico] = useState(terrainMap);
+  const [mapMistico, setMapMistico] = useState(terrainMap2);
 
   // Efecto para ocultar el texto después de 10 segundos
   useEffect(() => {
@@ -155,7 +155,7 @@ const Biodiversity = () => {
   const terrainOffsetX = -((mapWidth - 1) * chunkSize) / 2;
   const terrainOffsetZ = -((mapHeight - 1) * chunkSize) / 2;
 
-  const currentText = isDamaged ? views : viewDamaged;
+  const currentText = isDamaged ? viewDamaged : views;
 
   return (
     <div className="container h-screen max-w-full">
