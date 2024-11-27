@@ -6,7 +6,11 @@ import MushroomsBlock from "../../forestModels/mushrooms/MushroomsBlock";
 import AnimalsBlock from "../../forestModels/animals/AnimalsBlock";
 import ChunkGenerator from "./ChunkGenerator";
 
-const DenseForestChunkAnimals = ({ position, seed = 12345 }) => {
+const DenseForestChunkAnimals = ({
+  position,
+  seed = 12345,
+  isAnimationDegraded = false,
+}) => {
   const blocks = [
     {
       Component: ConiTreesBlock,
@@ -16,6 +20,7 @@ const DenseForestChunkAnimals = ({ position, seed = 12345 }) => {
         minRadius: 2,
         randomRotation: true,
         maxTiltAngle: Math.PI / 16,
+        isAnimationDegraded: isAnimationDegraded,
       },
     },
     {

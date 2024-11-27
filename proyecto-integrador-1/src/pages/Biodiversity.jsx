@@ -129,7 +129,7 @@ const Biodiversity = () => {
     [1, 1, 5, 5, 1, 1],
   ];
 
-  const terrainMap = [[6], [6], [6], [6], [6], [6], [6], [6], [6]];
+  const terrainMap = [[5 , 5, 5], [5 , 5, 5], [5 , 5, 5]];
 
   const mapWidth = terrainMap[0].length;
   const mapHeight = terrainMap.length;
