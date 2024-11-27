@@ -157,6 +157,12 @@ const Biodiversity = () => {
 
   const currentText = isDamaged ? viewDamaged : views;
 
+  const handleBoxClick = () => {
+    console.log("¡Se hizo clic en el RoundedBox!");
+    setFocusMode((prev) => !prev);
+    // Aquí puedes ejecutar cualquier lógica que desees
+  };
+
   return (
     <div className="container h-screen max-w-full">
       <button
@@ -174,12 +180,15 @@ const Biodiversity = () => {
 
       {showScrollHint && (
         <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 transform rounded-lg px-6 py-2 text-center text-white transition-all duration-200 hover:scale-105">
-          <p className="animate-pulse text-3xl">
+          <p className="animate-pulse text-2xl">
             Desplázate por el entorno con el <strong>SCROLL</strong> del mouse
             🖱️
           </p>
-          <p className="animate-pulse text-3xl">
+          <p className="animate-pulse text-2xl">
             presiona <strong>ENTER</strong> para ver mejor el texto ⌨️
+          </p>
+          <p className="animate-pulse text-2xl">
+            o <strong>CLICKEA</strong> sobre el recuadro para leer mejor 🖱️
           </p>
         </div>
       )}
@@ -200,6 +209,7 @@ const Biodiversity = () => {
               text={box.text}
               position={box.position}
               rotation={box.rotation}
+              onClick={handleBoxClick}
             />
           ))}
 

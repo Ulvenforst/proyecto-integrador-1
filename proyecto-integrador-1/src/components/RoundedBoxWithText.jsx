@@ -1,8 +1,7 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo } from "react";
 import { RoundedBox, Text3D } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
 
-function RoundedBoxWithText({ text, position, rotation }) {
+function RoundedBoxWithText({ text, position, rotation, onClick=null }) {
   const maxLineLength = 35;
   const lines = useMemo(() => {
     const words = text.split(" ");
@@ -25,19 +24,26 @@ function RoundedBoxWithText({ text, position, rotation }) {
   const boxWidth = Math.max(...lines.map((line) => line.length)) * 0.4;
   const boxHeight = lines.length * 0.8 + 0.5;
 
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <RoundedBox
       args={[boxWidth, boxHeight, 0.3]}
       radius={0.18}
       smoothness={4}
       position={position}
-      rotation={rotation} // Rotación en el eje Y
+      rotation={rotation}
+      onClick={handleClick} // Detectar clics
     >
       <meshStandardMaterial transparent opacity={0.7} color="#ffffff" />
       {lines.map((line, index) => (
         <Text3D
           key={index}
-          font="/fonts/blue-ocean.json"
+          font="/fonts/Roseglow_Regular.json"
           size={0.6}
           height={0.1}
           position={[
