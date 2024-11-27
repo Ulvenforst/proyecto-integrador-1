@@ -5,6 +5,7 @@ import { Suspense, useEffect, useState } from "react";
 import RoundedBoxWithText from "../components/RoundedBoxWithText";
 import { gsap } from "gsap";
 import { Physics } from "@react-three/rapier";
+import { Model } from "../components/FloorPhy";
 
 //componentes
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
@@ -44,16 +45,16 @@ function CameraAnimation({ viewIndex, positions }) {
   return (
     <OrbitControls
       // ref={orbitControlsRef}
-      maxPolarAngle={Math.PI * 0.51}
-      minPolarAngle={Math.PI * 0.5}
-      maxAzimuthAngle={Math.PI * 0.015}
-      minAzimuthAngle={-Math.PI * 0.015}
+      //maxPolarAngle={Math.PI * 0.51}
+      //minPolarAngle={Math.PI * 0.5}
+      //maxAzimuthAngle={Math.PI * 0.015}
+      //minAzimuthAngle={-Math.PI * 0.015}
       target={[0, 10, -200]}
-      enableZoom={false}
+      enableZoom={true}
       enablePan={true}
       enableRotate={true}
-      rotateSpeed={0.005} // Ajusta la velocidad de rotación (valor más bajo para hacerlo más lento)
-      panSpeed={0.005} // Ajusta la velocidad de desplazamiento (valor más bajo para hacerlo más lento)
+      //rotateSpeed={0.005} // Ajusta la velocidad de rotación (valor más bajo para hacerlo más lento)
+      //panSpeed={0.005} // Ajusta la velocidad de desplazamiento (valor más bajo para hacerlo más lento)
       //minDistance={3.5} // Establece la distancia mínima
       //maxDistance={15} // Establece la distancia máxima
     />
@@ -68,6 +69,7 @@ const Biodiversity = () => {
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [isDamaged, setIsDamaged] = useState(false);
 
+  /** 
   const terrainMap = [
     [1, 1, 1, 8, 1, 1],
     [1, 8, 8, 8, 1, 1],
@@ -90,7 +92,11 @@ const Biodiversity = () => {
     [1, 6, 6, 5, 5, 1],
     [1, 1, 5, 5, 1, 1],
     [1, 1, 5, 5, 1, 1],
-  ];
+  ];*/
+
+  const terrainMap = [[1]];
+
+  const terrainMap2 = [[1]];
   const [mapMistico, setMapMistico] = useState(terrainMap2);
 
   // Efecto para ocultar el texto después de 10 segundos
@@ -105,6 +111,7 @@ const Biodiversity = () => {
   // Efecto para manejar el scroll del mouse
   useEffect(() => {
     const handleWheel = (event) => {
+      return;
       if (isAnimating) return;
       setIsAnimating(true);
 
@@ -159,7 +166,7 @@ const Biodiversity = () => {
 
   const handleBoxClick = () => {
     console.log("¡Se hizo clic en el RoundedBox!");
-    setFocusMode((prev) => !prev);
+    //setFocusMode((prev) => !prev);
     // Aquí puedes ejecutar cualquier lógica que desees
   };
 
@@ -228,7 +235,9 @@ const Biodiversity = () => {
             scale={0.8}
             minRadius={12}
           />
-
+          <Physics>
+            <Model></Model>
+          </Physics>
           <Terrain
             map={mapMistico}
             baseSeed={12345}
