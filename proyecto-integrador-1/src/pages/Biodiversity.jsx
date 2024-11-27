@@ -11,36 +11,33 @@ import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
 import { useNavigate } from "react-router-dom";
 
+//UTILS
+import views from "../utils/dataBio";
+
 function CameraAnimation({ viewIndex, positions }) {
   const { camera } = useThree();
 
   useEffect(() => {
-    gsap.to(camera.position, {
-      x: positions[viewIndex][0],
-      y: positions[viewIndex][1],
-      z: positions[viewIndex][2],
-      duration: 1,
-      ease: "power0",
-      onUpdate: () => camera.updateProjectionMatrix(),
-    });
-
-    const target = {
-      // Definir un objeto de target para la animación
-      x: camera.position.x,
-      y: camera.position.y,
-      z: camera.position.z,
-    };
-
-    gsap.to(target, {
-      x: positions[viewIndex][0] - 10,
-      y: positions[viewIndex][1],
-      z: positions[viewIndex][2] - 10,
-      duration: 1,
-      ease: "power0", // Mantener el mismo easing para la sincronización
-      onUpdate: () => {
-        camera.lookAt(target.x, target.y, target.z);
-      },
-    });
+    const timeline = gsap.timeline();
+    timeline
+      .to(camera.position, {
+        x: positions[viewIndex][0],
+        y: positions[viewIndex][1],
+        z: positions[viewIndex][2],
+        duration: 1,
+        ease: "power1.inOut",
+      })
+      .to(
+        { x: 0, y: 10, z: -200 },
+        {
+          x: positions[viewIndex][0] - 10,
+          y: positions[viewIndex][1],
+          z: positions[viewIndex][2] - 10,
+          duration: 1,
+          ease: "power1.inOut",
+        },
+        0,
+      );
   }, [viewIndex]);
 
   return (
@@ -68,6 +65,7 @@ const Biodiversity = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
+  const [degraded, setDegraded] = useState(false);
 
   // Efecto para ocultar el texto después de 10 segundos
   useEffect(() => {
@@ -90,46 +88,26 @@ const Biodiversity = () => {
         setViewIndex((prev) => (prev - 1 + views.length) % views.length);
       }
 
-      setTimeout(() => setIsAnimating(false), 1000);
+      setTimeout(() => setIsAnimating(false), 1005);
     };
 
     window.addEventListener("wheel", handleWheel);
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [isAnimating, views.length]);
+  }, [isAnimating]);
 
   // Efecto para manejar el evento de la tecla "enter"
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Enter") {
         setFocusMode((prev) => !prev);
+      } else if (event.key === " ") {
+        setDegraded((prev) => !prev);
+        console.log("cambiopoooooooooo");
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
-
-  const views = [
-    {
-      text: "La biodiversidad, la variedad de vida en la Tierra, se encuentra en un declive acelerado. Este fenómeno, conocido como pérdida de biodiversidad, representa una de las mayores crisis ambientales de nuestro tiempo. Desde los bosques tropicales hasta los océanos, los ecosistemas están sufriendo transformaciones drásticas que ponen en peligro la supervivencia de millones de especies.",
-      position: [0, 6, 145],
-      rotation: [0, 0, 0],
-    },
-    {
-      text: "Destrucción de hábitats: La deforestación, la urbanización y la expansión agrícola destruyen los hogares de muchas especies.",
-      position: [-12, 6, 55],
-      rotation: [0, Math.PI / 6, 0],
-    },
-    {
-      text: "Sobreexplotación de recursos: La pesca excesiva, la caza furtiva y la tala ilegal agotan las poblaciones de numerosas especies.",
-      position: [10, 6, -16],
-      rotation: [0, -Math.PI / 6, 0],
-    },
-    {
-      text: "Contaminación: La contaminación del aire, el agua y el suelo afecta negativamente a los ecosistemas y a la vida silvestre.",
-      position: [-10, 6, -90],
-      rotation: [0, Math.PI / 6, 0],
-    },
-  ];
 
   const positions = [
     //roja, verde, azul
@@ -139,7 +117,7 @@ const Biodiversity = () => {
     [0, 5, -75],
   ];
 
-  const terrainMap = [
+  const terrainMap2 = [
     [1, 1, 1, 5, 1, 1],
     [1, 6, 6, 5, 1, 1],
     [1, 6, 6, 5, 1, 1],
@@ -150,6 +128,8 @@ const Biodiversity = () => {
     [1, 1, 5, 5, 1, 1],
     [1, 1, 5, 5, 1, 1],
   ];
+
+  const terrainMap = [[6], [6], [6], [6], [6], [6], [6], [6], [6]];
 
   const mapWidth = terrainMap[0].length;
   const mapHeight = terrainMap.length;
@@ -212,7 +192,7 @@ const Biodiversity = () => {
           />
 
           <CloudsBlock
-            n={300}
+            n={10}
             factor={Math.max(totalWidth, totalHeight)}
             seed={133456}
             textureOffsetX={0.8}
@@ -226,6 +206,7 @@ const Biodiversity = () => {
             map={terrainMap}
             baseSeed={12345}
             position={[terrainOffsetX, 0, terrainOffsetZ]}
+            isAnimationDegraded={degraded}
           />
 
           <primitive object={new AxesHelper(500)} />
