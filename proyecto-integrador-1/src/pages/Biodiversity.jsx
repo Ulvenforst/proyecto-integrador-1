@@ -69,7 +69,6 @@ const Biodiversity = () => {
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [isDamaged, setIsDamaged] = useState(false);
 
-  /** 
   const terrainMap = [
     [1, 1, 1, 8, 1, 1],
     [1, 8, 8, 8, 1, 1],
@@ -92,11 +91,7 @@ const Biodiversity = () => {
     [1, 6, 6, 5, 5, 1],
     [1, 1, 5, 5, 1, 1],
     [1, 1, 5, 5, 1, 1],
-  ];*/
-
-  const terrainMap = [[1]];
-
-  const terrainMap2 = [[1]];
+  ];
   const [mapMistico, setMapMistico] = useState(terrainMap2);
 
   // Efecto para ocultar el texto después de 10 segundos

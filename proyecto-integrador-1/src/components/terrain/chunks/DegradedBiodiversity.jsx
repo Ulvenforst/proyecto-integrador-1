@@ -23,6 +23,7 @@ const DegradedBiodiversity = ({
         maxTiltAngle: Math.PI,
       },
     },
+    /** 
     {
       Component: SkullBlock,
       props: {
@@ -34,7 +35,7 @@ const DegradedBiodiversity = ({
         maxTiltAngle: Math.PI / 2,
         isAnimationDegraded: isAnimationDegraded,
       },
-    },
+    },*/
     {
       Component: StumpsBlock,
       props: {
