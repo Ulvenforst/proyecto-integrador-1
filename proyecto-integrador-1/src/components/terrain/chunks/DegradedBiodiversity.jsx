@@ -26,7 +26,7 @@ const DegradedBiodiversity = ({
     {
       Component: SkullBlock,
       props: {
-        n: 1,
+        n: 20,
         factor: 35,
         seedOffset: 2,
         minRadius: 2,

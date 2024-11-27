@@ -19,8 +19,8 @@ const ModelGLB2JSX = ({
 
   //cambios
   if (fullPath.includes("skull") || fullPath.includes("tree")) {
-    console.log(animations);
-    console.log(startAnimation);
+    //console.log(animations);
+    //console.log(startAnimation);
   }
 
   const group = useRef();
@@ -51,7 +51,7 @@ const ModelGLB2JSX = ({
       actions["antil_skull1Action"]?.play();
       actions["Tree_Spruce_small_01Action"]?.play();
     } else {
-      console.warn("No se encontraron acciones disponibles para reproducir.");
+      //console.warn("No se encontraron acciones disponibles para reproducir.");
       actions["antil_skull1Action"]?.stop();
     }
   }, [actions, startAnimation]);

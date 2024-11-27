@@ -15,7 +15,7 @@ const DenseForestChunkAnimals = ({
     {
       Component: ConiTreesBlock,
       props: {
-        n: 15,
+        n: 10,
         factor: 35,
         minRadius: 2,
         randomRotation: true,
@@ -26,11 +26,13 @@ const DenseForestChunkAnimals = ({
     {
       Component: AnimalsBlock,
       props: {
-        n: 15,
+        n: 10,
         factor: 35,
         minRadius: 2,
         randomRotation: true,
         maxTiltAngle: Math.PI / 2,
+        isAnimationDegraded: isAnimationDegraded,
+        scale: 1
       },
     },
     {
@@ -64,7 +66,7 @@ const DenseForestChunkAnimals = ({
     {
       Component: GrassBlock,
       props: {
-        n: 100,
+        n: 40,
         factor: 35,
         seedOffset: 1,
         minRadius: 0.5,

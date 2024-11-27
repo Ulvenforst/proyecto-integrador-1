@@ -4,6 +4,7 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useState } from "react";
 import RoundedBoxWithText from "../components/RoundedBoxWithText";
 import { gsap } from "gsap";
+import { Physics } from "@react-three/rapier";
 
 //componentes
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
@@ -12,7 +13,7 @@ import Terrain from "../components/terrain/Terrain";
 import { useNavigate } from "react-router-dom";
 
 //UTILS
-import views from "../utils/dataBio";
+import { views, viewDamaged } from "../utils/dataBio";
 
 function CameraAnimation({ viewIndex, positions }) {
   const { camera } = useThree();
@@ -43,18 +44,18 @@ function CameraAnimation({ viewIndex, positions }) {
   return (
     <OrbitControls
       // ref={orbitControlsRef}
-      //maxPolarAngle={Math.PI * 0.51}
-      //minPolarAngle={Math.PI * 0.5}
-      //maxAzimuthAngle={Math.PI * 0.015}
-      //minAzimuthAngle={-Math.PI * 0.015}
+      maxPolarAngle={Math.PI * 0.51}
+      minPolarAngle={Math.PI * 0.5}
+      maxAzimuthAngle={Math.PI * 0.015}
+      minAzimuthAngle={-Math.PI * 0.015}
       target={[0, 10, -200]}
-      enableZoom={true}
+      enableZoom={false}
       enablePan={true}
       enableRotate={true}
-      //rotateSpeed={0.005} // Ajusta la velocidad de rotación (valor más bajo para hacerlo más lento)
-      //panSpeed={0.005} // Ajusta la velocidad de desplazamiento (valor más bajo para hacerlo más lento)
-      // minDistance={3.5} // Establece la distancia mínima
-      // maxDistance={15} // Establece la distancia máxima
+      rotateSpeed={0.005} // Ajusta la velocidad de rotación (valor más bajo para hacerlo más lento)
+      panSpeed={0.005} // Ajusta la velocidad de desplazamiento (valor más bajo para hacerlo más lento)
+      //minDistance={3.5} // Establece la distancia mínima
+      //maxDistance={15} // Establece la distancia máxima
     />
   );
 }
@@ -65,7 +66,32 @@ const Biodiversity = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
-  const [degraded, setDegraded] = useState(false);
+  const [isDamaged, setIsDamaged] = useState(false);
+
+  const terrainMap = [
+    [1, 1, 1, 5, 1, 1],
+    [1, 5, 5, 5, 1, 1],
+    [1, 5, 5, 5, 1, 1],
+    [1, 1, 5, 5, 5, 1],
+    [1, 1, 5, 5, 5, 1],
+    [1, 5, 5, 5, 1, 1],
+    [1, 5, 5, 5, 1, 1],
+    [1, 1, 5, 5, 1, 1],
+    [1, 1, 5, 5, 1, 1],
+  ];
+
+  const terrainMap2 = [
+    [1, 1, 1, 1, 1, 1],
+    [1, 6, 6, 6, 1, 1],
+    [1, 6, 6, 6, 1, 1],
+    [1, 1, 6, 6, 6, 1],
+    [1, 1, 6, 6, 6, 1],
+    [1, 6, 6, 6, 1, 1],
+    [1, 6, 6, 6, 1, 1],
+    [1, 1, 6, 6, 1, 1],
+    [1, 1, 6, 6, 1, 1],
+  ];
+  const [mapMistico, setMapMistico] = useState(terrainMap);
 
   // Efecto para ocultar el texto después de 10 segundos
   useEffect(() => {
@@ -79,7 +105,6 @@ const Biodiversity = () => {
   // Efecto para manejar el scroll del mouse
   useEffect(() => {
     const handleWheel = (event) => {
-      return
       if (isAnimating) return;
       setIsAnimating(true);
 
@@ -96,16 +121,19 @@ const Biodiversity = () => {
     return () => window.removeEventListener("wheel", handleWheel);
   }, [isAnimating]);
 
-  // Efecto para manejar el evento de la tecla "enter"
+  // Efecto para manejar el evento de la tecla "enter" y alternar el mapa con la barra espaciadora
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Enter") {
         setFocusMode((prev) => !prev);
       } else if (event.key === " ") {
-        setDegraded((prev) => !prev);
-        console.log("cambiopoooooooooo");
+        setIsDamaged((prev) => !prev);
+        setMapMistico((prev) =>
+          prev === terrainMap ? terrainMap2 : terrainMap,
+        );
       }
     };
+
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
@@ -118,28 +146,16 @@ const Biodiversity = () => {
     [0, 5, -75],
   ];
 
-  const terrainMap2 = [
-    [1, 1, 1, 5, 1, 1],
-    [1, 6, 6, 5, 1, 1],
-    [1, 6, 6, 5, 1, 1],
-    [1, 1, 5, 6, 6, 1],
-    [1, 1, 5, 6, 6, 1],
-    [1, 6, 6, 5, 1, 1],
-    [1, 6, 6, 5, 1, 1],
-    [1, 1, 5, 5, 1, 1],
-    [1, 1, 5, 5, 1, 1],
-  ];
-
-  const terrainMap = [[5 , 5, 5], [5 , 5, 5], [5 , 5, 5]];
-
-  const mapWidth = terrainMap[0].length;
-  const mapHeight = terrainMap.length;
+  const mapWidth = mapMistico[0].length;
+  const mapHeight = mapMistico.length;
   const chunkSize = 40;
   const totalWidth = mapWidth * chunkSize;
   const totalHeight = mapHeight * chunkSize;
 
   const terrainOffsetX = -((mapWidth - 1) * chunkSize) / 2;
   const terrainOffsetZ = -((mapHeight - 1) * chunkSize) / 2;
+
+  const currentText = isDamaged ? views : viewDamaged;
 
   return (
     <div className="container h-screen max-w-full">
@@ -152,7 +168,7 @@ const Biodiversity = () => {
 
       {focusMode && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-black bg-opacity-80 p-8 text-2xl text-white">
-          <p>{views[viewIndex].text}</p>
+          <p>{currentText[viewIndex].text}</p>
         </div>
       )}
 
@@ -178,7 +194,7 @@ const Biodiversity = () => {
         <Suspense fallback={null}>
           <CameraAnimation viewIndex={viewIndex} positions={positions} />
 
-          {views.map((box, index) => (
+          {currentText.map((box, index) => (
             <RoundedBoxWithText
               key={index}
               text={box.text}
@@ -204,12 +220,11 @@ const Biodiversity = () => {
           />
 
           <Terrain
-            map={terrainMap}
+            map={mapMistico}
             baseSeed={12345}
             position={[terrainOffsetX, 0, terrainOffsetZ]}
-            isAnimationDegraded={degraded}
+            isAnimationDegraded={true}
           />
-
           <primitive object={new AxesHelper(500)} />
 
           <BakeShadows />

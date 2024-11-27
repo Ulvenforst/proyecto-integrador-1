@@ -1,4 +1,4 @@
-export const MUSHROOM_TYPES = [
+export const ANIMALS_TYPES = [
   {
     modelName: "fox_final_plane.glb",
     nodeName: "fox_final_plane",
