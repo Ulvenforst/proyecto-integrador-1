@@ -14,6 +14,8 @@ import SoilErosion from "./pages/SoilErosion";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 
+import QuizEcosystem from "./pages/QuizBio/QuizErased";
+
 function App() {
   return (
     <AuthProvider>
@@ -24,7 +26,7 @@ function App() {
           <Route path="/home" element={<PrivateRoute element={HomePage} />} />
           <Route
             path="/biodiversity"
-            element={<PrivateRoute element={Biodiversity} />}
+            element={<PrivateRoute element={QuizEcosystem} />}
           />
           <Route
             path="/deforestation"
