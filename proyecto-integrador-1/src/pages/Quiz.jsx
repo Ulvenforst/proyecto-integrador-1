@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase/config";
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
 import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
@@ -36,13 +39,15 @@ function CameraAnimation({ position, target }) {
   return null;
 }
 
-export default function QuizDeforestation() {
+export default function Quiz() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [clickCount, setClickCount] = useState(0);
   const [hasAnsweredMultipleChoice, setHasAnsweredMultipleChoice] = useState(false);
   const [answeredCorrectly, setAnsweredCorrectly] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [terrainMap, setTerrainMap] = useState([
     [1, 1, 1, 1],
@@ -69,6 +74,67 @@ export default function QuizDeforestation() {
     [cameraDistance * 0.6, cameraHeight * 0.5, -cameraDistance * 0.6],
     [cameraDistance * 0.6, cameraHeight * 0.5, cameraDistance * 0.6],
   ];
+
+  const [cameraPosition, setCameraPosition] = useState(positions[0]);
+  const [cameraTarget, setCameraTarget] = useState([centerX, 0, centerZ]);
+
+  // Cargar estado guardado al iniciar
+  useEffect(() => {
+    const loadQuizState = async () => {
+      if (!user) return;
+      
+      try {
+        const quizRef = doc(db, "quizzes", user.uid);
+        const quizDoc = await getDoc(quizRef);
+        
+        if (quizDoc.exists()) {
+          const data = quizDoc.data();
+          if (data) {
+            setCurrentQuestion(data.currentQuestion || 0);
+            setScore(data.score || 0);
+            setClickCount(data.clickCount || 0);
+            setHasAnsweredMultipleChoice(data.hasAnsweredMultipleChoice || false);
+            setAnsweredCorrectly(data.answeredCorrectly || false);
+            if (data.terrainMap) {
+              setTerrainMap(JSON.parse(data.terrainMap));
+            }
+            setCameraPosition(positions[data.currentQuestion || 0]);
+            setCameraTarget([centerX, 0, centerZ]);
+          }
+        }
+      } catch (error) {
+        console.error("Error loading quiz state:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadQuizState();
+  }, [user]);
+
+  // Guardar estado cuando cambia algo importante
+  useEffect(() => {
+    const saveQuizState = async () => {
+      if (!user || isLoading) return;
+
+      try {
+        const quizRef = doc(db, "quizzes", user.uid);
+        await setDoc(quizRef, {
+          currentQuestion,
+          score,
+          clickCount,
+          hasAnsweredMultipleChoice,
+          answeredCorrectly,
+          terrainMap: JSON.stringify(terrainMap),
+          lastUpdated: new Date().toISOString()
+        }, { merge: true });
+      } catch (error) {
+        console.error("Error saving quiz state:", error);
+      }
+    };
+
+    saveQuizState();
+  }, [currentQuestion, score, clickCount, hasAnsweredMultipleChoice, answeredCorrectly, terrainMap, user, isLoading]);
 
   const multipleChoiceQuestion = {
     question: "¿Cuál es la mejor manera de combatir la deforestación de manera activa?",
@@ -146,13 +212,57 @@ export default function QuizDeforestation() {
     }
   };
 
+  const handleResetQuiz = async () => {
+    try {
+      const initialState = {
+        currentQuestion: 0,
+        score: 0,
+        clickCount: 0,
+        hasAnsweredMultipleChoice: false,
+        answeredCorrectly: false,
+        terrainMap: [
+          [1, 1, 1, 1],
+          [1, 1, 1, 1],
+          [2, 2, 1, 1],
+          [2, 2, 1, 1],
+        ]
+      };
+
+      // Actualizar estado local
+      setCurrentQuestion(initialState.currentQuestion);
+      setScore(initialState.score);
+      setClickCount(initialState.clickCount);
+      setHasAnsweredMultipleChoice(initialState.hasAnsweredMultipleChoice);
+      setAnsweredCorrectly(initialState.answeredCorrectly);
+      setTerrainMap(initialState.terrainMap);
+      setCameraPosition(positions[0]);
+      setCameraTarget([centerX, 0, centerZ]);
+
+      // Actualizar en Firebase
+      if (user) {
+        const quizRef = doc(db, "quizzes", user.uid);
+        await updateDoc(quizRef, {
+          ...initialState,
+          terrainMap: JSON.stringify(initialState.terrainMap),
+          lastUpdated: new Date().toISOString()
+        });
+      }
+    } catch (error) {
+      console.error("Error resetting quiz:", error);
+    }
+  };
+
   const returnToDeforestation = () => {
     navigate("/deforestation");
   };
 
-  const [cameraPosition, setCameraPosition] = useState(questions[0].position);
-  const [cameraTarget, setCameraTarget] = useState(questions[0].target);
-
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-cyan-200">
+        <div className="text-2xl text-white">Cargando...</div>
+      </div>
+    );
+  }
   return (
     <div className="relative w-full h-screen">
       <div className="absolute top-6 left-6 z-10 max-w-md bg-black/50 backdrop-blur-sm text-white p-6 rounded-lg">
@@ -208,6 +318,7 @@ export default function QuizDeforestation() {
           </button>
         )}
       </div>
+
       <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-10 bg-black/50 backdrop-blur-sm text-white px-6 py-2 rounded-lg">
         <p className="text-lg">
           Puntuación: {score} | Pregunta: {currentQuestion + 1}/{questions.length}
@@ -220,6 +331,14 @@ export default function QuizDeforestation() {
           transform hover:scale-105 duration-200"
       >
         Volver
+      </button>
+
+      <button
+        onClick={handleResetQuiz}
+        className="absolute top-20 right-6 z-10 bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg transition-all
+          transform hover:scale-105 duration-200"
+      >
+        Reiniciar Quiz
       </button>
 
       <Canvas
