@@ -44,6 +44,7 @@ export default function Quiz() {
   const { user } = useAuth();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
+  const [maxScore, setMaxScore] = useState(0);
   const [clickCount, setClickCount] = useState(0);
   const [hasAnsweredMultipleChoice, setHasAnsweredMultipleChoice] = useState(false);
   const [answeredCorrectly, setAnsweredCorrectly] = useState(false);
@@ -98,6 +99,7 @@ export default function Quiz() {
             if (data.terrainMap) {
               setTerrainMap(JSON.parse(data.terrainMap));
             }
+            setMaxScore(data.maxScore || 0);
             setCameraPosition(positions[data.currentQuestion || 0]);
             setCameraTarget([centerX, 0, centerZ]);
           }
@@ -122,6 +124,7 @@ export default function Quiz() {
         await setDoc(quizRef, {
           currentQuestion,
           score,
+          maxScore: Math.max(score, maxScore),
           clickCount,
           hasAnsweredMultipleChoice,
           answeredCorrectly,
@@ -134,7 +137,14 @@ export default function Quiz() {
     };
 
     saveQuizState();
-  }, [currentQuestion, score, clickCount, hasAnsweredMultipleChoice, answeredCorrectly, terrainMap, user, isLoading]);
+  }, [currentQuestion, score, maxScore, clickCount, hasAnsweredMultipleChoice, answeredCorrectly, terrainMap, user, isLoading]);
+
+  // Actualizar maxScore cuando cambia el score
+  useEffect(() => {
+    if (score > maxScore) {
+      setMaxScore(score);
+    }
+  }, [score, maxScore]);
 
   const multipleChoiceQuestion = {
     question: "¿Cuál es la mejor manera de combatir la deforestación de manera activa?",
@@ -174,7 +184,7 @@ export default function Quiz() {
     setHasAnsweredMultipleChoice(true);
     if (selectedIndex === multipleChoiceQuestion.correctAnswer) {
       setAnsweredCorrectly(true);
-      setScore(prevScore => prevScore + 5);
+      setScore(prevScore => prevScore + 15);
     } else {
       setAnsweredCorrectly(false);
     }
@@ -192,14 +202,24 @@ export default function Quiz() {
   }, [clickCount, currentQuestion, answeredCorrectly]);
 
   useEffect(() => {
-    if (clickCount === 5) {
-      const newMap = terrainMap.map(row =>
-        row.map(chunk => chunk === 2 ? 1 : chunk)
-      );
-      setTerrainMap(newMap);
-      setScore(prevScore => prevScore + 10);
+  if (clickCount === 5 && currentQuestion === 0 && answeredCorrectly) {
+    const newMap = terrainMap.map(row =>
+      row.map(chunk => chunk === 2 ? 1 : chunk)
+    );
+    
+    // Verificar si el terreno ya está reforestado para evitar sumar puntos múltiples veces
+    const isAlreadyReforested = terrainMap.every((row, i) => 
+      row.every((chunk, j) => chunk === newMap[i][j])
+    );
+
+    setTerrainMap(newMap);
+    
+    // Solo sumar puntos si el terreno no estaba ya reforestado
+    if (!isAlreadyReforested) {
+      setScore(prevScore => prevScore + 15);
     }
-  }, [clickCount]);
+  }
+}, [clickCount, currentQuestion, answeredCorrectly, terrainMap]);
 
   const terrainOffsetX = -((mapWidth - 1) * chunkSize) / 2;
   const terrainOffsetZ = -((mapHeight - 1) * chunkSize) / 2;
@@ -340,6 +360,15 @@ export default function Quiz() {
       >
         Reiniciar Quiz
       </button>
+
+      {maxScore >= 90 && (
+        <div className="absolute bottom-6 right-6 z-10 bg-yellow-500 text-white p-4 rounded-full shadow-lg transform transition-transform hover:scale-110">
+          <div className="flex flex-col items-center">
+            <span className="text-4xl mb-1">★</span>
+            <span className="text-sm font-bold">¡Perfección!</span>
+          </div>
+        </div>
+      )}
 
       <Canvas
         className="bg-cyan-200"
