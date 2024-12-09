@@ -35,11 +35,7 @@ function QuizEcosystem() {
   };
 
   return (
-    <Canvas
-      shadows
-      camera={{ position: [0, 5, 10], fov: 50 }}
-      style={{ width: "100vw", height: "100vh" }}
-    >
+    <>
       {/* Luces */}
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 5, 5]} castShadow />
@@ -69,7 +65,7 @@ function QuizEcosystem() {
         onResolve={() => resolveProblem("endangeredSpecies")}
         position={[10, 0, -10]}
       />
-    </Canvas>
+    </>
   );
 }
 
