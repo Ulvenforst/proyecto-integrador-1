@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
 import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
+import PixelArt from "../components/postprocessing/PixelArt";
 
 function CameraAnimation({ viewIndex, positions, centerX, centerZ }) {
   const { camera } = useThree();
@@ -75,6 +76,7 @@ const Scene = ({ viewIndex }) => {
           fov: 100,
         }}
       >
+        <PixelArt />
         <Suspense fallback={null}>
           <CameraAnimation
             viewIndex={viewIndex}
