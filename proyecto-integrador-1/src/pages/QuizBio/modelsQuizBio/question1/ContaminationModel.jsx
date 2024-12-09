@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 
 export function ContaminationModel(props) {
-  const { nodes, materials } = useGLTF("/Barrel.glb");
+  const { nodes, materials } = useGLTF("models/quizBiodiversity/Barrel.glb");
   return (
     <group {...props} dispose={null}>
       <group

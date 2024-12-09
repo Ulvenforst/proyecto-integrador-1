@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 
 export function CleanWaterModel(props) {
-  const { nodes, materials } = useGLTF("/flower.glb");
+  const { nodes, materials } = useGLTF("models/quizBiodiversity/flower.glb");
   return (
     <group {...props} dispose={null}>
       <mesh
