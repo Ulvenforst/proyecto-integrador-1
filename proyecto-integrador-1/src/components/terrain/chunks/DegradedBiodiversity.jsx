@@ -2,7 +2,6 @@ import StonesBlock from "../../forestModels/stones/StonesBlock";
 import ChunkGenerator from "./ChunkGenerator";
 import StumpsBlock from "../../forestModels/stumps/StumpsBlock";
 import LogsBlock from "../../forestModels/logs/LogsBlock";
-import AnimalsBlock from "../../forestModels/animals/AnimalsBlock";
 import SkullBlock from "../../forestModels/skull/SkullBlock";
 import { FLOOR_TYPES } from "../floors";
 
@@ -23,7 +22,6 @@ const DegradedBiodiversity = ({
         maxTiltAngle: Math.PI,
       },
     },
-    /** 
     {
       Component: SkullBlock,
       props: {
@@ -35,7 +33,7 @@ const DegradedBiodiversity = ({
         maxTiltAngle: Math.PI / 2,
         isAnimationDegraded: isAnimationDegraded,
       },
-    },*/
+    },
     {
       Component: StumpsBlock,
       props: {
