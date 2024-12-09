@@ -9,6 +9,9 @@ import { Suspense } from "react";
 import { OrbitControls } from "@react-three/drei";
 import WoodenSigns from "../components/generalModels/wooden_signs/WoodenSigns";
 import { gsap } from "gsap";
+import AnimatedBunny from "../components/forestModels/animals/AnimatedBunny";
+import AnimatedFarmer from "../components/generalModels/people/AnimatedFarmer";
+import { Physics } from "@react-three/rapier";
 
 function CameraAnimation({ position, target }) {
   const { camera } = useThree();
@@ -41,12 +44,17 @@ export default function Deforestation() {
   const navigate = useNavigate();
   
   const [terrainMap, setTerrainMap] = useState([
-    [1, 1, 1, 1],
-    [1, 1, 1, 1],
+    [0, 3, 0, 1],
+    [0, 0, 1, 1],
     [1, 0, 1, 1],
-    [1, 1, 1, 1],
+    [0, 0, 1, 1],
     [1, 1, 1, 1],
   ]);
+
+  const [infoText, setInfoText] = useState({
+    title: "Deforestación",
+    content: "Los bosques cubren aproximadamente el 30% del planeta, y los ecosistemas que forman juegan un rol importante en la vida de la Tierra. Sin embargo, la deforestación está destruyendo los bosques de manera masiva, y estos podrían desaparecer en los próximos 100 años si no tomamos acción."
+  });
 
   const mapWidth = terrainMap[0].length;
   const mapHeight = terrainMap.length;
@@ -75,6 +83,10 @@ export default function Deforestation() {
       if (event.key === 'Enter') {
         setCameraPosition(initialCameraPosition);
         setCameraTarget(initialCameraTarget);
+        setInfoText({
+          title: "Deforestación",
+          content: "Los bosques cubren aproximadamente el 30% del planeta, y los ecosistemas que forman juegan un rol importante en la vida de la Tierra. Sin embargo, la deforestación está destruyendo los bosques de manera masiva, y estos podrían desaparecer en los próximos 100 años si no tomamos acción."
+        });
       }
     };
 
@@ -100,13 +112,17 @@ export default function Deforestation() {
   const handleSignClick = [
     // Causas
     () => {
-      setCameraPosition([
-        -cameraDistance * 1.2,
-        cameraHeight * 1.5,
-        -cameraDistance * 0.3
-      ]);
-      setCameraTarget([terrainOffsetX + chunkSize, 0, terrainOffsetZ]);
-    },
+    setCameraPosition([
+      cameraDistance,
+      cameraHeight * 10,
+      -cameraDistance * 0.3
+    ]);
+    setCameraTarget([terrainOffsetX + chunkSize, 0, terrainOffsetZ]);
+    setInfoText({
+      title: "Causas de la Deforestación",
+      content: "La agricultura comercial es responsable del 40% de la deforestación tropical. La silvicultura y la agricultura generan el 24% de las emisiones de gases de efecto invernadero, convirtiendo a la deforestación en un contribuyente significativo del cambio climático. La tala ilegal, la expansión urbana y la minería también son factores clave en la destrucción de nuestros bosques."
+    });
+  },
     // Soluciones
     () => {
       setCameraPosition([
@@ -114,21 +130,28 @@ export default function Deforestation() {
         cameraHeight * 1.5,
         -cameraDistance * 1.2
       ]);
-      setCameraTarget([terrainOffsetX, 0, terrainOffsetZ + chunkSize]);
+      setCameraTarget([terrainOffsetX+50, 0, terrainOffsetZ + chunkSize+100]);
+      setInfoText({
+        title: "Soluciones",
+        content: "Para combatir la deforestación, necesitamos implementar políticas de protección forestal, promover la agricultura sostenible, certificar productos forestales, restaurar áreas degradadas y educar sobre la importancia de los bosques. La reforestación y el consumo responsable son clave."
+      });
     },
     // Quiz
     () => {
       console.log("Quiz clicked");
+      setInfoText({
+        title: "Evaluación",
+        content: "¿Listo para poner a prueba tu conocimiento sobre la deforestación y su impacto en nuestro planeta?"
+      });
     }
   ];
 
   return (
     <div className="relative w-full h-screen">
       <div className="absolute top-6 left-6 z-10 max-w-md bg-black/50 backdrop-blur-sm text-white p-6 rounded-lg">
-        <h1 className="text-3xl font-bold mb-4">Deforestación</h1>
+        <h1 className="text-3xl font-bold mb-4">{infoText.title}</h1>
         <p className="text-lg mb-4">
-          La deforestación es la pérdida de bosques y selvas debido a la acción humana.
-          Haz clic en cualquier área del bosque para ver el impacto de la deforestación.
+          {infoText.content}
         </p>
       </div>
 
@@ -162,6 +185,11 @@ export default function Deforestation() {
             enablePan={false}
             minDistance={cameraDistance * 0.2}
             maxDistance={cameraDistance * 1.0}
+          />
+          <AnimatedBunny 
+            position={[-10, 0, -10]} 
+            rotation={[0, Math.PI, 0]}
+            scale={0.5}
           />
 
           <WoodenSigns 
@@ -205,6 +233,12 @@ export default function Deforestation() {
             }
           />
 
+          <AnimatedFarmer 
+            position={[-10, 0, 45]}  // Ajusta según la posición de tu granja
+            rotation={[0, Math.PI+5, 0]}
+            scale={0.7}
+          />
+
           <WoodenSigns 
             signNumber={3} 
             position={[-9, 0, -12]}
@@ -225,24 +259,15 @@ export default function Deforestation() {
             mapSize={Math.max(mapWidth, mapHeight)}
             chunkSize={chunkSize}
           />
-
-          <CloudsBlock
-            n={30}
-            factor={Math.max(totalWidth, totalHeight)}
-            seed={133456}
-            textureOffsetX={0.8}
-            textureOffsetY={1}
-            position={[0, 60, 0]}
-            scale={0.8}
-            minRadius={12}
-          />
-
-          <Terrain
-            map={terrainMap}
-            baseSeed={12345}
-            position={[terrainOffsetX, 0, terrainOffsetZ]}
-            onChunkClick={handleChunkClick}
-          />
+      
+          <Physics gravity={[0, -2, 0]}>
+            <Terrain
+              map={terrainMap}
+              baseSeed={12345}
+              position={[terrainOffsetX, 0, terrainOffsetZ]}
+              onChunkClick={handleChunkClick}
+            />
+          </Physics>
           <BakeShadows />
         </Suspense>
       </Canvas>
