@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@react-three/postprocessing": "^2.16.3",
+    "@react-three/rapier": "^1.5.0",
     "postprocessing": "^6.36.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
