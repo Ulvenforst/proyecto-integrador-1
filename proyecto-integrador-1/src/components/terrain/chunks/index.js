@@ -1,7 +1,6 @@
 import DeforestationChunk from "./DeforestationChunk";
 import DenseForestChunk from "./DenseForestChunk";
 import EmptyChunk from "./EmptyChunk";
-import DegradedSoil from "./DegradedSoil";
 
 
 //bio
