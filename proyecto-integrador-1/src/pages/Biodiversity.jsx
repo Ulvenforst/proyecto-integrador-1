@@ -1,50 +1,45 @@
 import { BakeShadows, OrbitControls } from "@react-three/drei";
 import { AxesHelper } from "three";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Suspense, useRef, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import RoundedBoxWithText from "../components/RoundedBoxWithText";
-import NavBar from "../components/NavBar";
 import { gsap } from "gsap";
-import { Html } from "@react-three/drei";
+import { Physics } from "@react-three/rapier";
+import { Model } from "../components/FloorPhy";
+
 //componentes
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
 import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
-import Wood_sing from "../components/Wood_sing";
-import { RoundedBox, Text3D } from "@react-three/drei";
-import { FirstPersonControls } from "@react-three/drei";
 import { useNavigate } from "react-router-dom";
+
+//UTILS
+import { views, viewDamaged } from "../utils/dataBio";
 
 function CameraAnimation({ viewIndex, positions }) {
   const { camera } = useThree();
 
   useEffect(() => {
-    gsap.to(camera.position, {
-      x: positions[viewIndex][0],
-      y: positions[viewIndex][1],
-      z: positions[viewIndex][2],
-      duration: 1,
-      ease: "power0",
-      onUpdate: () => camera.updateProjectionMatrix(),
-    });
-
-    const target = {
-      // Definir un objeto de target para la animación
-      x: camera.position.x,
-      y: camera.position.y,
-      z: camera.position.z,
-    };
-
-    gsap.to(target, {
-      x: positions[viewIndex][0] - 10,
-      y: positions[viewIndex][1],
-      z: positions[viewIndex][2] - 10,
-      duration: 1,
-      ease: "power0", // Mantener el mismo easing para la sincronización
-      onUpdate: () => {
-        camera.lookAt(target.x, target.y, target.z);
-      },
-    });
+    const timeline = gsap.timeline();
+    timeline
+      .to(camera.position, {
+        x: positions[viewIndex][0],
+        y: positions[viewIndex][1],
+        z: positions[viewIndex][2],
+        duration: 1,
+        ease: "power1.inOut",
+      })
+      .to(
+        { x: 0, y: 10, z: -200 },
+        {
+          x: positions[viewIndex][0] - 10,
+          y: positions[viewIndex][1],
+          z: positions[viewIndex][2] - 10,
+          duration: 1,
+          ease: "power1.inOut",
+        },
+        0,
+      );
   }, [viewIndex]);
 
   return (
@@ -55,13 +50,13 @@ function CameraAnimation({ viewIndex, positions }) {
       maxAzimuthAngle={Math.PI * 0.015}
       minAzimuthAngle={-Math.PI * 0.015}
       target={[0, 10, -200]}
-      enableZoom={false}
+      enableZoom={true}
       enablePan={true}
       enableRotate={true}
       rotateSpeed={0.005} // Ajusta la velocidad de rotación (valor más bajo para hacerlo más lento)
       panSpeed={0.005} // Ajusta la velocidad de desplazamiento (valor más bajo para hacerlo más lento)
-      // minDistance={3.5} // Establece la distancia mínima
-      // maxDistance={15} // Establece la distancia máxima
+      //minDistance={3.5} // Establece la distancia mínima
+      //maxDistance={15} // Establece la distancia máxima
     />
   );
 }
@@ -72,6 +67,32 @@ const Biodiversity = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
+  const [isDamaged, setIsDamaged] = useState(false);
+
+  const terrainMap = [
+    [1, 1, 1, 8, 1, 1],
+    [1, 8, 8, 8, 1, 1],
+    [1, 8, 8, 8, 1, 1],
+    [1, 1, 8, 8, 8, 1],
+    [1, 1, 8, 8, 8, 1],
+    [1, 8, 8, 8, 1, 1],
+    [1, 8, 8, 8, 1, 1],
+    [1, 1, 8, 8, 1, 1],
+    [1, 1, 8, 8, 1, 1],
+  ];
+
+  const terrainMap2 = [
+    [1, 1, 1, 1, 1, 1],
+    [1, 6, 6, 5, 5, 1],
+    [1, 6, 6, 5, 5, 1],
+    [1, 5, 5, 6, 6, 1],
+    [1, 5, 5, 6, 6, 1],
+    [1, 6, 6, 5, 5, 1],
+    [1, 6, 6, 5, 5, 1],
+    [1, 1, 5, 5, 1, 1],
+    [1, 1, 5, 5, 1, 1],
+  ];
+  const [mapMistico, setMapMistico] = useState(terrainMap2);
 
   // Efecto para ocultar el texto después de 10 segundos
   useEffect(() => {
@@ -79,32 +100,10 @@ const Biodiversity = () => {
       setShowScrollHint(false);
     }, 10000);
 
-    return () => clearTimeout(timer); // Limpieza del temporizador
+    return () => clearTimeout(timer);
   }, []);
 
-  const views = [
-    {
-      text: "La biodiversidad, la variedad de vida en la Tierra, se encuentra en un declive acelerado. Este fenómeno, conocido como pérdida de biodiversidad, representa una de las mayores crisis ambientales de nuestro tiempo. Desde los bosques tropicales hasta los océanos, los ecosistemas están sufriendo transformaciones drásticas que ponen en peligro la supervivencia de millones de especies.",
-      position: [0, 6, 145],
-      rotation: [0, 0, 0],
-    },
-    {
-      text: "Destrucción de hábitats: La deforestación, la urbanización y la expansión agrícola destruyen los hogares de muchas especies.",
-      position: [-12, 6, 55],
-      rotation: [0, Math.PI / 6, 0],
-    },
-    {
-      text: "Sobreexplotación de recursos: La pesca excesiva, la caza furtiva y la tala ilegal agotan las poblaciones de numerosas especies.",
-      position: [10, 6, -16],
-      rotation: [0, -Math.PI / 6, 0],
-    },
-    {
-      text: "Contaminación: La contaminación del aire, el agua y el suelo afecta negativamente a los ecosistemas y a la vida silvestre.",
-      position: [-10, 6, -90],
-      rotation: [0, Math.PI / 6, 0],
-    },
-  ];
-
+  // Efecto para manejar el scroll del mouse
   useEffect(() => {
     const handleWheel = (event) => {
       if (isAnimating) return;
@@ -116,43 +115,29 @@ const Biodiversity = () => {
         setViewIndex((prev) => (prev - 1 + views.length) % views.length);
       }
 
-      setTimeout(() => setIsAnimating(false), 1000);
+      setTimeout(() => setIsAnimating(false), 1005);
     };
 
     window.addEventListener("wheel", handleWheel);
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [isAnimating, views.length]);
+  }, [isAnimating]);
 
+  // Efecto para manejar el evento de la tecla "enter" y alternar el mapa con la barra espaciadora
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Enter") {
         setFocusMode((prev) => !prev);
+      } else if (event.key === " ") {
+        setIsDamaged((prev) => !prev);
+        setMapMistico((prev) =>
+          prev === terrainMap ? terrainMap2 : terrainMap,
+        );
       }
     };
+
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
-
-  const terrainMap = [
-    [1, 1, 1, 5, 1, 1],
-    [1, 6, 6, 5, 1, 1],
-    [1, 6, 6, 5, 1, 1],
-    [1, 1, 5, 6, 6, 1],
-    [1, 1, 5, 6, 6, 1],
-    [1, 6, 6, 5, 1, 1],
-    [1, 6, 6, 5, 1, 1],
-    [1, 1, 5, 5, 1, 1],
-    [1, 1, 5, 5, 1, 1],
-  ];
-
-  const mapWidth = terrainMap[0].length;
-  const mapHeight = terrainMap.length;
-  const chunkSize = 40;
-  const totalWidth = mapWidth * chunkSize;
-  const totalHeight = mapHeight * chunkSize;
-
-  const terrainOffsetX = -((mapWidth - 1) * chunkSize) / 2;
-  const terrainOffsetZ = -((mapHeight - 1) * chunkSize) / 2;
 
   const positions = [
     //roja, verde, azul
@@ -162,26 +147,27 @@ const Biodiversity = () => {
     [0, 5, -75],
   ];
 
-  const goHome = async () => {
-    navigate("/home");
-  };
+  const mapWidth = mapMistico[0].length;
+  const mapHeight = mapMistico.length;
+  const chunkSize = 40;
+  const totalWidth = mapWidth * chunkSize;
+  const totalHeight = mapHeight * chunkSize;
 
-  const scrollHintStyle = {
-    position: "absolute",
-    bottom: "20px",
-    left: "50%",
-    transform: "translateX(-50%)",
-    color: "white",
-    fontSize: "7rem",
-    animation: "blink 1s infinite", // Aplica la animación de parpadeo
-    opacity: showScrollHint ? 1 : 0, // Oculta el texto después de 10 segundos
-    transition: "opacity 0.5s ease",
+  const terrainOffsetX = -((mapWidth - 1) * chunkSize) / 2;
+  const terrainOffsetZ = -((mapHeight - 1) * chunkSize) / 2;
+
+  const currentText = isDamaged ? viewDamaged : views;
+
+  const handleBoxClick = () => {
+    console.log("¡Se hizo clic en el RoundedBox!");
+    setFocusMode((prev) => !prev);
+    // Aquí puedes ejecutar cualquier lógica que desees
   };
 
   return (
     <div className="container h-screen max-w-full">
       <button
-        onClick={goHome}
+        onClick={() => navigate("/home")}
         className="absolute left-6 top-6 z-10 transform rounded-lg bg-green-500 px-6 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-green-600"
       >
         inicio
@@ -189,17 +175,21 @@ const Biodiversity = () => {
 
       {focusMode && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-black bg-opacity-80 p-8 text-2xl text-white">
-          <p>{views[viewIndex].text}</p>
+          <p>{currentText[viewIndex].text}</p>
         </div>
       )}
 
       {showScrollHint && (
         <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 transform rounded-lg px-6 py-2 text-center text-white transition-all duration-200 hover:scale-105">
-          <p className="animate-pulse text-3xl">
-            Desplázate por el entorno con el <strong>SCROLL</strong> del mouse 🖱️
+          <p className="animate-pulse text-2xl">
+            Desplázate por el entorno con el <strong>SCROLL</strong> del mouse
+            🖱️
           </p>
-          <p className="animate-pulse text-3xl">
+          <p className="animate-pulse text-2xl">
             presiona <strong>ENTER</strong> para ver mejor el texto ⌨️
+          </p>
+          <p className="animate-pulse text-2xl">
+            o <strong>CLICKEA</strong> sobre el recuadro para leer mejor 🖱️
           </p>
         </div>
       )}
@@ -214,12 +204,23 @@ const Biodiversity = () => {
         <Suspense fallback={null}>
           <CameraAnimation viewIndex={viewIndex} positions={positions} />
 
+          {currentText.map((box, index) => (
+            <RoundedBoxWithText
+              key={index}
+              text={box.text}
+              position={box.position}
+              rotation={box.rotation}
+              onClick={handleBoxClick}
+            />
+          ))}
+
           <GenericLight
             mapSize={Math.max(mapWidth, mapHeight)}
             chunkSize={chunkSize}
           />
+
           <CloudsBlock
-            n={300}
+            n={10}
             factor={Math.max(totalWidth, totalHeight)}
             seed={133456}
             textureOffsetX={0.8}
@@ -228,32 +229,19 @@ const Biodiversity = () => {
             scale={0.8}
             minRadius={12}
           />
+          {!isDamaged ? (
+            <Physics>
+              <Model></Model>
+            </Physics>
+          ) : null}
 
-          <primitive object={new AxesHelper(500)} />
-
-          {views.map((box, index) => {
-            return (
-              <RoundedBoxWithText
-                key={index}
-                text={box.text}
-                position={box.position}
-                rotation={box.rotation}
-              />
-            );
-          })}
-
-          <RoundedBoxWithText
-            text={
-              "Contaminación: La contaminación del aire, el agua y el suelo afecta negativamente a los ecosistemas y a la vida silvestre."
-            }
-            position={[-10, 6, -90]}
-            rotation={[0, Math.PI / 6, 0]}
-          />
           <Terrain
-            map={terrainMap}
+            map={mapMistico}
             baseSeed={12345}
             position={[terrainOffsetX, 0, terrainOffsetZ]}
+            isAnimationDegraded={true}
           />
+          <primitive object={new AxesHelper(500)} />
 
           <BakeShadows />
         </Suspense>

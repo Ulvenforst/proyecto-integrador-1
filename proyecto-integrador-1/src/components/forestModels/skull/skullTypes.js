@@ -3,6 +3,7 @@ export const SKULL_TYPES = [
   // modelName: "bison_skull.glb",
   //  nodeName: "bison_skull__0",
   //},
+
   {
     modelName: "wolf_skull1.glb",
     nodeName: "wolf_skull1",
