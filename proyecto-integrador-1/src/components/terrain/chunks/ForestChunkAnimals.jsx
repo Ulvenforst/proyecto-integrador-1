@@ -5,7 +5,6 @@ import StonesBlock from "../../forestModels/stones/StonesBlock";
 import MushroomsBlock from "../../forestModels/mushrooms/MushroomsBlock";
 import AnimalsBlock from "../../forestModels/animals/AnimalsBlock";
 import ChunkGenerator from "./ChunkGenerator";
-
 import DeadTreesBlock from "../../forestModels/dead_trees/DeadTreesBlock";
 import { FLOOR_TYPES } from "../floors";
 

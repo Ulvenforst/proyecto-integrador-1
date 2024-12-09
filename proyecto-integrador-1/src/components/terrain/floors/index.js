@@ -22,7 +22,7 @@ export const FLOOR_TYPES = {
     props: {},
   },
   DEGRADED: {
-    Component: DegradedFloor,
+    Component: LostFloor,
     props: {},
   },
 };

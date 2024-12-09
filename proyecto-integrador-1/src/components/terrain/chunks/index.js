@@ -1,14 +1,13 @@
 import DeforestationChunk from "./DeforestationChunk";
 import DenseForestChunk from "./DenseForestChunk";
 import EmptyChunk from "./EmptyChunk";
-
+import DegradedSoil from "./DegradedSoil";
+import FarmChunk from "./FarmChunk";
 
 //bio
 import DenseBiodiversity from "./DenseBiodiversity";
 import DenseForestChunkAnimals from "./ForestChunkAnimals";
 import DegradedBiodiversity from "./DegradedBiodiversity";
-import DegradedSoil from "./DegradedSoil";
-import FarmChunk from "./FarmChunk";
 
 export const CHUNK_TYPES = {
   0: EmptyChunk,

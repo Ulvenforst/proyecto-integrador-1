@@ -1,17 +1,15 @@
 import { BakeShadows, OrbitControls } from "@react-three/drei";
 import { AxesHelper } from "three";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState, useMemo} from "react";
 import RoundedBoxWithText from "../components/RoundedBoxWithText";
 import { gsap } from "gsap";
-import { Physics } from "@react-three/rapier";
-import { Model } from "../components/FloorPhy";
+import { useNavigate } from "react-router-dom";
 
 //componentes
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
 import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
-import { useNavigate } from "react-router-dom";
 
 //UTILS
 import { views, viewDamaged } from "../utils/dataBio";
@@ -50,7 +48,7 @@ function CameraAnimation({ viewIndex, positions }) {
       maxAzimuthAngle={Math.PI * 0.015}
       minAzimuthAngle={-Math.PI * 0.015}
       target={[0, 10, -200]}
-      enableZoom={true}
+      enableZoom={false}
       enablePan={true}
       enableRotate={true}
       rotateSpeed={0.005} // Ajusta la velocidad de rotación (valor más bajo para hacerlo más lento)
@@ -70,13 +68,13 @@ const Biodiversity = () => {
   const [isDamaged, setIsDamaged] = useState(false);
 
   const terrainMap = [
-    [1, 1, 1, 8, 1, 1],
-    [1, 8, 8, 8, 1, 1],
-    [1, 8, 8, 8, 1, 1],
-    [1, 1, 8, 8, 8, 1],
-    [1, 1, 8, 8, 8, 1],
-    [1, 8, 8, 8, 1, 1],
-    [1, 8, 8, 8, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 8, 8, 1, 1],
+    [1, 1, 8, 8, 1, 1],
+    [1, 1, 8, 8, 1, 1],
+    [1, 1, 8, 8, 1, 1],
+    [1, 1, 8, 8, 1, 1],
+    [1, 1, 8, 8, 1, 1],
     [1, 1, 8, 8, 1, 1],
     [1, 1, 8, 8, 1, 1],
   ];
@@ -139,13 +137,20 @@ const Biodiversity = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const positions = [
-    //roja, verde, azul
-    [0, 5, 155],
-    [0, 5, 72],
-    [0, 5, -1],
-    [0, 5, -75],
-  ];
+  const positions = useMemo(
+    () => [
+      [0, 5, 155],
+      [0, 5, 72],
+      [0, 5, -1],
+      [0, 5, -75],
+    ],
+    [],
+  );
+
+  const currentText = useMemo(
+    () => (isDamaged ? viewDamaged : views),
+    [isDamaged, viewDamaged, views],
+  );
 
   const mapWidth = mapMistico[0].length;
   const mapHeight = mapMistico.length;
@@ -155,14 +160,6 @@ const Biodiversity = () => {
 
   const terrainOffsetX = -((mapWidth - 1) * chunkSize) / 2;
   const terrainOffsetZ = -((mapHeight - 1) * chunkSize) / 2;
-
-  const currentText = isDamaged ? viewDamaged : views;
-
-  const handleBoxClick = () => {
-    console.log("¡Se hizo clic en el RoundedBox!");
-    setFocusMode((prev) => !prev);
-    // Aquí puedes ejecutar cualquier lógica que desees
-  };
 
   return (
     <div className="container h-screen max-w-full">
@@ -210,7 +207,6 @@ const Biodiversity = () => {
               text={box.text}
               position={box.position}
               rotation={box.rotation}
-              onClick={handleBoxClick}
             />
           ))}
 
@@ -229,11 +225,12 @@ const Biodiversity = () => {
             scale={0.8}
             minRadius={12}
           />
-          {!isDamaged ? (
+
+          {/*!isDamaged ? (
             <Physics>
               <Model></Model>
             </Physics>
-          ) : null}
+          ) : null*/}
 
           <Terrain
             map={mapMistico}
