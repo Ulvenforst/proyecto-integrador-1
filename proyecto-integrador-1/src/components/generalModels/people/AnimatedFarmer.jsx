@@ -1,9 +1,11 @@
-import React, { useRef, useEffect } from 'react';
-import { useGLTF, useAnimations } from '@react-three/drei';
+import React, { useRef, useEffect } from "react";
+import { useGLTF, useAnimations } from "@react-three/drei";
 
 const AnimatedFarmer = (props) => {
   const group = useRef();
-  const { nodes, materials, animations } = useGLTF('/models/general/people/animated_farmer.glb');
+  const { nodes, materials, animations } = useGLTF(
+    "/models/general/people/animated_farmer.glb",
+  );
   const { actions } = useAnimations(animations, group);
 
   // Reproducir la animación al montar el componente
@@ -15,12 +17,19 @@ const AnimatedFarmer = (props) => {
       return () => action.fadeOut(0.5);
     }
   }, [actions]);
-
+  console.log(materials);
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Sketchfab_Scene">
-        <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]} scale={2.134}>
-          <group name="f51976a08d70435c940a11c0699b2f81fbx" rotation={[Math.PI / 2, 0, 0]}>
+        <group
+          name="Sketchfab_model"
+          rotation={[-Math.PI / 2, 0, 0]}
+          scale={2.134}
+        >
+          <group
+            name="f51976a08d70435c940a11c0699b2f81fbx"
+            rotation={[Math.PI / 2, 0, 0]}
+          >
             <group name="Object_2">
               <group name="RootNode">
                 <group name="Object_4">
@@ -53,4 +62,4 @@ const AnimatedFarmer = (props) => {
 
 export default AnimatedFarmer;
 
-useGLTF.preload('/models/general/people/animated_farmer.glb');
+useGLTF.preload("/models/general/people/animated_farmer.glb");
