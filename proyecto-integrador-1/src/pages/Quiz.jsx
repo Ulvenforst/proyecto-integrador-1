@@ -561,14 +561,26 @@ export default function Quiz() {
         Reiniciar Quiz
       </button>
 
-      {maxScore >= 90 && (
-        <div className="absolute bottom-6 right-6 z-10 transform rounded-full bg-yellow-500 p-4 text-white shadow-lg transition-transform hover:scale-110">
-          <div className="flex flex-col items-center">
-            <span className="mb-1 text-4xl">★</span>
-            <span className="text-sm font-bold">¡Perfección!</span>
+      <div className="absolute bottom-6 right-6 z-10 transform rounded-full bg-yellow-500 p-4 text-white shadow-lg transition-transform hover:scale-110">
+        {maxScore >= 30 && maxScore < 60 && (
+          <div className="bg-bronze flex flex-col items-center">
+            <span className="mb-1 text-4xl">🥉</span>
+            <span className="text-sm font-bold">¡Bronce!</span>
           </div>
-        </div>
-      )}
+        )}
+        {maxScore >= 60 && maxScore < 90 && (
+          <div className="bg-silver flex flex-col items-center">
+            <span className="mb-1 text-4xl">🥈</span>
+            <span className="text-sm font-bold">¡Plata!</span>
+          </div>
+        )}
+        {maxScore >= 90 && (
+          <div className="bg-gold flex flex-col items-center">
+            <span className="mb-1 text-4xl">🥇</span>
+            <span className="text-sm font-bold">¡Oro!</span>
+          </div>
+        )}
+      </div>
 
       <Canvas
         className="bg-cyan-200"
