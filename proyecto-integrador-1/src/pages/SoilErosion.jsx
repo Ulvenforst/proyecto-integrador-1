@@ -9,7 +9,8 @@ import { Suspense } from "react";
 import { OrbitControls } from "@react-three/drei";
 import WoodenSigns from "../components/generalModels/wooden_signs/WoodenSigns";
 import { gsap } from "gsap";
-import RoundedBoxWithText from "../components/RoundedBoxWithText";
+import FlowersBlock from "../components/forestModels/flowers/FlowersBlock";
+import PixelArt from "../components/postprocessing/PixelArt";
 
 function CameraAnimation({ position, target }) {
   const { camera } = useThree();
@@ -78,9 +79,12 @@ export default function SoilErosion() {
 
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (event.key === "Escape") {
+      if (event.key === "Enter") {
         setCameraPosition(initialCameraPosition);
         setCameraTarget(initialCameraTarget);
+        setSignMessage(
+          "La erosión del suelo es un proceso natural en el cual la capa superior del suelo es removida por agentes como el viento, el agua y la actividad humana. Este fenómeno puede llevar a la pérdida de nutrientes esenciales, entre otros.",
+        );
       }
     };
 
@@ -106,8 +110,8 @@ export default function SoilErosion() {
     // Causas
     () => {
       setCameraPosition([
-        -cameraDistance * 1.2,
-        cameraHeight * 1.5,
+        cameraDistance,
+        cameraHeight * 10,
         -cameraDistance * 0.3,
       ]);
       setCameraTarget([terrainOffsetX + chunkSize, 0, terrainOffsetZ]);
@@ -122,14 +126,18 @@ export default function SoilErosion() {
         cameraHeight * 1.5,
         -cameraDistance * 1.2,
       ]);
-      setCameraTarget([terrainOffsetX, 0, terrainOffsetZ + chunkSize]);
+      setCameraTarget([
+        terrainOffsetX + 50,
+        0,
+        terrainOffsetZ + chunkSize + 100,
+      ]);
       setSignMessage(
         "Las soluciones para la erosión del suelo incluyen la reforestación, el uso de terrazas en la agricultura, la rotación de cultivos, la construcción de barreras contra el viento, la implementación de prácticas agrícolas sostenibles y la gestión adecuada del agua.",
       );
     },
     // Quiz
     () => {
-      console.log("Quiz clicked");
+      navigate("/quiz");
     },
   ];
 
@@ -157,6 +165,7 @@ export default function SoilErosion() {
           far: 1000,
         }}
       >
+        <PixelArt />
         <Suspense fallback={null}>
           <CameraAnimation position={cameraPosition} target={cameraTarget} />
           <OrbitControls
@@ -207,6 +216,13 @@ export default function SoilErosion() {
                 ></iframe>
               </div>
             }
+          />
+          <FlowersBlock
+            position={[-10, 0, 45]} // Ajusta según la posición de tu granja
+            rotation={[0, Math.PI + 5, 0]}
+            scale={2}
+            n={10}
+            factor={10}
           />
 
           <WoodenSigns

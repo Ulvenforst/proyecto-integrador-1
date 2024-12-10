@@ -45,6 +45,7 @@ function CameraAnimation({ position, target }) {
 export default function Quiz() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [showScoreModal, setShowScoreModal] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [currentBioQuestion, setCurrentBioQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -66,10 +67,36 @@ export default function Quiz() {
     deforestation: false,
     endangeredSpecies: false,
   });
+  const erosionQuestion = {
+    question: "¿Cuál es la mejor manera de prevenir la erosión del suelo?",
+    options: [
+      "Plantar vegetación en las zonas expuestas",
+      "Construir caminos pavimentados",
+      "Eliminar las pendientes pronunciadas",
+      "Usar fertilizantes químicos en exceso",
+    ],
+    correctAnswer: 0, // La primera opción es la correcta
+    explanation:
+      "La plantación de vegetación ayuda a proteger el suelo al reducir la velocidad del agua y evitar la erosión.",
+  };
+
+  const [hasAnsweredErosion, setHasAnsweredErosion] = useState(false);
+  const [answeredErosionCorrectly, setAnsweredErosionCorrectly] =
+    useState(false);
+
+  const handleErosionQuestionAnswer = (selectedIndex) => {
+    setHasAnsweredErosion(true);
+    if (selectedIndex === erosionQuestion.correctAnswer) {
+      setAnsweredErosionCorrectly(true);
+      setScore((prevScore) => prevScore + 30);
+    } else {
+      setAnsweredErosionCorrectly(false);
+    }
+  };
 
   const [terrainMap, setTerrainMap] = useState([
-    [10, 10, 1, 1],
-    [10, 10, 1, 1],
+    [10, 10, 7, 7],
+    [10, 10, 7, 7],
     [2, 2, 1, 1],
     [2, 2, 1, 1],
   ]);
@@ -95,6 +122,7 @@ export default function Quiz() {
 
   const [cameraPosition, setCameraPosition] = useState(positions[0]);
   const [cameraTarget, setCameraTarget] = useState([centerX, 0, centerZ]);
+  console.log(terrainMap);
 
   // Cargar estado guardado al iniciar
   useEffect(() => {
@@ -112,6 +140,8 @@ export default function Quiz() {
           setClickCount(data.clickCount || 0);
           setHasAnsweredMultipleChoice(data.hasAnsweredMultipleChoice || false);
           setAnsweredCorrectly(data.answeredCorrectly || false);
+          setHasAnsweredErosion(data.hasAnsweredErosion || false); // Nuevo
+          setAnsweredErosionCorrectly(data.answeredErosionCorrectly || false); // Nuevo
           if (data.terrainMap) setTerrainMap(JSON.parse(data.terrainMap));
           if (data.ecosystemState)
             setEcosystemState(JSON.parse(data.ecosystemState));
@@ -148,6 +178,8 @@ export default function Quiz() {
             clickCount,
             hasAnsweredMultipleChoice,
             answeredCorrectly,
+            hasAnsweredErosion, // Nuevo
+            answeredErosionCorrectly, // Nuevo
             terrainMap: JSON.stringify(terrainMap),
             ecosystemState: JSON.stringify(ecosystemState),
             bioCorrectAnswer: JSON.stringify(bioCorrectAnswer),
@@ -170,6 +202,8 @@ export default function Quiz() {
     clickCount,
     hasAnsweredMultipleChoice,
     answeredCorrectly,
+    hasAnsweredErosion, // Nuevo
+    answeredErosionCorrectly,
     terrainMap,
     ecosystemState,
     bioCorrectAnswer,
@@ -198,8 +232,8 @@ export default function Quiz() {
   useEffect(() => {
     if (clickCount === 5 && currentQuestion === 0 && answeredCorrectly) {
       const newMap = [
-        [10, 10, 1, 1],
-        [10, 10, 1, 1],
+        [10, 10, 7, 7],
+        [10, 10, 7, 7],
         [1, 1, 1, 1],
         [1, 1, 1, 1],
       ];
@@ -311,6 +345,8 @@ export default function Quiz() {
       setCurrentQuestion((prevQuestion) => prevQuestion + 1);
       setCameraPosition(questions[currentQuestion + 1].position);
       setCameraTarget(questions[currentQuestion + 1].target);
+    } else {
+      setShowScoreModal(true); // Mostrar el modal si ya se terminó el quiz
     }
   };
 
@@ -322,6 +358,8 @@ export default function Quiz() {
         clickCount: 0,
         hasAnsweredMultipleChoice: false,
         answeredCorrectly: false,
+        hasAnsweredErosion: false,
+        answeredErosionCorrectly: false,
         terrainMap: [
           [10, 10, 1, 1],
           [10, 10, 1, 1],
@@ -347,6 +385,8 @@ export default function Quiz() {
       setClickCount(initialState.clickCount);
       setHasAnsweredMultipleChoice(initialState.hasAnsweredMultipleChoice);
       setAnsweredCorrectly(initialState.answeredCorrectly);
+      setHasAnsweredErosion(initialState.hasAnsweredErosion); // Nuevo
+      setAnsweredErosionCorrectly(initialState.answeredErosionCorrectly); // Nuevo
       setTerrainMap(initialState.terrainMap);
       setEcosystemState({
         contamination: false,
@@ -382,6 +422,17 @@ export default function Quiz() {
     navigate(-1);
   };
 
+  const getBadge = (score) => {
+    if (score >= 90) {
+      return { name: "Oro 🥇", color: "text-yellow-500" };
+    } else if (score >= 60) {
+      return { name: "Plata 🥈", color: "text-gray-400" };
+    } else if (score >= 30) {
+      return { name: "Bronce 🥉", color: "text-orange-500" };
+    } else {
+      return { name: "Sin badge 😢", color: "text-red-500" };
+    }
+  };
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center bg-cyan-200">
@@ -540,6 +591,63 @@ export default function Quiz() {
         </div>
       )}
 
+      {currentQuestion === 2 && (
+        <div className="absolute left-6 top-6 z-10 max-w-md rounded-lg bg-black/50 p-6 text-white backdrop-blur-sm">
+          <h1 className="mb-4 text-3xl font-bold">Pregunta 3</h1>
+          <p className="mb-4 text-lg">{erosionQuestion.question}</p>
+
+          {!hasAnsweredErosion && (
+            <div className="space-y-2">
+              {erosionQuestion.options.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleErosionQuestionAnswer(index)}
+                  className="w-full rounded bg-green-500 p-2 text-left transition-colors hover:bg-green-600"
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {hasAnsweredErosion && (
+            <div
+              className={`mb-4 rounded-lg p-4 ${
+                answeredErosionCorrectly ? "bg-green-500/50" : "bg-red-500/50"
+              }`}
+            >
+              {answeredErosionCorrectly ? (
+                <>
+                  <p className="text-lg font-bold text-green-300">
+                    ¡Correcto! {erosionQuestion.explanation}
+                  </p>
+                  <button
+                    onClick={handleNextQuestion}
+                    className="mt-4 transform rounded-lg bg-green-500 px-6 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-green-600"
+                  >
+                    Finalizar Quiz
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p className="text-md mb-4 text-red-300">
+                    Respuesta incorrecta. La respuesta correcta es: "
+                    {erosionQuestion.options[erosionQuestion.correctAnswer]}".{" "}
+                    {erosionQuestion.explanation}
+                  </p>
+                  <button
+                    onClick={handleNextQuestion}
+                    className="mt-4 transform rounded-lg bg-red-600 px-6 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-red-700"
+                  >
+                    Finalizar Quiz
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="absolute left-1/2 top-6 z-10 -translate-x-1/2 transform rounded-lg bg-black/50 px-6 py-2 text-white backdrop-blur-sm">
         <p className="text-lg">
           Puntuación: {score} | Pregunta: {currentQuestion + 1}/
@@ -581,6 +689,53 @@ export default function Quiz() {
           </div>
         )}
       </div>
+
+      {showScoreModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="max-w-md rounded-lg bg-white p-8 text-center shadow-lg">
+            <h2 className="mb-4 text-3xl font-bold text-green-600">
+              ¡Quiz Finalizado!
+            </h2>
+            <p className="mb-4 text-lg">
+              Tu calificación final es: <strong>{score}</strong> puntos.
+            </p>
+
+            {/* Badge para este intento */}
+            <div className="mb-4">
+              <h3 className="mb-2 text-xl font-bold text-gray-700">
+                Badge de este intento:
+              </h3>
+              <div className="flex items-center justify-center space-x-2">
+                <span className="text-4xl">{getBadge(score).icon}</span>
+                <span className="text-lg font-semibold">
+                  {getBadge(score).name}
+                </span>
+              </div>
+            </div>
+
+            {/* Badge para el mejor intento */}
+            <div>
+              <h3 className="mb-2 text-xl font-bold text-gray-700">
+                Badge del mejor intento:
+              </h3>
+              <div className="flex items-center justify-center space-x-2">
+                <span className="text-4xl">{getBadge(maxScore).icon}</span>
+                <span className="text-lg font-semibold">
+                  {getBadge(maxScore).name}
+                </span>
+              </div>
+            </div>
+
+            {/* Botón para cerrar */}
+            <button
+              onClick={() => setShowScoreModal(false)}
+              className="mt-6 transform rounded-lg bg-blue-500 px-6 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-blue-600"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
 
       <Canvas
         className="bg-cyan-200"
