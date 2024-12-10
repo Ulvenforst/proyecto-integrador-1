@@ -1,7 +1,7 @@
 import { BakeShadows, OrbitControls } from "@react-three/drei";
 import { AxesHelper } from "three";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Suspense, useEffect, useState, useMemo} from "react";
+import { Suspense, useEffect, useState, useMemo } from "react";
 import RoundedBoxWithText from "../components/RoundedBoxWithText";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ import Terrain from "../components/terrain/Terrain";
 
 //UTILS
 import { views, viewDamaged } from "../utils/dataBio";
+import Button3D from "../components/Button3D";
 
 function CameraAnimation({ viewIndex, positions }) {
   const { camera } = useThree();
@@ -161,6 +162,10 @@ const Biodiversity = () => {
   const terrainOffsetX = -((mapWidth - 1) * chunkSize) / 2;
   const terrainOffsetZ = -((mapHeight - 1) * chunkSize) / 2;
 
+  const handleGoQuiz = () => {
+    navigate("/quiz");
+  };
+
   return (
     <div className="container h-screen max-w-full">
       <button
@@ -239,6 +244,12 @@ const Biodiversity = () => {
             isAnimationDegraded={true}
           />
           <primitive object={new AxesHelper(500)} />
+
+          <Button3D
+            text={"GO TO QUIZ  "}
+            position={isDamaged ? [-2, 10, -90] : [-10, 10, -90]}
+            function_click={handleGoQuiz}
+          ></Button3D>
 
           <BakeShadows />
         </Suspense>
