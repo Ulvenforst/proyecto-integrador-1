@@ -5,15 +5,57 @@ import { Suspense, useEffect, useState, useMemo } from "react";
 import RoundedBoxWithText from "../components/RoundedBoxWithText";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
+import React, { useRef, useCallback } from "react";
 
 //componentes
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
 import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
+import PixelArt from "../components/postprocessing/PixelArt";
+import { PositionalAudio } from "three";
 
 //UTILS
 import { views, viewDamaged } from "../utils/dataBio";
 import Button3D from "../components/Button3D";
+
+import * as THREE from "three";
+
+const AudioComponent = ({ url }) => {
+  const { camera, scene } = useThree(); // Accede al contexto de Three.js
+  const audioRef = useRef();
+
+  useEffect(() => {
+    // Crea el listener y el PositionalAudio
+    const listener = new THREE.AudioListener();
+    camera.add(listener); // Añade el listener a la cámara
+
+    const sound = new THREE.PositionalAudio(listener);
+    const audioLoader = new THREE.AudioLoader();
+
+    audioLoader.load(
+      url,
+      (buffer) => {
+        sound.setBuffer(buffer);
+        sound.setLoop(true);
+        sound.setVolume(20); // Ajusta el volumen
+        audioRef.current = sound; // Guarda la referencia
+        sound.play(); // Opcional: inicia reproducción automática
+      },
+      undefined,
+      (error) => console.error("Error al cargar el audio:", error),
+    );
+
+    // Añade el PositionalAudio a la escena
+    scene.add(sound);
+
+    return () => {
+      camera.remove(listener); // Limpia el listener al desmontar
+      scene.remove(sound); // Limpia el sonido al desmontar
+    };
+  }, [camera, scene, url]);
+
+  return null; // Este componente no renderiza nada visible
+};
 
 function CameraAnimation({ viewIndex, positions }) {
   const { camera } = useThree();
@@ -203,8 +245,12 @@ const Biodiversity = () => {
           position: positions[0],
         }}
       >
+        <PixelArt></PixelArt>
+
         <Suspense fallback={null}>
           <CameraAnimation viewIndex={viewIndex} positions={positions} />
+
+          <AudioComponent url="/sound/bosque-con-abejas.mp3" />
 
           {currentText.map((box, index) => (
             <RoundedBoxWithText
