@@ -267,7 +267,7 @@ export default function Quiz() {
       title: "contamination",
     },
     {
-      question: "¿Qué escena representa la persida de especies?",
+      question: "¿Qué escena representa la perdidad de especies?",
       position: positions[1],
       target: [centerX, 0, centerZ],
       title: "endangeredSpecies",
@@ -394,7 +394,7 @@ export default function Quiz() {
       </div>
     );
   }
-  console.log(bioCorrectAnswer);
+
   return (
     <div className="relative h-screen w-full">
       {(currentQuestion === 0 || currentQuestion === 2) && (
@@ -470,9 +470,19 @@ export default function Quiz() {
           <h1 className="mb-4 text-3xl font-bold">Pregunta 2</h1>
 
           {currentBioQuestion < 3 ? (
-            <p className="mb-4 text-lg">
-              {questionsBio[currentBioQuestion].question}
-            </p>
+            <div
+              className="mb-6 rounded-lg p-6 shadow-lg"
+              style={{ backgroundColor: "rgba(59, 130, 246, 0.7)" }}
+            >
+              <div className="text-center">
+                <h3 className="text-xl font-bold uppercase tracking-wide text-white">
+                  seccion {currentBioQuestion + 1}
+                </h3>
+                <p className="mt-4 text-lg font-medium text-white drop-shadow-md">
+                  {questionsBio[currentBioQuestion].question}
+                </p>
+              </div>
+            </div>
           ) : //selecciono todas bien
           Object.values(bioCorrectAnswer).every(Boolean) ? (
             <div className="mt-4 rounded-lg border border-green-400 bg-green-100 p-6 text-center shadow-md">
