@@ -21,6 +21,7 @@ function QuizEcosystem({
   setCurrentBioQuestion,
   bioCorrectAnswer,
   setBioCorrectAnswer,
+  currentQuestion,
 }) {
   const questionsBio = [
     // Pregunta 1...
@@ -37,9 +38,6 @@ function QuizEcosystem({
 
   // Función para resolver problemas
   const resolveProblem = (problem) => {
-    console.log(problem + "==========");
-    console.log(questionsBio[currentBioQuestion].title);
-
     setEcosystemState((prev) => {
       if (!prev[problem]) {
         // Solo sumar 10 si el problema es "contaminatio"
@@ -66,7 +64,21 @@ function QuizEcosystem({
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 5, 5]} castShadow />
       {/* Controles de cámara */}
-      <OrbitControls enableZoom={true} enableRotate={false} enablePan={false} />
+      {currentQuestion === 1 ? (
+        <OrbitControls
+          maxPolarAngle={Math.PI * 0.49}
+          minPolarAngle={Math.PI * 0.1}
+          maxAzimuthAngle={-Math.PI * 0.6}
+          minAzimuthAngle={-Math.PI * 1}
+          target={[0, 0, -0]}
+          enableZoom={true}
+          enablePan={false}
+          enableRotate={true}
+          minDistance={3.5}
+          maxDistance={80}
+          rotateSpeed={0.05}
+        />
+      ) : null}
       {/* Modelos interactivos */}
       <ProblemModel
         modelProblem={<ContaminationModel />}

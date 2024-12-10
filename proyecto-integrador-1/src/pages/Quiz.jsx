@@ -267,7 +267,7 @@ export default function Quiz() {
       title: "contamination",
     },
     {
-      question: "¿Qué escena representa la persida de especies?",
+      question: "¿Qué escena representa la perdidad de especies?",
       position: positions[1],
       target: [centerX, 0, centerZ],
       title: "endangeredSpecies",
@@ -394,10 +394,10 @@ export default function Quiz() {
       </div>
     );
   }
-  console.log(bioCorrectAnswer);
+
   return (
     <div className="relative h-screen w-full">
-      {currentQuestion === 0 && (
+      {(currentQuestion === 0 || currentQuestion === 2) && (
         <div className="absolute left-6 top-6 z-10 max-w-md rounded-lg bg-black/50 p-6 text-white backdrop-blur-sm">
           <h1 className="mb-4 text-3xl font-bold">
             Pregunta {currentQuestion + 1}
@@ -467,22 +467,41 @@ export default function Quiz() {
 
       {currentQuestion === 1 && (
         <div className="absolute left-6 top-6 z-10 max-w-md rounded-lg bg-black/50 p-6 text-white backdrop-blur-sm">
-          <h1 className="mb-4 text-3xl font-bold">
-            Pregunta 2 === {currentBioQuestion}
-          </h1>
+          <h1 className="mb-4 text-3xl font-bold">Pregunta 2</h1>
 
           {currentBioQuestion < 3 ? (
-            <p className="mb-4 text-lg">
-              {questionsBio[currentBioQuestion].question}
-            </p>
-          ) : Object.values(bioCorrectAnswer).every(Boolean) ? (
-            <button
-              onClick={handleNextQuestion}
-              className="mt-4 transform rounded-lg bg-green-500 px-6 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-green-600"
+            <div
+              className="mb-6 rounded-lg p-6 shadow-lg"
+              style={{ backgroundColor: "rgba(59, 130, 246, 0.7)" }}
             >
-              Siguiente pregunta
-            </button>
+              <div className="text-center">
+                <h3 className="text-xl font-bold uppercase tracking-wide text-white">
+                  seccion {currentBioQuestion + 1}
+                </h3>
+                <p className="mt-4 text-lg font-medium text-white drop-shadow-md">
+                  {questionsBio[currentBioQuestion].question}
+                </p>
+              </div>
+            </div>
+          ) : //selecciono todas bien
+          Object.values(bioCorrectAnswer).every(Boolean) ? (
+            <div className="mt-4 rounded-lg border border-green-400 bg-green-100 p-6 text-center shadow-md">
+              <h2 className="text-2xl font-bold text-green-700">
+                ¡Felicitaciones! 🎉
+              </h2>
+              <p className="mt-2 text-green-600">
+                Has identificado correctamente todas las problemáticas. ¡Buen
+                trabajo!
+              </p>
+              <button
+                onClick={handleNextQuestion}
+                className="mt-4 transform rounded-lg bg-green-500 px-6 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-green-600"
+              >
+                Siguiente pregunta
+              </button>
+            </div>
           ) : (
+            //fallo en alguna
             <div className="space-y-2">
               <div>
                 {Object.entries(bioCorrectAnswer).map(([key, value]) => {
@@ -593,6 +612,7 @@ export default function Quiz() {
             setCurrentBioQuestion={setCurrentBioQuestion}
             bioCorrectAnswer={bioCorrectAnswer}
             setBioCorrectAnswer={setBioCorrectAnswer}
+            currentQuestion={currentQuestion}
           ></QuizEcosystem>
 
           <Terrain
