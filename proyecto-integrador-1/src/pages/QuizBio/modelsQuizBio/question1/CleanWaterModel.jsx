@@ -98,8 +98,9 @@ export function CleanWaterModel(props) {
         />
       </group>
       <group
-        position={[8.072, 2.872, -9.246]}
+        position={[7.318, 1.363, -8.092]}
         rotation={[Math.PI / 2, 0, -0.274]}
+        scale={3.421}
       >
         <mesh
           castShadow
@@ -163,6 +164,7 @@ export function CleanWaterModel(props) {
       <group
         position={[-7.244, 2.793, -7.966]}
         rotation={[Math.PI / 2, 0, 0.656]}
+        scale={1.51}
       >
         <mesh
           castShadow
@@ -226,8 +228,9 @@ export function CleanWaterModel(props) {
         />
       </group>
       <group
-        position={[-7.707, 2.437, 7.318]}
+        position={[-2.877, 2.158, 7.566]}
         rotation={[Math.PI / 2, 0, -0.612]}
+        scale={2.245}
       >
         <mesh
           castShadow
@@ -293,6 +296,7 @@ export function CleanWaterModel(props) {
       <group
         position={[-5.385, 2.003, -3.044]}
         rotation={[Math.PI / 2, 0, -0.812]}
+        scale={1.658}
       >
         <mesh
           castShadow
@@ -423,6 +427,7 @@ export function CleanWaterModel(props) {
       <group
         position={[-1.482, 3.306, -7.284]}
         rotation={[Math.PI / 2, 0, 0.591]}
+        scale={1.434}
       >
         <mesh
           castShadow
@@ -486,8 +491,9 @@ export function CleanWaterModel(props) {
         />
       </group>
       <group
-        position={[4.295, 2.951, -5.173]}
+        position={[4.592, 3.241, -3.019]}
         rotation={[Math.PI / 2, 0, -0.359]}
+        scale={2.3}
       >
         <mesh
           castShadow
@@ -550,7 +556,11 @@ export function CleanWaterModel(props) {
           material={materials["RedPart.007"]}
         />
       </group>
-      <group position={[8.98, 2.872, 6.464]} rotation={[Math.PI / 2, 0, 0.581]}>
+      <group
+        position={[7.742, 2.872, 6.502]}
+        rotation={[Math.PI / 2, 0, 0.581]}
+        scale={1.757}
+      >
         <mesh
           castShadow
           receiveShadow
@@ -615,6 +625,7 @@ export function CleanWaterModel(props) {
       <group
         position={[5.312, 1.924, 1.108]}
         rotation={[Math.PI / 2, 0, 0.337]}
+        scale={2.173}
       >
         <mesh
           castShadow
@@ -680,6 +691,7 @@ export function CleanWaterModel(props) {
       <group
         position={[1.892, 2.872, -10.154]}
         rotation={[Math.PI / 2, 0, -0.326]}
+        scale={1.444}
       >
         <mesh
           castShadow
@@ -810,6 +822,7 @@ export function CleanWaterModel(props) {
       <group
         position={[0.329, 1.707, 8.267]}
         rotation={[Math.PI / 2, 0, 0.655]}
+        scale={1.433}
       >
         <mesh
           castShadow
@@ -875,6 +888,7 @@ export function CleanWaterModel(props) {
       <group
         position={[-3.475, 1.865, -8.789]}
         rotation={[Math.PI / 2, 0, -0.12]}
+        scale={2.116}
       >
         <mesh
           castShadow
@@ -940,6 +954,7 @@ export function CleanWaterModel(props) {
       <group
         position={[8.669, 2.042, -4.041]}
         rotation={[Math.PI / 2, 0, 0.236]}
+        scale={1.766}
       >
         <mesh
           castShadow
@@ -1067,6 +1082,7 @@ export function CleanWaterModel(props) {
       <group
         position={[-5.897, 2.003, 1.522]}
         rotation={[Math.PI / 2, 0, -1.45]}
+        scale={1.596}
       >
         <mesh
           castShadow
@@ -1132,6 +1148,7 @@ export function CleanWaterModel(props) {
       <group
         position={[1.935, 3.653, -2.673]}
         rotation={[Math.PI / 2, 0, -2.458]}
+        scale={2.26}
       >
         <mesh
           castShadow
@@ -1198,10 +1215,10 @@ export function CleanWaterModel(props) {
         castShadow
         receiveShadow
         geometry={nodes.uploads_files_3977413_珊瑚.geometry}
-        material={materials.Material}
+        material={materials["Material.001"]}
         position={[-0.542, 1.562, -11.165]}
         rotation={[Math.PI / 2, 0, 0]}
-        scale={0.016}
+        scale={0.012}
       />
       <mesh
         castShadow
@@ -1210,7 +1227,7 @@ export function CleanWaterModel(props) {
         material={materials["Material.002"]}
         position={[-3.203, 1.562, -6.416]}
         rotation={[Math.PI / 2, 0, 0]}
-        scale={0.016}
+        scale={0.012}
       />
       <mesh
         castShadow
@@ -1219,7 +1236,7 @@ export function CleanWaterModel(props) {
         material={materials["Material.009"]}
         position={[-0.42, 1.562, -1.381]}
         rotation={[Math.PI / 2, 0, 0]}
-        scale={0.016}
+        scale={0.009}
       />
       <mesh
         castShadow
@@ -1228,16 +1245,16 @@ export function CleanWaterModel(props) {
         material={materials["Material.023"]}
         position={[-0.87, 1.562, -12.107]}
         rotation={[Math.PI / 2, 0, 2.652]}
-        scale={0.016}
+        scale={0.01}
       />
       <mesh
         castShadow
         receiveShadow
         geometry={nodes.uploads_files_3977413_珊瑚004.geometry}
         material={materials["Material.024"]}
-        position={[-7.87, 1.562, -0.89]}
+        position={[-7.903, 1.17, -0.89]}
         rotation={[Math.PI / 2, 0, 0]}
-        scale={0.016}
+        scale={0.01}
       />
       <mesh
         castShadow
@@ -1246,7 +1263,7 @@ export function CleanWaterModel(props) {
         material={materials["Material.025"]}
         position={[5.68, 1.562, 5.087]}
         rotation={[Math.PI / 2, 0, 2.96]}
-        scale={0.016}
+        scale={0.009}
       />
       <mesh
         castShadow
@@ -1255,25 +1272,25 @@ export function CleanWaterModel(props) {
         material={materials["Material.026"]}
         position={[1.791, 1.562, -7.235]}
         rotation={[Math.PI / 2, 0, 2.376]}
-        scale={0.016}
+        scale={0.012}
       />
       <mesh
         castShadow
         receiveShadow
         geometry={nodes.uploads_files_3977413_珊瑚007.geometry}
         material={materials["Material.027"]}
-        position={[-1.975, 1.562, 5.25]}
+        position={[-0.877, 1.035, 4.658]}
         rotation={[Math.PI / 2, 0, 0]}
-        scale={0.016}
+        scale={0.012}
       />
       <mesh
         castShadow
         receiveShadow
         geometry={nodes.uploads_files_3977413_珊瑚008.geometry}
         material={materials["Material.028"]}
-        position={[-10.899, 1.562, -11.001]}
+        position={[-10.034, 1.219, -11.001]}
         rotation={[Math.PI / 2, 0, 0]}
-        scale={0.016}
+        scale={0.01}
       />
     </group>
   );
