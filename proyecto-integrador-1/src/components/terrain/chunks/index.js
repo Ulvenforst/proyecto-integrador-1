@@ -8,6 +8,7 @@ import FarmChunk from "./FarmChunk";
 import DenseBiodiversity from "./DenseBiodiversity";
 import DenseForestChunkAnimals from "./ForestChunkAnimals";
 import DegradedBiodiversity from "./DegradedBiodiversity";
+import soilGreenDesert from "./soilGreenDesert";
 
 export const CHUNK_TYPES = {
   0: EmptyChunk,
@@ -18,6 +19,7 @@ export const CHUNK_TYPES = {
   6: DegradedBiodiversity,
   7: DegradedSoil,
   8: DenseBiodiversity,
+  10: soilGreenDesert,
 };
 
 export { DenseForestChunk, EmptyChunk, FarmChunk };

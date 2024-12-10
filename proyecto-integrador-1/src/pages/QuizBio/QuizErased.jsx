@@ -18,7 +18,7 @@ import ForestModel from "./modelsQuizBio/question2/ForestModel";
 import EmptyHabitatModel from "./modelsQuizBio/question3/EmptyHabitatModel";
 import PopulatedHabitatModel from "./modelsQuizBio/question3/PopulatedHabitatModel";
 
-function QuizEcosystem() {
+function QuizEcosystem({ positions = [0, 0, 0] }) {
   const [ecosystemState, setEcosystemState] = useState({
     contamination: false,
     deforestation: false,
@@ -47,7 +47,7 @@ function QuizEcosystem() {
         modelSolution={<CleanWaterModel />}
         isResolved={ecosystemState.contamination}
         onResolve={() => resolveProblem("contamination")}
-        position={[10, 0, 10]}
+        position={[10 + positions[0], 0 + positions[1], 10 + positions[2]]}
       />
 
       <ProblemModel
@@ -55,7 +55,7 @@ function QuizEcosystem() {
         modelSolution={<ForestModel />}
         isResolved={ecosystemState.deforestation}
         onResolve={() => resolveProblem("deforestation")}
-        position={[-10, 0, 10]}
+        position={[-20 + positions[0], 0 + positions[1], 10 + positions[2]]}
       />
 
       <ProblemModel
@@ -63,7 +63,7 @@ function QuizEcosystem() {
         modelSolution={<PopulatedHabitatModel />}
         isResolved={ecosystemState.endangeredSpecies}
         onResolve={() => resolveProblem("endangeredSpecies")}
-        position={[10, 0, -10]}
+        position={[10 + positions[0], 0 + positions[1], -20 + positions[2]]}
       />
     </>
   );

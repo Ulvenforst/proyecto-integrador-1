@@ -45,7 +45,7 @@ function CameraAnimation({ position, target }) {
 export default function Quiz() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(1);
   const [score, setScore] = useState(0);
   const [maxScore, setMaxScore] = useState(0);
   const [clickCount, setClickCount] = useState(0);
@@ -55,8 +55,8 @@ export default function Quiz() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [terrainMap, setTerrainMap] = useState([
-    [1, 1, 1, 1],
-    [1, 1, 1, 1],
+    [10, 10, 1, 1],
+    [10, 10, 1, 1],
     [2, 2, 1, 1],
     [2, 2, 1, 1],
   ]);
@@ -75,7 +75,7 @@ export default function Quiz() {
 
   const positions = [
     [-cameraDistance * 0.6, cameraHeight * 0.5, cameraDistance * 0.6],
-    [-cameraDistance * 0.71, cameraHeight * 0.4, -cameraDistance * 0.71],
+    [-cameraDistance * 1, cameraHeight * 1.3, -cameraDistance * 1.2],
     [cameraDistance * 0.6, cameraHeight * 0.5, -cameraDistance * 0.6],
     [cameraDistance * 0.6, cameraHeight * 0.5, cameraDistance * 0.6],
   ];
@@ -105,9 +105,9 @@ export default function Quiz() {
               data.hasAnsweredMultipleChoice || false,
             );
             setAnsweredCorrectly(data.answeredCorrectly || false);
-            if (data.terrainMap) {
-              setTerrainMap(JSON.parse(data.terrainMap));
-            }
+            //if (!data.terrainMap) {
+            //setTerrainMap(JSON.parse(data.terrainMap));
+            //}
             setMaxScore(data.maxScore || 0);
             setCameraPosition(positions[data.currentQuestion || 0]);
             setCameraTarget([centerX, 0, centerZ]);
@@ -141,9 +141,9 @@ export default function Quiz() {
               data.hasAnsweredMultipleChoice || false,
             );
             setAnsweredCorrectly(data.answeredCorrectly || false);
-            if (data.terrainMap) {
-              setTerrainMap(JSON.parse(data.terrainMap));
-            }
+            //if (data.terrainMap) {
+            //setTerrainMap(JSON.parse(data.terrainMap));
+            //}
             setMaxScore(data.maxScore || 0);
             setCameraPosition(positions[data.currentQuestion || 0]);
             setCameraTarget([centerX, 0, centerZ]);
@@ -257,8 +257,7 @@ export default function Quiz() {
       target: [centerX, 0, centerZ],
     },
     {
-      question:
-        "¿Cuántos años tarda en promedio un árbol en alcanzar su madurez?",
+      question: "Que cosas estan mal en este ambiente, seleccionalas",
       position: positions[1],
       target: [centerX, 0, centerZ],
     },
@@ -476,9 +475,11 @@ export default function Quiz() {
             minRadius={12}
           />
 
+          <QuizEcosystem positions={[-25, 0, -30]}></QuizEcosystem>
+
           <Terrain
             map={terrainMap}
-            baseSeed={12345}
+            baseSeed={1234}
             position={[terrainOffsetX, 0, terrainOffsetZ]}
           />
         </Suspense>
