@@ -6,17 +6,17 @@ export default function ForestModel(props) {
   const { nodes, materials, animations } = useGLTF("models/quizBiodiversity/ForestModel.glb");
   const { actions } = useAnimations(animations, group);
 
-  useEffect(() => {
+  //useEffect(() => {
     // Recorremos todas las acciones y las reproducimos
-    Object.values(actions).forEach((action) => {
-      action.reset().play();
-    });
+    //Object.values(actions).forEach((action) => {
+      //action.reset().play();
+    //});
 
-    return () => {
+    //return () => {
       // Nos aseguramos de detener las acciones al desmontar el componente
-      Object.values(actions).forEach((action) => action.stop());
-    };
-  }, [actions]);
+      //Object.values(actions).forEach((action) => action.stop());
+    //};
+  //}, [actions]);
 
   return (
     <group ref={group} {...props} dispose={null}>

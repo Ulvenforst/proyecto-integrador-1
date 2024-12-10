@@ -1,37 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { useSpring, animated } from "@react-spring/three";
 
 import ProblemModel from "./ProblemModel";
 
-//modelos
-//Q1
+// Modelos
 import { ContaminationModel } from "./modelsQuizBio/question1/ContaminationModel";
 import { CleanWaterModel } from "./modelsQuizBio/question1/CleanWaterModel";
-
-//Q2
 import DeforestationModel from "./modelsQuizBio/question2/DeforestationModel";
 import ForestModel from "./modelsQuizBio/question2/ForestModel";
-
-//Q3
 import EmptyHabitatModel from "./modelsQuizBio/question3/EmptyHabitatModel";
 import PopulatedHabitatModel from "./modelsQuizBio/question3/PopulatedHabitatModel";
 
-function QuizEcosystem({ positions = [0, 0, 0] }) {
-  const [ecosystemState, setEcosystemState] = useState({
-    contamination: false,
-    deforestation: false,
-    endangeredSpecies: false,
-    drought: false,
-  });
+function QuizEcosystem({
+  positions = [0, 0, 0],
+  setScore,
+  ecosystemState,
+  setEcosystemState,
+  currentBioQuestion,
+  setCurrentBioQuestion,
+  bioCorrectAnswer,
+  setBioCorrectAnswer,
+}) {
+  const questionsBio = [
+    // Pregunta 1...
+    {
+      title: "contamination",
+    },
+    {
+      title: "endangeredSpecies",
+    },
+    {
+      title: "deforestation",
+    },
+  ];
 
   // Función para resolver problemas
   const resolveProblem = (problem) => {
-    setEcosystemState((prev) => ({
-      ...prev,
-      [problem]: true,
-    }));
+    console.log(problem + "==========");
+    console.log(questionsBio[currentBioQuestion].title);
+
+    setEcosystemState((prev) => {
+      if (!prev[problem]) {
+        // Solo sumar 10 si el problema es "contaminatio"
+        if (problem === questionsBio[currentBioQuestion].title) {
+          setScore((prevScore) => prevScore + 10);
+          // Actualizar bioCorrectAnswer
+          setBioCorrectAnswer((prevBioCorrectAnswer) => ({
+            ...prevBioCorrectAnswer,
+            [problem]: true, // Hacer verdadero el correspondiente
+          }));
+        }
+        setCurrentBioQuestion((prevScore) => prevScore + 1);
+      }
+      return {
+        ...prev,
+        [problem]: true,
+      };
+    });
   };
 
   return (
@@ -40,7 +66,7 @@ function QuizEcosystem({ positions = [0, 0, 0] }) {
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 5, 5]} castShadow />
       {/* Controles de cámara */}
-      <OrbitControls enableZoom={true} />
+      <OrbitControls enableZoom={true} enableRotate={false} enablePan={false} />
       {/* Modelos interactivos */}
       <ProblemModel
         modelProblem={<ContaminationModel />}

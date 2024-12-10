@@ -46,6 +46,7 @@ export default function Quiz() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [currentQuestion, setCurrentQuestion] = useState(1);
+  const [currentBioQuestion, setCurrentBioQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [maxScore, setMaxScore] = useState(0);
   const [clickCount, setClickCount] = useState(0);
@@ -53,6 +54,18 @@ export default function Quiz() {
     useState(false);
   const [answeredCorrectly, setAnsweredCorrectly] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [ecosystemState, setEcosystemState] = useState({
+    contamination: false,
+    deforestation: false,
+    endangeredSpecies: false,
+  });
+
+  const [bioCorrectAnswer, setBioCorrectAnswer] = useState({
+    contamination: false,
+    deforestation: false,
+    endangeredSpecies: false,
+  });
 
   const [terrainMap, setTerrainMap] = useState([
     [10, 10, 1, 1],
@@ -88,45 +101,6 @@ export default function Quiz() {
     const loadQuizState = async () => {
       if (!user) return;
 
-      console.log(user);
-
-      try {
-        const quizRef = doc(db, "quizzes", user.uid);
-        const quizDoc = await getDoc(quizRef);
-        console.log(quizDoc);
-
-        if (quizDoc.exists()) {
-          const data = quizDoc.data();
-          if (data) {
-            setCurrentQuestion(data.currentQuestion || 0);
-            setScore(data.score || 0);
-            setClickCount(data.clickCount || 0);
-            setHasAnsweredMultipleChoice(
-              data.hasAnsweredMultipleChoice || false,
-            );
-            setAnsweredCorrectly(data.answeredCorrectly || false);
-            //if (!data.terrainMap) {
-            //setTerrainMap(JSON.parse(data.terrainMap));
-            //}
-            setMaxScore(data.maxScore || 0);
-            setCameraPosition(positions[data.currentQuestion || 0]);
-            setCameraTarget([centerX, 0, centerZ]);
-          }
-        }
-      } catch (error) {
-        console.error("Error loading quiz state:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadQuizState();
-  }, [user]);
-
-  useEffect(() => {
-    const loadQuizState = async () => {
-      if (!user) return;
-
       try {
         const quizRef = doc(db, "quizzes", user.uid);
         const quizDoc = await getDoc(quizRef);
@@ -141,9 +115,16 @@ export default function Quiz() {
               data.hasAnsweredMultipleChoice || false,
             );
             setAnsweredCorrectly(data.answeredCorrectly || false);
-            //if (data.terrainMap) {
-            //setTerrainMap(JSON.parse(data.terrainMap));
-            //}
+            if (data.terrainMap) {
+              setTerrainMap(JSON.parse(data.terrainMap));
+            }
+            if (data.ecosystemState) {
+              setEcosystemState(JSON.parse(data.ecosystemState));
+            }
+            if (data.bioCorrectAnswer) {
+              setBioCorrectAnswer(JSON.parse(data.bioCorrectAnswer));
+            }
+            setCurrentBioQuestion(data.currentBioQuestion || 0);
             setMaxScore(data.maxScore || 0);
             setCameraPosition(positions[data.currentQuestion || 0]);
             setCameraTarget([centerX, 0, centerZ]);
@@ -159,6 +140,7 @@ export default function Quiz() {
     if (user) loadQuizState();
   }, [user]); // Solo depende de `user`
 
+  // guardar estado del quiz
   useEffect(() => {
     if (isLoading || !user) return;
 
@@ -175,6 +157,9 @@ export default function Quiz() {
             hasAnsweredMultipleChoice,
             answeredCorrectly,
             terrainMap: JSON.stringify(terrainMap),
+            ecosystemState: JSON.stringify(ecosystemState),
+            bioCorrectAnswer: JSON.stringify(bioCorrectAnswer),
+            currentBioQuestion,
             lastUpdated: new Date().toISOString(),
           },
           { merge: true },
@@ -195,6 +180,7 @@ export default function Quiz() {
     terrainMap,
     user,
     isLoading,
+    currentBioQuestion,
   ]); // Se mantienen las dependencias necesarias
 
   useEffect(() => {
@@ -216,9 +202,12 @@ export default function Quiz() {
 
   useEffect(() => {
     if (clickCount === 5 && currentQuestion === 0 && answeredCorrectly) {
-      const newMap = terrainMap.map((row) =>
-        row.map((chunk) => (chunk === 2 ? 1 : chunk)),
-      );
+      const newMap = [
+        [10, 10, 1, 1],
+        [10, 10, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+      ];
 
       const isAlreadyReforested = terrainMap.every((row, i) =>
         row.every((chunk, j) => chunk === newMap[i][j]),
@@ -269,6 +258,46 @@ export default function Quiz() {
     },
   ];
 
+  const questionsBio = [
+    // Pregunta 1...
+    {
+      question: "¿Qué escena representa la contaminación?",
+      position: positions[1],
+      target: [centerX, 0, centerZ],
+      title: "contamination",
+    },
+    {
+      question: "¿Qué escena representa la persida de especies?",
+      position: positions[1],
+      target: [centerX, 0, centerZ],
+      title: "endangeredSpecies",
+    },
+    {
+      question: "¿Qué escena representa la perdida de habitats?",
+      position: positions[1],
+      target: [centerX, 0, centerZ],
+      title: "deforestation",
+    },
+  ];
+
+  const feedbackMessages = {
+    contamination: {
+      problem: "Contaminación",
+      explanation:
+        "La contaminación puede identificarse observando la calidad del agua, el aire o la presencia de desechos en el entorno.",
+    },
+    deforestation: {
+      problem: "Deforestación",
+      explanation:
+        "La deforestación se manifiesta por la pérdida de áreas boscosas y el aumento de zonas desprovistas de vegetación.",
+    },
+    endangeredSpecies: {
+      problem: "Especies en peligro",
+      explanation:
+        "Puedes identificar esta problemática prestando atención a la desaparición de especies locales o su escasa presencia.",
+    },
+  };
+
   const handleMultipleChoiceAnswer = (selectedIndex) => {
     setHasAnsweredMultipleChoice(true);
     if (selectedIndex === multipleChoiceQuestion.correctAnswer) {
@@ -299,11 +328,22 @@ export default function Quiz() {
         hasAnsweredMultipleChoice: false,
         answeredCorrectly: false,
         terrainMap: [
-          [1, 1, 1, 1],
-          [1, 1, 1, 1],
+          [10, 10, 1, 1],
+          [10, 10, 1, 1],
           [2, 2, 1, 1],
           [2, 2, 1, 1],
         ],
+        ecosystemState: {
+          contamination: false,
+          deforestation: false,
+          endangeredSpecies: false,
+        },
+        bioCorrectAnswer: {
+          contamination: false,
+          deforestation: false,
+          endangeredSpecies: false,
+        },
+        currentBioQuestion: 0,
       };
 
       // Actualizar estado local
@@ -313,8 +353,19 @@ export default function Quiz() {
       setHasAnsweredMultipleChoice(initialState.hasAnsweredMultipleChoice);
       setAnsweredCorrectly(initialState.answeredCorrectly);
       setTerrainMap(initialState.terrainMap);
+      setEcosystemState({
+        contamination: false,
+        deforestation: false,
+        endangeredSpecies: false,
+      });
+      setBioCorrectAnswer({
+        contamination: false,
+        deforestation: false,
+        endangeredSpecies: false,
+      });
       setCameraPosition(positions[0]);
       setCameraTarget([centerX, 0, centerZ]);
+      setCurrentBioQuestion(0);
 
       // Actualizar en Firebase
       if (user) {
@@ -322,6 +373,8 @@ export default function Quiz() {
         await updateDoc(quizRef, {
           ...initialState,
           terrainMap: JSON.stringify(initialState.terrainMap),
+          ecosystemState: JSON.stringify(initialState.ecosystemState),
+          bioCorrectAnswer: JSON.stringify(initialState.bioCorrectAnswer),
           lastUpdated: new Date().toISOString(),
         });
       }
@@ -341,73 +394,129 @@ export default function Quiz() {
       </div>
     );
   }
-
+  console.log(bioCorrectAnswer);
   return (
     <div className="relative h-screen w-full">
-      <div className="absolute left-6 top-6 z-10 max-w-md rounded-lg bg-black/50 p-6 text-white backdrop-blur-sm">
-        <h1 className="mb-4 text-3xl font-bold">
-          Pregunta {currentQuestion + 1}
-        </h1>
-        <p className="mb-4 text-lg">{questions[currentQuestion].question}</p>
+      {currentQuestion === 0 && (
+        <div className="absolute left-6 top-6 z-10 max-w-md rounded-lg bg-black/50 p-6 text-white backdrop-blur-sm">
+          <h1 className="mb-4 text-3xl font-bold">
+            Pregunta {currentQuestion + 1}
+          </h1>
 
-        {currentQuestion === 0 && !hasAnsweredMultipleChoice && (
-          <div className="space-y-2">
-            {multipleChoiceQuestion.options.map((option, index) => (
-              <button
-                key={index}
-                onClick={() => handleMultipleChoiceAnswer(index)}
-                className="w-full rounded bg-green-500 p-2 text-left transition-colors hover:bg-green-600"
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-        )}
+          <p className="mb-4 text-lg">{questions[currentQuestion].question}</p>
 
-        {currentQuestion === 0 && hasAnsweredMultipleChoice && (
-          <div
-            className={`mb-4 rounded-lg p-4 ${answeredCorrectly ? "bg-green-500/50" : "bg-red-500/50"}`}
-          >
-            {answeredCorrectly ? (
-              <>
-                <p className="text-md mb-4">
-                  Clicks realizados: {clickCount}/5
-                </p>
-                {clickCount === 5 && (
-                  <p className="text-lg font-bold text-green-300">
-                    ¡Excelente trabajo! Has completado la reforestación.
-                  </p>
-                )}
-              </>
-            ) : (
-              <div className="space-y-2">
-                <p className="font-bold text-red-300">Respuesta Incorrecta</p>
-                <p className="text-sm opacity-80">
-                  No podrás participar en la actividad de reforestación.
-                </p>
+          {currentQuestion === 0 && !hasAnsweredMultipleChoice && (
+            <div className="space-y-2">
+              {multipleChoiceQuestion.options.map((option, index) => (
                 <button
-                  onClick={handleNextQuestion}
-                  className="mt-2 w-full transform rounded-lg bg-red-600 px-6 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-red-700"
+                  key={index}
+                  onClick={() => handleMultipleChoiceAnswer(index)}
+                  className="w-full rounded bg-green-500 p-2 text-left transition-colors hover:bg-green-600"
                 >
-                  Siguiente pregunta
+                  {option}
                 </button>
-              </div>
-            )}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
 
-        {currentQuestion === 0 &&
-          hasAnsweredMultipleChoice &&
-          answeredCorrectly &&
-          clickCount === 5 && (
+          {currentQuestion === 0 && hasAnsweredMultipleChoice && (
+            <div
+              className={`mb-4 rounded-lg p-4 ${answeredCorrectly ? "bg-green-500/50" : "bg-red-500/50"}`}
+            >
+              {answeredCorrectly ? (
+                <>
+                  <p className="text-md mb-4">
+                    Clicks realizados: {clickCount}/5
+                  </p>
+                  {clickCount === 5 && (
+                    <p className="text-lg font-bold text-green-300">
+                      ¡Excelente trabajo! Has completado la reforestación.
+                    </p>
+                  )}
+                </>
+              ) : (
+                <div className="space-y-2">
+                  <p className="font-bold text-red-300">Respuesta Incorrecta</p>
+                  <p className="text-sm opacity-80">
+                    No podrás participar en la actividad de reforestación.
+                  </p>
+                  <button
+                    onClick={handleNextQuestion}
+                    className="mt-2 w-full transform rounded-lg bg-red-600 px-6 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-red-700"
+                  >
+                    Siguiente pregunta
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {currentQuestion === 0 &&
+            hasAnsweredMultipleChoice &&
+            answeredCorrectly &&
+            clickCount === 5 && (
+              <button
+                onClick={handleNextQuestion}
+                className="mt-4 transform rounded-lg bg-green-500 px-6 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-green-600"
+              >
+                Siguiente pregunta
+              </button>
+            )}
+        </div>
+      )}
+
+      {currentQuestion === 1 && (
+        <div className="absolute left-6 top-6 z-10 max-w-md rounded-lg bg-black/50 p-6 text-white backdrop-blur-sm">
+          <h1 className="mb-4 text-3xl font-bold">
+            Pregunta 2 === {currentBioQuestion}
+          </h1>
+
+          {currentBioQuestion < 3 ? (
+            <p className="mb-4 text-lg">
+              {questionsBio[currentBioQuestion].question}
+            </p>
+          ) : Object.values(bioCorrectAnswer).every(Boolean) ? (
             <button
               onClick={handleNextQuestion}
               className="mt-4 transform rounded-lg bg-green-500 px-6 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-green-600"
             >
               Siguiente pregunta
             </button>
+          ) : (
+            <div className="space-y-2">
+              <div>
+                {Object.entries(bioCorrectAnswer).map(([key, value]) => {
+                  if (!value) {
+                    return (
+                      <div
+                        key={key}
+                        style={{
+                          marginBottom: "1rem",
+                          border: "1px solid #ccc",
+                          padding: "1rem",
+                          borderRadius: "8px",
+                        }}
+                      >
+                        <p style={{ fontWeight: "bold", color: "#d9534f" }}>
+                          Problema: {feedbackMessages[key].problem}
+                        </p>
+                        <p>{feedbackMessages[key].explanation}</p>
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+              <button
+                onClick={handleNextQuestion}
+                className="mt-2 w-full transform rounded-lg bg-red-600 px-6 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-red-700"
+              >
+                Siguiente pregunta
+              </button>
+            </div>
           )}
-      </div>
+        </div>
+      )}
 
       <div className="absolute left-1/2 top-6 z-10 -translate-x-1/2 transform rounded-lg bg-black/50 px-6 py-2 text-white backdrop-blur-sm">
         <p className="text-lg">
@@ -475,7 +584,16 @@ export default function Quiz() {
             minRadius={12}
           />
 
-          <QuizEcosystem positions={[-25, 0, -30]}></QuizEcosystem>
+          <QuizEcosystem
+            positions={[-25, 0, -30]}
+            setScore={setScore}
+            ecosystemState={ecosystemState}
+            setEcosystemState={setEcosystemState}
+            currentBioQuestion={currentBioQuestion}
+            setCurrentBioQuestion={setCurrentBioQuestion}
+            bioCorrectAnswer={bioCorrectAnswer}
+            setBioCorrectAnswer={setBioCorrectAnswer}
+          ></QuizEcosystem>
 
           <Terrain
             map={terrainMap}
