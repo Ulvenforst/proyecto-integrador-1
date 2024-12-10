@@ -45,7 +45,7 @@ function CameraAnimation({ position, target }) {
 export default function Quiz() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [currentQuestion, setCurrentQuestion] = useState(1);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [currentBioQuestion, setCurrentBioQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [maxScore, setMaxScore] = useState(0);
@@ -99,7 +99,7 @@ export default function Quiz() {
   // Cargar estado guardado al iniciar
   useEffect(() => {
     const loadQuizState = async () => {
-      if (!user) return;
+      if (!user?.uid) return;
 
       try {
         const quizRef = doc(db, "quizzes", user.uid);
@@ -107,28 +107,20 @@ export default function Quiz() {
 
         if (quizDoc.exists()) {
           const data = quizDoc.data();
-          if (data) {
-            setCurrentQuestion(data.currentQuestion || 0);
-            setScore(data.score || 0);
-            setClickCount(data.clickCount || 0);
-            setHasAnsweredMultipleChoice(
-              data.hasAnsweredMultipleChoice || false,
-            );
-            setAnsweredCorrectly(data.answeredCorrectly || false);
-            if (data.terrainMap) {
-              setTerrainMap(JSON.parse(data.terrainMap));
-            }
-            if (data.ecosystemState) {
-              setEcosystemState(JSON.parse(data.ecosystemState));
-            }
-            if (data.bioCorrectAnswer) {
-              setBioCorrectAnswer(JSON.parse(data.bioCorrectAnswer));
-            }
-            setCurrentBioQuestion(data.currentBioQuestion || 0);
-            setMaxScore(data.maxScore || 0);
-            setCameraPosition(positions[data.currentQuestion || 0]);
-            setCameraTarget([centerX, 0, centerZ]);
-          }
+          setCurrentQuestion(data.currentQuestion || 0);
+          setScore(data.score || 0);
+          setClickCount(data.clickCount || 0);
+          setHasAnsweredMultipleChoice(data.hasAnsweredMultipleChoice || false);
+          setAnsweredCorrectly(data.answeredCorrectly || false);
+          if (data.terrainMap) setTerrainMap(JSON.parse(data.terrainMap));
+          if (data.ecosystemState)
+            setEcosystemState(JSON.parse(data.ecosystemState));
+          if (data.bioCorrectAnswer)
+            setBioCorrectAnswer(JSON.parse(data.bioCorrectAnswer));
+          setCurrentBioQuestion(data.currentBioQuestion || 0);
+          setMaxScore(data.maxScore || 0);
+          setCameraPosition(positions[data.currentQuestion || 0]);
+          setCameraTarget([centerX, 0, centerZ]);
         }
       } catch (error) {
         console.error("Error loading quiz state:", error);
@@ -137,12 +129,12 @@ export default function Quiz() {
       }
     };
 
-    if (user) loadQuizState();
-  }, [user]); // Solo depende de `user`
+    loadQuizState();
+  }, [user?.uid]); // Usa `user?.uid` para evitar errores si `user` es nulo.
 
   // guardar estado del quiz
   useEffect(() => {
-    if (isLoading || !user) return;
+    if (isLoading || !user?.uid) return;
 
     const saveQuizState = async () => {
       try {
@@ -169,7 +161,8 @@ export default function Quiz() {
       }
     };
 
-    saveQuizState();
+    const debounceSave = setTimeout(saveQuizState, 500); // Guardar después de 500ms.
+    return () => clearTimeout(debounceSave); // Cancelar si las dependencias cambian antes de 500ms.
   }, [
     currentQuestion,
     score,
@@ -178,10 +171,12 @@ export default function Quiz() {
     hasAnsweredMultipleChoice,
     answeredCorrectly,
     terrainMap,
-    user,
-    isLoading,
+    ecosystemState,
+    bioCorrectAnswer,
     currentBioQuestion,
-  ]); // Se mantienen las dependencias necesarias
+    user?.uid,
+    isLoading,
+  ]);
 
   useEffect(() => {
     if (score > maxScore) {
@@ -475,11 +470,19 @@ export default function Quiz() {
               style={{ backgroundColor: "rgba(59, 130, 246, 0.7)" }}
             >
               <div className="text-center">
-                <h3 className="text-xl font-bold uppercase tracking-wide text-white">
-                  seccion {currentBioQuestion + 1}
+                {/* Subtítulo */}
+                <h3 className="mb-2 text-2xl font-semibold uppercase tracking-wide text-gray-300">
+                  Sección {currentBioQuestion + 1}
                 </h3>
-                <p className="mt-4 text-lg font-medium text-white drop-shadow-md">
-                  {questionsBio[currentBioQuestion].question}
+
+                {/* Descripción */}
+                <p className="text-md mb-4 text-gray-200">
+                  Oprime sobre el escenario a escoger
+                </p>
+
+                {/* Pregunta */}
+                <p className="mt-6 text-xl font-semibold text-white drop-shadow-lg">
+                  <strong>{questionsBio[currentBioQuestion].question}</strong>
                 </p>
               </div>
             </div>
