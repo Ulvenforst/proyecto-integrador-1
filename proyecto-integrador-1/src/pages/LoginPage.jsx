@@ -14,7 +14,7 @@ import { useAuth } from "../context/AuthContext";
 import CloudsBlock from "../components/generalModels/clouds/CloudsBlock";
 import GenericLight from "../components/lights/GenericLight";
 import Terrain from "../components/terrain/Terrain";
-import Lights from "../components/lights/Lights";
+import LoginLight from "../components/lights/LoginLight";
 import Button3D from "../components/Button3D";
 
 //3D
@@ -133,16 +133,18 @@ export default function LoginPage() {
         <Suspense fallback={null}>
           <OrbitControls
             maxPolarAngle={Math.PI * 0.55}
-            target={[0, 2.5, 0]}
+            target={[0, 5, 0]}
             enablePan={false}
             minDistance={3.5}
             maxDistance={15}
           />
+
           <GenericLight
             mapSize={Math.max(mapWidth, mapHeight)}
             chunkSize={chunkSize}
           />
-          <Lights />
+
+          <LoginLight />
 
           <Button3D
             text={"login with google"}

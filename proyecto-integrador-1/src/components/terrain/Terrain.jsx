@@ -1,23 +1,24 @@
-import { CHUNK_TYPES } from './chunks';
+import { CHUNK_TYPES } from "./chunks";
 
-const Terrain = ({ 
-  map, 
+const Terrain = ({
+  map,
   baseSeed = 12345,
   position = [0, 0, 0],
-  onChunkClick
+  onChunkClick,
+  isAnimationDegraded,
 }) => {
   return (
     <group position={position}>
-      {map.map((row, rowIndex) => 
+      {map.map((row, rowIndex) =>
         row.map((chunkType, colIndex) => {
           const ChunkComponent = CHUNK_TYPES[chunkType];
-          
+
           if (!ChunkComponent) {
             console.warn(`No chunk type defined for value: ${chunkType}`);
             return null;
           }
 
-          const chunkSeed = baseSeed + (rowIndex * 1000) + colIndex;
+          const chunkSeed = baseSeed + rowIndex * 1000 + colIndex;
 
           return (
             <ChunkComponent
@@ -25,9 +26,10 @@ const Terrain = ({
               position={[colIndex, rowIndex]}
               seed={chunkSeed}
               onClick={() => onChunkClick?.(rowIndex, colIndex)}
+              isAnimationDegraded={isAnimationDegraded}
             />
           );
-        })
+        }),
       )}
     </group>
   );

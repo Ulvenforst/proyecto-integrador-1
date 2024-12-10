@@ -2,6 +2,7 @@ import GenericFloor from "../../forestModels/GenericFloor";
 import DeforestationFloor from "./DeforestationFloor";
 import SoilErosionFloor from "./SoilErosionFloor";
 import LostFloor from "./LostFloor";
+import DegradedFloor from "./DegradedFloor";
 
 export const FLOOR_TYPES = {
   DEFAULT: {
@@ -17,6 +18,10 @@ export const FLOOR_TYPES = {
     props: {},
   },
   LOST: {
+    Component: LostFloor,
+    props: {},
+  },
+  DEGRADED: {
     Component: LostFloor,
     props: {},
   },

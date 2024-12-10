@@ -22,7 +22,7 @@ const LostFloor = () => {
   */
 
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} scale={1.16} receiveShadow>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} scale={1} receiveShadow>
       <planeGeometry args={[40, 40]} />
       <meshStandardMaterial {...floorTexture} />
     </mesh>

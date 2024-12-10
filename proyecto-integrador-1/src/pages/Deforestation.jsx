@@ -12,6 +12,7 @@ import { gsap } from "gsap";
 import AnimatedBunny from "../components/forestModels/animals/AnimatedBunny";
 import AnimatedFarmer from "../components/generalModels/people/AnimatedFarmer";
 import { Physics } from "@react-three/rapier";
+import PixelArt from "../components/postprocessing/PixelArt";
 
 function CameraAnimation({ position, target }) {
   const { camera } = useThree();
@@ -138,11 +139,7 @@ export default function Deforestation() {
     },
     // Quiz
     () => {
-      console.log("Quiz clicked");
-      setInfoText({
-        title: "Evaluación",
-        content: "¿Listo para poner a prueba tu conocimiento sobre la deforestación y su impacto en nuestro planeta?"
-      });
+      navigate("/quiz");
     }
   ];
 
@@ -173,6 +170,7 @@ export default function Deforestation() {
           far: 1000
         }}
       >
+        <PixelArt />
         <Suspense fallback={null}>
           <CameraAnimation 
             position={cameraPosition}

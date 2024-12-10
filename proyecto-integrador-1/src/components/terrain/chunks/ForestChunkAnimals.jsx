@@ -5,27 +5,46 @@ import StonesBlock from "../../forestModels/stones/StonesBlock";
 import MushroomsBlock from "../../forestModels/mushrooms/MushroomsBlock";
 import AnimalsBlock from "../../forestModels/animals/AnimalsBlock";
 import ChunkGenerator from "./ChunkGenerator";
+import DeadTreesBlock from "../../forestModels/dead_trees/DeadTreesBlock";
+import { FLOOR_TYPES } from "../floors";
 
-const DenseForestChunkAnimals = ({ position, seed = 12345 }) => {
+const DenseForestChunkAnimals = ({
+  position,
+  seed = 12345,
+  isAnimationDegraded = false,
+}) => {
   const blocks = [
     {
       Component: ConiTreesBlock,
       props: {
-        n: 15,
+        n: 10,
         factor: 35,
         minRadius: 2,
         randomRotation: true,
         maxTiltAngle: Math.PI / 16,
+        isAnimationDegraded: isAnimationDegraded,
       },
     },
     {
       Component: AnimalsBlock,
       props: {
-        n: 15,
+        n: 10,
         factor: 35,
         minRadius: 2,
         randomRotation: true,
         maxTiltAngle: Math.PI / 2,
+        isAnimationDegraded: isAnimationDegraded,
+        scale: 1,
+      },
+    },
+    {
+      Component: DeadTreesBlock,
+      props: {
+        n: 10,
+        factor: 35,
+        seedOffset: 3,
+        minRadius: 1.5,
+        scale: 0.3,
       },
     },
     {
@@ -59,7 +78,7 @@ const DenseForestChunkAnimals = ({ position, seed = 12345 }) => {
     {
       Component: GrassBlock,
       props: {
-        n: 100,
+        n: 40,
         factor: 35,
         seedOffset: 1,
         minRadius: 0.5,
@@ -67,7 +86,14 @@ const DenseForestChunkAnimals = ({ position, seed = 12345 }) => {
     },
   ];
 
-  return <ChunkGenerator position={position} seed={seed} blocks={blocks} />;
+  return (
+    <ChunkGenerator
+      position={position}
+      seed={seed}
+      blocks={blocks}
+      floor={FLOOR_TYPES.DEGRADED}
+    />
+  );
 };
 
 export default DenseForestChunkAnimals;

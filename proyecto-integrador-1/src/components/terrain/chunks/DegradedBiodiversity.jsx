@@ -2,11 +2,14 @@ import StonesBlock from "../../forestModels/stones/StonesBlock";
 import ChunkGenerator from "./ChunkGenerator";
 import StumpsBlock from "../../forestModels/stumps/StumpsBlock";
 import LogsBlock from "../../forestModels/logs/LogsBlock";
-import AnimalsBlock from "../../forestModels/animals/AnimalsBlock";
 import SkullBlock from "../../forestModels/skull/SkullBlock";
 import { FLOOR_TYPES } from "../floors";
 
-const DegradedBiodiversity = ({ position, seed = 13345 }) => {
+const DegradedBiodiversity = ({
+  position,
+  seed = 13345,
+  isAnimationDegraded = false,
+}) => {
   const blocks = [
     {
       Component: LogsBlock,
@@ -22,12 +25,13 @@ const DegradedBiodiversity = ({ position, seed = 13345 }) => {
     {
       Component: SkullBlock,
       props: {
-        n: 25,
+        n: 20,
         factor: 35,
         seedOffset: 2,
         minRadius: 2,
         randomRotation: true,
         maxTiltAngle: Math.PI / 2,
+        isAnimationDegraded: isAnimationDegraded,
       },
     },
     {
